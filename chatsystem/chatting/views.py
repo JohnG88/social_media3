@@ -1,9 +1,10 @@
 from django.shortcuts import render
+from .models import Post
 
 # Create your views here.
 
 def index(request):
-    hello = "Hello World"
-    
-    context = {'hello': hello}
+    all_posts = Post.objects.all()
+
+    context = {'all_posts': all_posts}
     return render(request, "chatting/index.html", context)

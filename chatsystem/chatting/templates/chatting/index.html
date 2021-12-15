@@ -7,6 +7,12 @@
     <title>Chatting</title>
 </head>
 <body>
-    <h2>{{hello}}</h2>
+        {% for post in all_posts %}
+            <div class="container">
+                <h3>{{post.content}}</h3>
+                <img src="{{post.imageURL}}" width="200px" height="200px">
+                <p>{{post.created}}</p>
+            </div>
+        {% endfor %}
 </body>
 </html>
