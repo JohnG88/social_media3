@@ -21,3 +21,6 @@ class Post(models.Model):
         except:
             url = ''
         return url
+
+    class Meta:
+        ordering = ['-created']
