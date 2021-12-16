@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from .models import Post
 from .forms import PostModelForm
 
@@ -10,6 +10,7 @@ def index(request):
     if request.method == 'POST':
         if form.is_valid():
             form.save()
+            return redirect("index")
 
     all_posts = Post.objects.all()
 
