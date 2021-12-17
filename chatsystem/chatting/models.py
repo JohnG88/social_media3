@@ -23,4 +23,4 @@ class Post(models.Model):
         return url
 
     class Meta:
-        ordering = ['-created']
+        ordering = ['-updated']
