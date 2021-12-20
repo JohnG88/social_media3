@@ -1,9 +1,16 @@
+from django.http.response import HttpResponseRedirect
 from django.shortcuts import redirect, render
+from django.contrib import messages
+from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.decorators import login_required
+from django.urls import reverse
 from .models import Post
-from .forms import PostModelForm
+from .forms import PostModelForm, CustomUserCreationForm
 
 # Create your views here.
 
+@login_required(login_url='login')
 def index(request):
     form = PostModelForm(request.POST or None, request.FILES or None)
     
@@ -41,3 +48,42 @@ def delete_post(request, id):
     context = {"post": post}
 
     return render(request, "chatting/delete_post.html", context)
+
+def login_view(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                messages.info(request, f"You are now logged in as {username}.")
+                return redirect("index")
+            else:
+                messages.error(request, "Invalid username or password.")
+        else:
+            messages.error(request, "Invalid username or password.")
+    else:
+        messages.error(request, "Invalid username or password.")
+    form = AuthenticationForm()
+
+    context = {'form': form}
+    return render(request, "chatting/login.html", context)
+
+def register(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("login")
+    else:
+        form = CustomUserCreationForm()
+
+    context = {'form': form}
+
+    return render(request, 'chatting/register.html', context)
+
+def logout_view(request):
+    logout(request)
+    return redirect("login")

@@ -16,8 +16,9 @@
         <link rel="stylesheet" href="{% static 'chatting/style.css' %}">
     </head>
     <body>
+        {% include "chatting/navbar.html" %}
         {% block body %}
         {% endblock body %}
-        
+
     </body>
 </html>

@@ -15,6 +15,7 @@
                 <button type="submit" class="input-group-text">Post</button>
                 {{form.content|add_class:"form-control"}}
             </div>
+            <a class="btn btn-warning" href="{% url 'index' %}">Cancel Edit</a>
         </form>
     </div>
 {% endblock body %}

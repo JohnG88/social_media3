@@ -1,0 +1,73 @@
+{% extends 'chatting/layout.html' %} 
+{% load widget_tweaks %} 
+{% block body %}
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="register-center">
+
+            <div class="mb-3">
+                {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>
+                        {{ message }}
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+
+            <div class="box">
+                <div class="mb-3">
+                    {{form.username.label}}
+                    {{form.username|add_class:"form-control"}}
+                </div>
+                <div class="mb-3">
+                    {{form.password1.label}}
+                    {{form.password1|add_class:"form-control"}}
+                </div>
+                <div class="mb-3">
+                    {{form.password2.label}}
+                    {{form.password2|add_class:"form-control"}}
+                </div>
+                <div class="mb-3">
+                    {{form.email.label}}
+                    {{form.email|add_class:"form-control"}}
+                </div>
+                <button class="btn btn-primary" type="submit">Create Account</button>
+            </div>
+        </div>
+        {% comment %} <div class="register-center">
+            <div class="box">
+                <div class="mb-3">
+                    {{form.username.label}}
+                    {{form.username|add_class:"form-control"}}
+                </div>
+
+                <div class="mb-3">
+                    {{form.email.label}}
+                    {{form.email|add_class:"form-control"}}
+                </div>
+                <div class="mb-3">
+                    {{form.first_name.label}}
+                    {{form.first_name|add_class:"form-control"}}
+                </div>
+                <div class="mb-3">
+                    {{form.last_name.label}}
+                    {{form.last_name|add_class:"form-control"}}
+                </div>
+                <div class="mb-3">
+                    {{form.password1.label}}
+                    {{form.password1|add_class:"form-control"}}
+                </div>
+                <div class="mb-3">
+                    {{form.password2.label}}
+                    {{form.password2|add_class:"form-control"}}
+                </div>
+            </div>
+        </div> {% endcomment %}
+        
+    </form>
+
+{% endblock body %}
