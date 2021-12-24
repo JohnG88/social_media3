@@ -3,13 +3,13 @@
 {% block body %}
     <div class="center">
         <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-
-            {{form.image.a|add_class:"form-control"}}
+            {% csrf_token %}            
+            
 
             <div class="input-group mb-3">
                 {{form.image|add_class:"form-control"}}
             </div>
+            
 
             <div class="input-group mb-3">
                 <button type="submit" class="input-group-text">Post</button>

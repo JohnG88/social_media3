@@ -4,8 +4,11 @@
     <div class="center">
         <h3>Do you wish to delete:</h3>
         <p>{{post.content}}</p>
-
+        {% if  post.image  %}
         <img src="{{post.imageURL}}" width="200px" height="200px" />
+        {% else %}
+        {% endif %}
+        
 
         <form action="{% url 'delete-post' post.id %}" method="POST">
             {% csrf_token %}

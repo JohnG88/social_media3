@@ -3,14 +3,36 @@ from django.forms.forms import Form
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User 
 from django.core.exceptions import ValidationError
+from django.utils.encoding import force_str
 from django.forms.fields import EmailField
+from django.utils.html import format_html
 from .models import Post
+
+# For rendering custom ClearableFileInput
+from django.forms.widgets import ClearableFileInput
+
+class MyImageWidget(ClearableFileInput):
+    template_name = "chatting/custom_form.html"
+
+    def render(self, name, value, attrs=None, render=None):
+            if value and hasattr(value, "url"):
+                template = self.template_with_initialsubstitutions['initial'] = format_html(self.url_markup_template, value.url,force_str(value))
+
+
 
 
 class PostModelForm(forms.ModelForm):
     class Meta:
         model = Post
         exclude = ('created', 'updated')
+
+class EditPostModelForm(forms.ModelForm):
+    image = forms.ImageField(widget=MyImageWidget)
+    class Meta:
+        model = Post
+        exclude = ('created', 'updated')
+
+        
 
 # class LoginModelForm(forms.ModelForm):
 #     class Meta:

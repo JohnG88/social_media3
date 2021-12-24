@@ -6,7 +6,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from .models import Post
-from .forms import PostModelForm, CustomUserCreationForm
+from .forms import PostModelForm, EditPostModelForm, CustomUserCreationForm
 
 # Create your views here.
 
@@ -24,12 +24,14 @@ def index(request):
     context = {'all_posts': all_posts, 'form': form}
     return render(request, "chatting/index.html", context)
 
+@login_required(login_url='login')
 def update_post(request, id):
     post = Post.objects.get(id=id)
     content = post.content
     image = post.image
-
     form = PostModelForm(request.POST or None, request.FILES or None, instance=post)
+
+    # form = EditPostModelForm(request.POST or None, request.FILES or None, instance=post)
     
     if request.method == 'POST':
         if form.is_valid():
@@ -39,6 +41,7 @@ def update_post(request, id):
     context = {"form": form}
     return render(request, "chatting/edit_post.html", context)
 
+@login_required(login_url='login')
 def delete_post(request, id):
     post = Post.objects.get(id=id)
     if request.method == 'POST':
@@ -50,6 +53,8 @@ def delete_post(request, id):
     return render(request, "chatting/delete_post.html", context)
 
 def login_view(request):
+    if request.user.is_authenticated:
+        return redirect("index")
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
@@ -72,6 +77,8 @@ def login_view(request):
     return render(request, "chatting/login.html", context)
 
 def register(request):
+    if request.user.is_authenticated:
+        return redirect("index")
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():

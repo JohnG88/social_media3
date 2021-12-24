@@ -74,6 +74,8 @@ TEMPLATES = [
     },
 ]
 
+# FORM_RENDERER = 'django.forms.renderers.DjangoTemplates'
+
 WSGI_APPLICATION = 'chatsystem.wsgi.application'
 
 
