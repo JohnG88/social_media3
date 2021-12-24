@@ -1,21 +1,23 @@
 {% extends "chatting/layout.html" %} 
 {% load widget_tweaks %} 
 {% block body %}
-    <div class="center">
+    
         <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}            
-            
-
-            <div class="input-group mb-3">
-                {{form.image|add_class:"form-control"}}
+            {% csrf_token %}   
+            <div class="form-center">         
+                <div class="box">
+                    <div class="input-group mb-3">
+                        {{form.image|add_class:"form-control"}}
+                    </div>
+                    
+    
+                    <div class="input-group mb-3">
+                        <button type="submit" class="input-group-text">Post</button>
+                        {{form.content|add_class:"form-control"}}
+                    </div>
+                    <a class="btn btn-warning" href="{% url 'index' %}">Cancel Edit</a>
+                </div>
             </div>
-            
-
-            <div class="input-group mb-3">
-                <button type="submit" class="input-group-text">Post</button>
-                {{form.content|add_class:"form-control"}}
-            </div>
-            <a class="btn btn-warning" href="{% url 'index' %}">Cancel Edit</a>
         </form>
-    </div>
+    
 {% endblock body %}
