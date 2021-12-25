@@ -24,13 +24,13 @@ class MyImageWidget(ClearableFileInput):
 class PostModelForm(forms.ModelForm):
     class Meta:
         model = Post
-        exclude = ('created', 'updated')
+        exclude = ('user', 'created', 'updated')
 
 class EditPostModelForm(forms.ModelForm):
     image = forms.ImageField(widget=MyImageWidget)
     class Meta:
         model = Post
-        exclude = ('created', 'updated')
+        exclude = ('user','created', 'updated')
 
         
 

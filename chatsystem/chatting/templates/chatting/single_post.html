@@ -1,0 +1,9 @@
+{% extends "chatting/layout.html" %}
+
+{% block body %}
+    {% for post_item in post %}
+        <h3>{{post_item.user.username}}</h3>
+        <p>{{post_item.content}}</p>
+    {% endfor %}
+    
+{% endblock body %}

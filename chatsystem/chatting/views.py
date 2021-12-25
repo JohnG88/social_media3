@@ -12,17 +12,27 @@ from .forms import PostModelForm, EditPostModelForm, CustomUserCreationForm
 
 @login_required(login_url='login')
 def index(request):
+    user = request.user
     form = PostModelForm(request.POST or None, request.FILES or None)
     
     if request.method == 'POST':
         if form.is_valid():
+            user_form = form.save(commit=False)
+            user_form.user = user
             form.save()
             return redirect("index")
 
     all_posts = Post.objects.all()
 
-    context = {'all_posts': all_posts, 'form': form}
+    context = {'all_posts': all_posts, 'form': form, 'user': user}
     return render(request, "chatting/index.html", context)
+
+@login_required(login_url='login')
+def single_post_view(request, id):
+    post = Post.objects.filter(id=id)
+
+    context = {'post': post}
+    return render(request, "chatting/single_post.html", context)
 
 @login_required(login_url='login')
 def update_post(request, id):
