@@ -52,21 +52,21 @@ class CustomUserCreationForm(UserCreationForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Confrim Password', widget=forms.PasswordInput)
 
-    def username_clean(self):
+    def clean_username(self):
         username = self.cleaned_data['username'].lower()
         new = User.objects.filter(username=username)
-        if new.exists():
+        if new.count():
             raise ValidationError("User Already Exists")
         return username
 
-    def email_clean(self):
+    def clean_email(self):
         email = self.cleaned_data['email'].lower()
         new = User.objects.filter(email=email)
-        if new.exists():
+        if new.count():
             raise ValidationError("Email Already Exists.")
         return email
 
-    def clean_password2(self):
+    def password2_clean(self):
         password1 = self.cleaned_data['password1']
         password2 = self.cleaned_data['password2']
 

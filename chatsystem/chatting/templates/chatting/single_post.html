@@ -5,5 +5,5 @@
         <h3>{{post_item.user.username}}</h3>
         <p>{{post_item.content}}</p>
     {% endfor %}
-    
+    <a class="btn btn-warning" href="{% url 'index' %}">Home</a>
 {% endblock body %}

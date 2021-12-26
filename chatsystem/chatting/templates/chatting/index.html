@@ -21,7 +21,7 @@
 
     {% for post in all_posts %}
     <div class="container">
-        <h4>{{post.user.username}}</h4>
+        <h4>{{post.user.username| capfirst}}</h4>
         <h5>{{post.user.email}}</h5>
         <p>{{post.id}}</p>
         <h3>{{post.content}}</h3>
