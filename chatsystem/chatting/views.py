@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.urls import reverse
 from .models import Post
 from .forms import PostModelForm, EditPostModelForm, CustomUserCreationForm
@@ -61,6 +62,13 @@ def delete_post(request, id):
     context = {"post": post}
 
     return render(request, "chatting/delete_post.html", context)
+
+def profile_view(request, id):
+    user = User.objects.get(id=id)
+    print(f"This is the user {user}")
+
+    context = {'user': user}
+    return render(request, "chatting/profile.html", context)
 
 def login_view(request):
     if request.user.is_authenticated:

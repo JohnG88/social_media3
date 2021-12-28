@@ -21,7 +21,8 @@
 
     {% for post in all_posts %}
     <div class="container">
-        <h4>{{post.user.username| capfirst}}</h4>
+        <p>{{post.user.id}}</p>
+        <a href="{% url 'profile' post.user.id %}"><h4>{{post.user.username| capfirst}}</h4></a>
         <h5>{{post.user.email}}</h5>
         <p>{{post.id}}</p>
         <h3>{{post.content}}</h3>

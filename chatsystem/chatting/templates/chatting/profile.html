@@ -1,0 +1,9 @@
+{% extends 'chatting/layout.html' %}
+
+{% block body %}
+    <h1>Profile Page</h1>
+    {{user.id}}
+    {{user.username}}
+    {{user.email}}
+    <a class="btn btn-warning" href="{% url 'index' %}">Home</a>
+{% endblock body %}
