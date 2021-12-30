@@ -8,10 +8,12 @@ class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.CharField(max_length=500)
     image = models.ImageField(upload_to="media_posts", validators=[FileExtensionValidator(['png', 'jpg', 'jpeg'])], blank=True)
-    # liked = models.ManyToManyField(Profile, blank=True, related_name="likes")
+    liked = models.ManyToManyField(User, blank=True, related_name="likes")
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    # author = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="posts")
+
+    def total_likes(self):
+        return self.liked.count()
 
     def __str__(self):
         return str(self.content[:10])

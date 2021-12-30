@@ -1,5 +1,5 @@
-from django.http.response import HttpResponseRedirect
-from django.shortcuts import redirect, render
+from django.http.response import HttpResponseRedirect, JsonResponse
+from django.shortcuts import redirect, render,get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import AuthenticationForm
@@ -24,7 +24,7 @@ def index(request):
             return redirect("index")
 
     all_posts = Post.objects.all()
-
+    
     context = {'all_posts': all_posts, 'form': form, 'user': user}
     return render(request, "chatting/index.html", context)
 
@@ -51,6 +51,33 @@ def update_post(request, id):
 
     context = {"form": form}
     return render(request, "chatting/edit_post.html", context)
+
+# def like_post(request, id):
+#     if request.method == 'POST':
+#         user = request.user
+#         id = request.POST.get('post_id')
+#         print(f"id {id}")
+#         post = Post.objects.get(id=id)
+
+#         if user in post.liked.all():
+#             liked = False
+#             post.liked.remove(user)
+#         else:
+#             liked = True
+#             post.liked.add(user)
+#     # return JsonResponse({'liked': liked, 'count': post.total_likes})
+#     return render(request, "chatting/index.html", {"liked": liked})
+
+def like_post(request, id):
+    post = get_object_or_404(Post, id=request.POST.get('post_id'))
+    like_bool = False
+    if post.liked.filter(id=request.user.id).exists():
+        post.liked.remove(request.user)
+        like_bool = False
+    else:
+        post.liked.add(request.user)
+        like_bool = True
+    return redirect("index")
 
 @login_required(login_url='login')
 def delete_post(request, id):

@@ -40,6 +40,17 @@
         {% else %}
             <a href="{% url 'single-post' post.id %}">View Post</a>        
         {% endif %}
+
+        <form action="{% url 'like-post' post.id %}" method="POST">
+            {% csrf_token %}
+
+            {% if user not in post.liked.all %}
+                <button type="submit" name="post_id" value="{{post.id}}" class="btn btn-danger">Like</button>
+            {% else %}
+                <button type="submit" name="post_id" value="{{post.id}}" class="btn btn-info">Unlike</button>
+            - {{post.total_likes}} Likes -
+            {% endif %}
+        </form>
         
         
         
