@@ -1,9 +1,29 @@
-{% extends 'chatting/layout.html' %}
+{% extends 'chatting/layout.html' %} {% block body %}
+<h1>Profile Page</h1>
+{{user.id}} {{user.username}} {{user.email}}
+<form action="{% url 'follow-unfollow' user.id %}" method="POST">
+    {% csrf_token %} 
 
-{% block body %}
-    <h1>Profile Page</h1>
-    {{user.id}}
-    {{user.username}}
-    {{user.email}}
-    <a class="btn btn-warning" href="{% url 'index' %}">Home</a>
+    {% if user not in followed_user.following_user_id.all %}
+        <button
+            type="submit"
+            name="user_id"
+            value="{{user.id}}"
+            class="btn btn-danger"
+        >
+            Follow
+        </button>
+    {% else %}
+        <button
+            type="submit"
+            name="user_id"
+            value="{{user.id}}"
+            class="btn btn-info"
+        >
+            Unfollow
+        </button>
+    {% endif %}
+    Followers - {{user.follow_count}}
+</form>
+<a class="btn btn-warning" href="{% url 'index' %}">Home</a>
 {% endblock body %}

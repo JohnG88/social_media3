@@ -6,7 +6,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.urls import reverse
-from .models import Post
+from .models import Post, UserFollowing
 from .forms import PostModelForm, EditPostModelForm, CustomUserCreationForm
 
 # Create your views here.
@@ -90,12 +90,34 @@ def delete_post(request, id):
 
     return render(request, "chatting/delete_post.html", context)
 
+@login_required(login_url='login')
 def profile_view(request, id):
     user = User.objects.get(id=id)
+    main_user = request.user
+    followed_user = UserFollowing.objects.get(user=main_user)
     print(f"This is the user {user}")
 
-    context = {'user': user}
+    context = {'user': user, 'followed_user': followed_user}
     return render(request, "chatting/profile.html", context)
+
+def follow_unfollow(request, id):
+    user = request.user
+    print(f"User = {user}")
+    other_user = User.objects.get(id=id)
+    print(f"Other User = {other_user}")
+    follow_user, created = UserFollowing.objects.get_or_create(user=user)
+    print(f"follow user {follow_user}")
+    if other_user in follow_user.following_user_id.all():
+        # followers = False
+        follow_user.following_user_id.remove(other_user)
+    else:
+        #followers = True
+        follow_user.following_user_id.add(other_user)
+    follow_user.save()
+    
+    return HttpResponseRedirect(reverse('profile', args=[id]))
+
+
 
 def login_view(request):
     if request.user.is_authenticated:

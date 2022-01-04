@@ -28,3 +28,11 @@ class Post(models.Model):
 
     class Meta:
         ordering = ['-updated']
+
+class UserFollowing(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="following")
+    following_user_id = models.ManyToManyField(User, related_name="followers")
+    created = models.DateTimeField(auto_now_add=True)
+
+    def total_followers(self):
+        return self.followers.count()
