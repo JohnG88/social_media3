@@ -2,7 +2,9 @@
 <h1>Profile Page</h1>
 {{user.id}} {{user.username}} {{user.email}}
 <form action="{% url 'follow-unfollow' user.id %}" method="POST">
-    {% csrf_token %} 
+    {% csrf_token %}
+    
+    <p>following - {{followed_user.following_user_id.all.count}}</p>
 
     {% if user not in followed_user.following_user_id.all %}
         <button
@@ -23,7 +25,8 @@
             Unfollow
         </button>
     {% endif %}
-    Followers - {{user.follow_count}}
+    Followers - {{user.followers.count}}
+    
 </form>
 <a class="btn btn-warning" href="{% url 'index' %}">Home</a>
 {% endblock body %}

@@ -35,4 +35,12 @@ class UserFollowing(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def total_followers(self):
-        return self.followers.count()
+        return self.following_user_id.count()
+
+    @property
+    def get_following_list(self):
+        pass
+    
+    @property
+    def total_following_count(self):
+        return len(self.get_following_list())

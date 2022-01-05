@@ -107,6 +107,13 @@ def follow_unfollow(request, id):
     print(f"Other User = {other_user}")
     follow_user, created = UserFollowing.objects.get_or_create(user=user)
     print(f"follow user {follow_user}")
+    # to reference attribute/field from same model use its name
+    # ex follow_user is variable of UserFollowing and UserFollowing, and you can use lines such as below,
+    # follow_user.following_user_id.all()
+    # to reference attribute/field from another model and you have a related name in that field you can just use  a variable that has another model and use that related_name
+    # user.followers.all()
+    # And if you do not have a related_name you can just use variable lowercase name of model _set
+    # user.userfollowing_set.all()
     if other_user in follow_user.following_user_id.all():
         # followers = False
         follow_user.following_user_id.remove(other_user)
