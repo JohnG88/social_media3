@@ -1,6 +1,8 @@
 from django.db import models
 from django.core.validators import FileExtensionValidator
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+
 
 # Create your models here.
 
@@ -34,13 +36,14 @@ class UserFollowing(models.Model):
     following_user_id = models.ManyToManyField(User, related_name="followers")
     created = models.DateTimeField(auto_now_add=True)
 
-    def total_followers(self):
-        return self.following_user_id.count()
+    def __str__(self):
+        return self.user.username
 
-    @property
-    def get_following_list(self):
-        pass
-    
-    @property
-    def total_following_count(self):
-        return len(self.get_following_list())
+    def total_followers(self):
+        return self.following_user_id.all().count()
+
+def create_follow_query(sender, instance, created, *args, **kwargs):
+    if created:
+        UserFollowing.objects.get_or_create(user=instance)
+
+post_save.connect(create_follow_query, sender=User)

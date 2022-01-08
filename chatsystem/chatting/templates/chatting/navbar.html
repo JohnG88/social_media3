@@ -9,7 +9,7 @@
                     class="nav-link other-profile-id"
                     data-id="{{ user.id }}"
                     href="#"
-                    >{{ user.username| capfirst}}</a
+                    >{{ request.user.username| capfirst}}</a
                 >
             </li>
             {% endif %} {% comment %}

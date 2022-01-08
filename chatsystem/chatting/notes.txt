@@ -1,0 +1,16 @@
+In another project i created two profile views, one for request.user, ad another one for other profiles
+
+In models of other profiles I used 
+    - user foreignkey
+    - followers manytomany with related name of get_followed_profiles
+    - Model functions
+        - function get_followers
+        - @property function get_following_count
+
+In views.py
+    - function get_profile_stats
+    - user = User.objects.get(id=id)
+    - profile = Profile.objects.get(user=user)
+    - To get following count and followers count
+        - 'count': profile.get_following_count,
+        - 'following': user.get_followed_profiles.all().count()

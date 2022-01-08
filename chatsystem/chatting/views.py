@@ -13,17 +13,19 @@ from .forms import PostModelForm, EditPostModelForm, CustomUserCreationForm
 
 @login_required(login_url='login')
 def index(request):
-    user = request.user
-    form = PostModelForm(request.POST or None, request.FILES or None)
-    
-    if request.method == 'POST':
-        if form.is_valid():
-            user_form = form.save(commit=False)
-            user_form.user = user
-            form.save()
-            return redirect("index")
+    if request.user.is_authenticated:
+        user = request.user
+        print(f"INdex user {user}")
+        form = PostModelForm(request.POST or None, request.FILES or None)
+        
+        if request.method == 'POST':
+            if form.is_valid():
+                user_form = form.save(commit=False)
+                user_form.user = user
+                form.save()
+                return redirect("index")
 
-    all_posts = Post.objects.all()
+        all_posts = Post.objects.all()
     
     context = {'all_posts': all_posts, 'form': form, 'user': user}
     return render(request, "chatting/index.html", context)
@@ -92,21 +94,31 @@ def delete_post(request, id):
 
 @login_required(login_url='login')
 def profile_view(request, id):
-    user = User.objects.get(id=id)
-    main_user = request.user
-    followed_user = UserFollowing.objects.get(user=main_user)
-    print(f"This is the user {user}")
+    if request.user.is_authenticated:
+        user = User.objects.get(id=id)
+        print(f"Profile user {user}")
+        # main_user = request.user
+        # print(f"main User {main_user}")
+        # followed_user = UserFollowing.objects.get(user=user)
+        followed_user = UserFollowing.objects.get(user=user)
+        # print(f"This is the followed user {followed_user}")
 
-    context = {'user': user, 'followed_user': followed_user}
+    context = {'user': user, 'followed_user': followed_user, 'count': followed_user.total_followers, 'following': user.followers.all().count()}
     return render(request, "chatting/profile.html", context)
 
 def follow_unfollow(request, id):
-    user = request.user
-    print(f"User = {user}")
     other_user = User.objects.get(id=id)
-    print(f"Other User = {other_user}")
-    follow_user, created = UserFollowing.objects.get_or_create(user=user)
+    print(f"Other user {other_user}")
+    follow_user = UserFollowing.objects.get(user=request.user)
     print(f"follow user {follow_user}")
+
+    if other_user in follow_user.following_user_id.all():
+        # followers = False
+        follow_user.following_user_id.remove(other_user)
+    else:
+        # followers = True
+        follow_user.following_user_id.add(other_user)
+    follow_user.save()
     # to reference attribute/field from same model use its name
     # ex follow_user is variable of UserFollowing and UserFollowing, and you can use lines such as below,
     # follow_user.following_user_id.all()
@@ -114,13 +126,7 @@ def follow_unfollow(request, id):
     # user.followers.all()
     # And if you do not have a related_name you can just use variable lowercase name of model _set
     # user.userfollowing_set.all()
-    if other_user in follow_user.following_user_id.all():
-        # followers = False
-        follow_user.following_user_id.remove(other_user)
-    else:
-        #followers = True
-        follow_user.following_user_id.add(other_user)
-    follow_user.save()
+    
     
     return HttpResponseRedirect(reverse('profile', args=[id]))
 

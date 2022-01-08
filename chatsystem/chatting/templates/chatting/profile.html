@@ -4,28 +4,33 @@
 <form action="{% url 'follow-unfollow' user.id %}" method="POST">
     {% csrf_token %}
     
-    <p>following - {{followed_user.following_user_id.all.count}}</p>
-
-    {% if user not in followed_user.following_user_id.all %}
-        <button
+    <p>following - {{count}}</p>
+    {% if request.user == user %}
+        
+    {% else %}
+        {% if request.user not in followed_user.following_user_id.all %}
+            <button
+                type="submit"
+                name="user_id"
+                value="{{user.id}}"
+                class="btn btn-info"
+            >
+                Follow
+            </button>
+        
+        {% else %}
+            <button
             type="submit"
             name="user_id"
             value="{{user.id}}"
             class="btn btn-danger"
-        >
-            Follow
-        </button>
-    {% else %}
-        <button
-            type="submit"
-            name="user_id"
-            value="{{user.id}}"
-            class="btn btn-info"
-        >
-            Unfollow
-        </button>
+            >
+                Unfollow
+            </button>
     {% endif %}
-    Followers - {{user.followers.count}}
+    {% endif %}
+    
+    Followers - {{following}}
     
 </form>
 <a class="btn btn-warning" href="{% url 'index' %}">Home</a>
