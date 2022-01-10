@@ -8,7 +8,7 @@
     {% if request.user == user %}
         
     {% else %}
-        {% if request.user not in followed_user.following_user_id.all %}
+        {% if request.user not in user.followers.all %}
             <button
                 type="submit"
                 name="user_id"
@@ -27,7 +27,7 @@
             >
                 Unfollow
             </button>
-    {% endif %}
+        {% endif %}
     {% endif %}
     
     Followers - {{following}}

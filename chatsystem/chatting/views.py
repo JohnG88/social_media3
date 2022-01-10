@@ -15,7 +15,7 @@ from .forms import PostModelForm, EditPostModelForm, CustomUserCreationForm
 def index(request):
     if request.user.is_authenticated:
         user = request.user
-        print(f"INdex user {user}")
+        # print(f"INdex user {user}")
         form = PostModelForm(request.POST or None, request.FILES or None)
         
         if request.method == 'POST':
@@ -26,6 +26,7 @@ def index(request):
                 return redirect("index")
 
         all_posts = Post.objects.all()
+        
     
     context = {'all_posts': all_posts, 'form': form, 'user': user}
     return render(request, "chatting/index.html", context)
@@ -97,6 +98,8 @@ def profile_view(request, id):
     if request.user.is_authenticated:
         user = User.objects.get(id=id)
         print(f"Profile user {user}")
+        all_followers = request.user.followers.all()
+        print(f"All followers {all_followers}")
         # main_user = request.user
         # print(f"main User {main_user}")
         # followed_user = UserFollowing.objects.get(user=user)
@@ -133,8 +136,8 @@ def follow_unfollow(request, id):
 
 
 def login_view(request):
-    if request.user.is_authenticated:
-        return redirect("index")
+    # if request.user.is_authenticated:
+    #     return redirect("index")
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():

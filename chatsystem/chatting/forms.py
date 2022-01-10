@@ -53,14 +53,15 @@ class CustomUserCreationForm(UserCreationForm):
     password2 = forms.CharField(label='Confrim Password', widget=forms.PasswordInput)
 
     def clean_username(self):
-        username = self.cleaned_data['username'].lower()
+        # can add .lower at end of ['username']/ ['email'] to have whole username lowercased, can also be used with email, i don't know how to implement it 
+        username = self.cleaned_data['username']
         new = User.objects.filter(username=username)
         if new.count():
             raise ValidationError("User Already Exists")
         return username
 
     def clean_email(self):
-        email = self.cleaned_data['email'].lower()
+        email = self.cleaned_data['email']
         new = User.objects.filter(email=email)
         if new.count():
             raise ValidationError("Email Already Exists.")
