@@ -112,7 +112,9 @@ def profile_view(request, id):
             following_bool = False
         print(f"This is the followed user boolean {following_bool}")
 
-    context = {'user': user, 'followed_user': followed_user, 'count': followed_user.total_followers, 'following': user.followers.all().count(), 'follow_bool': following_bool}
+        posts = Post.objects.filter(user=user).all()
+
+    context = {'user': user, 'followed_user': followed_user, 'count': followed_user.total_followers, 'following': user.followers.all().count(), 'follow_bool': following_bool, 'posts': posts}
     return render(request, "chatting/profile.html", context)
 
 def follow_unfollow(request, id):

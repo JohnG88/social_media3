@@ -34,4 +34,14 @@
     
 </form>
 <a class="btn btn-warning" href="{% url 'index' %}">Home</a>
+
+    <div>
+        {% for post in posts %}
+            <h5>{{post.content}}</h5>
+            {% if post.image %}
+            <img src="{{post.imageURL}}" width="200px" height="200px" />
+            {% else %}
+            {% endif %}
+        {% endfor %}
+    </div>
 {% endblock body %}
