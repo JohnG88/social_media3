@@ -98,22 +98,28 @@ def profile_view(request, id):
     if request.user.is_authenticated:
         user = User.objects.get(id=id)
         print(f"Profile user {user}")
+        main_user = UserFollowing.objects.get(user=request.user)
+        print(f"Main user {main_user}")
         all_followers = request.user.followers.all()
-        print(f"All followers {all_followers}")
-        # main_user = request.user
-        # print(f"main User {main_user}")
-        # followed_user = UserFollowing.objects.get(user=user)
+        print(f"{main_user} following {all_followers}")
+        following_bool = False
         followed_user = UserFollowing.objects.get(user=user)
-        # print(f"This is the followed user {followed_user}")
+        print(f"this is followed user {followed_user}")
+        if user in main_user.following_user_id.all():
+        # if main_user.following_user_id.filter(user=followed_user).exists():
+            following_bool = True
+        else:
+            following_bool = False
+        print(f"This is the followed user boolean {following_bool}")
 
-    context = {'user': user, 'followed_user': followed_user, 'count': followed_user.total_followers, 'following': user.followers.all().count()}
+    context = {'user': user, 'followed_user': followed_user, 'count': followed_user.total_followers, 'following': user.followers.all().count(), 'follow_bool': following_bool}
     return render(request, "chatting/profile.html", context)
 
 def follow_unfollow(request, id):
     other_user = User.objects.get(id=id)
-    print(f"Other user {other_user}")
+    # print(f"Other user {other_user}")
     follow_user = UserFollowing.objects.get(user=request.user)
-    print(f"follow user {follow_user}")
+    # print(f"following user {follow_user}")
 
     if other_user in follow_user.following_user_id.all():
         # followers = False

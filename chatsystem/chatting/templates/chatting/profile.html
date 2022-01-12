@@ -8,14 +8,14 @@
     {% if request.user == user %}
         
     {% else %}
-        {% if request.user not in user.followers.all %}
+        {% if follow_bool %}
             <button
                 type="submit"
                 name="user_id"
                 value="{{user.id}}"
                 class="btn btn-info"
             >
-                Follow
+                Unfollow
             </button>
         
         {% else %}
@@ -25,7 +25,7 @@
             value="{{user.id}}"
             class="btn btn-danger"
             >
-                Unfollow
+                Follow
             </button>
         {% endif %}
     {% endif %}
