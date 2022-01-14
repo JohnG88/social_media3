@@ -14,7 +14,8 @@ from .forms import PostModelForm, EditPostModelForm, CustomUserCreationForm
 @login_required(login_url='login')
 def index(request):
     if request.user.is_authenticated:
-        user = request.user
+        main_user = request.user
+        user = User.objects.get(id=main_user.id)
         # print(f"INdex user {user}")
         form = PostModelForm(request.POST or None, request.FILES or None)
         
@@ -26,9 +27,22 @@ def index(request):
                 return redirect("index")
 
         all_posts = Post.objects.all()
+
+        followed_profiles = UserFollowing.objects.get(user=request.user)
+
+        follower_user_posts = Post.objects.filter(user__followers=followed_profiles)
+        print(f"Follower Ids {follower_user_posts}")
+
+        
+
+        # followed_profiles = user.followers.all()
+        # all_followed_profiles_posts = Post.objects.filter(user_id__in=followed_profiles).all()
+        # followed_profiles = user.followers.all()
+        # print(f"Followed Profiles {followed_profiles}")
+        # followed_profiles_posts = Post.objects.filter(user__in=followed_profiles).all()
         
     
-    context = {'all_posts': all_posts, 'form': form, 'user': user}
+    context = {'follower_user_posts': follower_user_posts, 'form': form, 'user': user}
     return render(request, "chatting/index.html", context)
 
 @login_required(login_url='login')

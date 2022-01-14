@@ -19,7 +19,7 @@
         </form>
     </div>
 
-    {% for post in all_posts %}
+    {% for post in follower_user_posts %}
     <div class="container">
         <p>{{post.user.id}}</p>
         <a href="{% url 'profile' post.user.id %}"><h4>{{post.user.username| capfirst}}</h4></a>
