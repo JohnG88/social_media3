@@ -6,6 +6,12 @@
     /* border: 3px solid green; */
 }
 
+.no-posts-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .form-center {
     /* background: dodgerblue; */
     /* border: 4px solid midnightblue; */

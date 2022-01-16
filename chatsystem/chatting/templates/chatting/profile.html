@@ -42,6 +42,8 @@
             <img src="{{post.imageURL}}" width="200px" height="200px" />
             {% else %}
             {% endif %}
+        {% empty %}
+            <div class="no-posts-center">No posts to view</div>
         {% endfor %}
     </div>
 {% endblock body %}

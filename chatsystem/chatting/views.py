@@ -10,6 +10,8 @@ from django.urls import reverse
 from .models import Post, UserFollowing
 from .forms import PostModelForm, EditPostModelForm, CustomUserCreationForm
 
+import random
+
 # Create your views here.
 
 @login_required(login_url='login')
@@ -51,6 +53,7 @@ def index(request):
         # I still don't know how list comprehensions work, I tweaked one example I copied from a tutorial, It seems to be working 
         available = [user for user in users if user not in all_followed_profiles]
         print(f"Available {available}")
+        random.shuffle(available)
 
         # user_posts = Post.objects.filter(user=request.user).all()
 
@@ -61,7 +64,7 @@ def index(request):
         # followed_profiles_posts = Post.objects.filter(user__in=followed_profiles).all()
         
     
-    context = {'follower_user_posts': follower_user_posts, 'form': form, 'user': user, 'available': available}
+    context = {'follower_user_posts': follower_user_posts, 'form': form, 'user': user, 'available': available[:3]}
     return render(request, "chatting/index.html", context)
 
 @login_required(login_url='login')

@@ -8,8 +8,8 @@
                     id="profile_name"
                     class="nav-link other-profile-id"
                     data-id="{{ user.id }}"
-                    href="#"
-                    >{{ request.user.username| capfirst}}</a
+                    href="{% url 'profile' request.user.id %}"
+                    >{{ request.user.username}}</a
                 >
             </li>
             {% endif %} {% comment %}

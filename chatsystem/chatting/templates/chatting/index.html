@@ -34,6 +34,7 @@
                 {% for users in available %}
                 <a href="{% url 'profile' users.id %}">
                     <div class="modal-body">{{users.username}}</div>
+                    <hr>
                 </a>
                 {% endfor %}
                     <div class="modal-footer">
@@ -114,5 +115,7 @@
                 - {{post.total_likes}} Likes - {% endif %}
             </form>
         </div>
+    {% empty %}
+        <div class="no-posts-center">No posts to view</div>
     {% endfor %} 
 {% endblock body %}
