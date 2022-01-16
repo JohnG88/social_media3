@@ -61,7 +61,7 @@ def index(request):
         # followed_profiles_posts = Post.objects.filter(user__in=followed_profiles).all()
         
     
-    context = {'follower_user_posts': follower_user_posts, 'form': form, 'user': user}
+    context = {'follower_user_posts': follower_user_posts, 'form': form, 'user': user, 'available': available}
     return render(request, "chatting/index.html", context)
 
 @login_required(login_url='login')
