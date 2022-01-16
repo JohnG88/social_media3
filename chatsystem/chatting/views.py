@@ -5,6 +5,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.db.models import Q
 from django.urls import reverse
 from .models import Post, UserFollowing
 from .forms import PostModelForm, EditPostModelForm, CustomUserCreationForm
@@ -27,13 +28,31 @@ def index(request):
                 return redirect("index")
 
         all_posts = Post.objects.all()
-
+        
+        # created the request.user query for UserFollowing
         followed_profiles = UserFollowing.objects.get(user=request.user)
+        print(f"followed Profiles {followed_profiles}")
 
-        follower_user_posts = Post.objects.filter(user__followers=followed_profiles)
-        print(f"Follower Ids {follower_user_posts}")
+        all_followed_profiles = followed_profiles.following_user_id.all()
+        print(f"all_followed_profiles {all_followed_profiles}")
+
+        all_followed_users_tables = UserFollowing.objects.all()
+        print(f"All followed Users {all_followed_users_tables}")
 
         
+        # queried the user from posts and linked it to followers from UserFollowing's following_user_id's related name and instanced followed_profiles to it 
+        follower_user_posts = Post.objects.filter(Q(user__followers=followed_profiles) | Q(user=request.user))
+        print(f"Follower Ids {follower_user_posts}")
+
+        # profiles = Profile.objects.all().exclude(user=self.user)
+        users = User.objects.all().exclude(id=main_user.id)
+        print(f"Users {users}")
+
+        # I still don't know how list comprehensions work, I tweaked one example I copied from a tutorial, It seems to be working 
+        available = [user for user in users if user not in all_followed_profiles]
+        print(f"Available {available}")
+
+        # user_posts = Post.objects.filter(user=request.user).all()
 
         # followed_profiles = user.followers.all()
         # all_followed_profiles_posts = Post.objects.filter(user_id__in=followed_profiles).all()
