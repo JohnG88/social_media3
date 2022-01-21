@@ -7,8 +7,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.urls import reverse
-from .models import Post, UserFollowing
-from .forms import PostModelForm, EditPostModelForm, CustomUserCreationForm
+from .models import Post, UserFollowing, UserAvatar
+from .forms import PostModelForm, UserAvatarModelForm, CustomUserCreationForm
 
 import random
 
@@ -62,6 +62,8 @@ def index(request):
         # followed_profiles = user.followers.all()
         # print(f"Followed Profiles {followed_profiles}")
         # followed_profiles_posts = Post.objects.filter(user__in=followed_profiles).all()
+
+        
         
     
     context = {'follower_user_posts': follower_user_posts, 'form': form, 'user': user, 'available': available[:3]}
@@ -149,9 +151,41 @@ def profile_view(request, id):
         print(f"This is the followed user boolean {following_bool}")
 
         posts = Post.objects.filter(user=user).all()
+        
+        r_user = User.objects.get(id=request.user.id)
+        print(f"r_user {r_user}")
+        user_avatar = UserAvatar.objects.get(user=r_user)
+        print(f"User Avatar {user_avatar}" )
+        
+        # Add the instance to form not keep creating UserAvatar queries
+        form = UserAvatarModelForm(request.POST or None, request.FILES or None, instance=user_avatar)
 
-    context = {'user': user, 'followed_user': followed_user, 'count': followed_user.total_followers, 'following': user.followers.all().count(), 'follow_bool': following_bool, 'posts': posts}
+        if request.method == 'POST':
+            if form.is_valid():
+                user_avatar_form = form.save(commit=False)
+                user_avatar_form.user = r_user
+                form.save()
+                return HttpResponseRedirect(reverse('profile', args=[id]))
+
+        
+        # Idk if this is standard but it created the UserAvatar queries for each existing user(already created a signal to create the queries each time a user registers, so I commented it out)
+        # users = User.objects.all()
+        # for user in users:
+        #     UserAvatar.objects.create(user=user)
+            
+
+    context = {'user': user, 'followed_user': followed_user, 'count': followed_user.total_followers, 'following': user.followers.all().count(), 'follow_bool': following_bool, 'posts': posts, 'user_avatar': user_avatar, 'form': form}
     return render(request, "chatting/profile.html", context)
+
+def delete_avatar(request, id):
+    r_user = request.user
+    user = User.objects.get(id=r_user.id)
+    user_avatar = UserAvatar.objects.get(user=user)
+    if request.method == 'POST':
+        user_avatar.avatar.delete()
+        user_avatar.avatar = 'avatar.png'
+        user_avatar.save()
+        return HttpResponseRedirect(reverse('profile', args=[id]))
 
 def follow_unfollow(request, id):
     other_user = User.objects.get(id=id)

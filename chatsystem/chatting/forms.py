@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 from django.utils.encoding import force_str
 from django.forms.fields import EmailField
 from django.utils.html import format_html
-from .models import Post
+from .models import Post, UserAvatar
 
 # For rendering custom ClearableFileInput
 from django.forms.widgets import ClearableFileInput
@@ -83,3 +83,8 @@ class CustomUserCreationForm(UserCreationForm):
         )
 
         return user
+
+class UserAvatarModelForm(forms.ModelForm):
+    class Meta:
+        model = UserAvatar
+        exclude = ('user',)
