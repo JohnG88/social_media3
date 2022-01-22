@@ -152,7 +152,7 @@ def profile_view(request, id):
 
         posts = Post.objects.filter(user=user).all()
         
-        r_user = User.objects.get(id=request.user.id)
+        r_user = User.objects.get(id=id)
         print(f"r_user {r_user}")
         user_avatar = UserAvatar.objects.get(user=r_user)
         print(f"User Avatar {user_avatar}" )

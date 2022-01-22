@@ -20,6 +20,10 @@ class Post(models.Model):
     def __str__(self):
         return str(self.content[:10])
 
+    def delete(self, *args, **kwargs):
+        self.image.delete()
+        super().delete(*args, **kwargs)
+
     @property
     def imageURL(self):
         try:
@@ -55,6 +59,10 @@ class UserAvatar(models.Model):
 
     def __str__(self):
         return self.user.username
+
+    def delete(self, *args, **kwargs):
+        self.avatar.delete()
+        super().delete(*args, **kwargs)
 
 def create_avatar_query(sender, instance, created, *args, **kwargs):
     if created:

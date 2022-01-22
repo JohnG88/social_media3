@@ -8,22 +8,28 @@
     <img src="{{user_avatar.avatar.url}}" alt="User Avatar" width="150px" height="150px">
 </div>
 
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    <div class="input-group mb-3">
-        {{form.avatar|add_class:"form-control"}}
-    </div>
-    <div class="input-group mb-3">
-        <button class="input-group-text">Update Avatar</button>
-    </div>
-</form>
-
-<form method="POST" enctype="multipart/form-data" action="{% url 'delete-avatar' user.id %}">
-    {% csrf_token %}
-    <div class="input-group mb-3">
-        <button class="input-group-text">Delete Avatar</button>
-    </div>
-</form>
+{% if user == request.user %}
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="input-group mb-3">
+            {{form.avatar|add_class:"form-control"}}
+        </div>
+        <div class="input-group mb-3">
+            <button class="input-group-text">Update Avatar</button>
+        </div>
+    </form>
+    {% if user_avatar.avatar %}
+        <form method="POST" enctype="multipart/form-data" action="{% url 'delete-avatar' user.id %}">
+            {% csrf_token %}
+            <div class="input-group mb-3">
+                <button class="input-group-text">Delete Avatar</button>
+            </div>
+        </form>
+    {% else %}
+    {% endif %}
+    
+{% else %}
+{% endif %}
 
 {{user.id}} {{user.username}} {{user.email}}
 <form action="{% url 'follow-unfollow' user.id %}" method="POST">
