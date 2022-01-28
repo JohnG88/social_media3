@@ -18,7 +18,7 @@
             <button class="input-group-text">Update Avatar</button>
         </div>
     </form>
-    {% if user_avatar.avatar %}
+    {% if user_avatar.avatar != default_mage%}
         <form method="POST" enctype="multipart/form-data" action="{% url 'delete-avatar' user.id %}">
             {% csrf_token %}
             <div class="input-group mb-3">

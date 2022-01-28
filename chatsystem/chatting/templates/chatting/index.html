@@ -1,121 +1,123 @@
-{% extends "chatting/layout.html" %} 
-{% load widget_tweaks %} 
-{% block body %}
+{% extends "chatting/layout.html" %} {% load widget_tweaks %} {% block body %}
 
-    <!-- Button trigger modal -->
-    <button
-        type="button"
-        class="btn btn-primary"
-        data-bs-toggle="modal"
-        data-bs-target="#exampleModal"
-    >
-        People To Follow
-    </button>
+<!-- Button trigger modal -->
+<button
+    type="button"
+    class="btn btn-primary"
+    data-bs-toggle="modal"
+    data-bs-target="#exampleModal"
+>
+    People To Follow
+</button>
 
-    <!-- Modal -->
-    <div
-        class="modal fade"
-        id="exampleModal"
-        tabindex="-1"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-    >
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Users</h5>
-                    <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                    ></button>
-                </div>
-                {% for users in available %}
-                <a href="{% url 'profile' users.id %}">
-                    <div class="modal-body">{{users.username}}</div>
-                    <hr>
-                </a>
-                {% endfor %}
-                    <div class="modal-footer">
-                    <button
-                        type="button"
-                        class="btn btn-secondary"
-                        data-bs-dismiss="modal"
-                    >
-                        Close
-                    </button>
-                    <button type="button" class="btn btn-primary">
-                        Save changes
-                    </button>
-                </div>
+<!-- Modal -->
+<div
+    class="modal fade"
+    id="exampleModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Users</h5>
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                ></button>
+            </div>
+            {% for users in available %}
+            <a href="{% url 'profile' users.id %}">
+                <div class="modal-body">{{users.username}}</div>
+                <hr />
+            </a>
+            {% endfor %}
+            <div class="modal-footer">
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                >
+                    Close
+                </button>
+                <button type="button" class="btn btn-primary">
+                    Save changes
+                </button>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="center">
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
+<div class="center">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
 
-            <div class="input-group mb-3">
-                {{form.image|add_class:"form-control"}}
-            </div>
-
-            <div class="input-group mb-3">
-                <button type="submit" class="input-group-text">Post</button>
-                {{form.content|add_class:"form-control"}}
-            </div>
-
-            {% comment %} <button type="submit">Post</button> {% endcomment %}
-        </form>
-    </div>
-
-    {% for post in follower_user_posts %}
-        <div class="container">
-            <p>{{post.user.id}}</p>
-            <a href="{% url 'profile' post.user.id %}"
-                ><h4>{{post.user.username}}</h4></a
-            >
-            <h5>{{post.user.email}}</h5>
-            <p>{{post.id}}</p>
-            <h3>{{post.content}}</h3>
-            {% if post.image %}
-            <img src="{{post.imageURL}}" width="200px" height="200px" />
-            {% else %} {% endif %}
-
-            <p>{{post.created}}</p>
-
-            {% if post.user == user %}
-            <a href="{% url 'update-post' post.id %}">Edit Post</a>
-
-            <a href="{% url 'delete-post' post.id %}">Delete Post</a>
-            {% else %}
-            <a href="{% url 'single-post' post.id %}">View Post</a>
-            {% endif %}
-
-            <form action="{% url 'like-post' post.id %}" method="POST">
-                {% csrf_token %} {% if user not in post.liked.all %}
-                <button
-                    type="submit"
-                    name="post_id"
-                    value="{{post.id}}"
-                    class="btn btn-danger"
-                >
-                    Like
-                </button>
-                {% else %}
-                <button
-                    type="submit"
-                    name="post_id"
-                    value="{{post.id}}"
-                    class="btn btn-info"
-                >
-                    Unlike
-                </button>
-                - {{post.total_likes}} Likes - {% endif %}
-            </form>
+        <div class="input-group mb-3">
+            {{form.image|add_class:"form-control"}}
         </div>
-    {% empty %}
-        <div class="no-posts-center">No posts to view</div>
-    {% endfor %} 
+
+        <div class="input-group mb-3">
+            <button type="submit" class="input-group-text">Post</button>
+            {{form.content|add_class:"form-control"}}
+        </div>
+    </form>
+</div>
+        {% for post in follower_user_posts %}
+            <div class="post-center">
+            <div style="width: 40rem;">
+            <div class="card">
+                <div>
+                    {% if post.image %}
+                        <img
+                            src="{{post.imageURL}}"
+                            class="card-img-top"
+                            alt="Post Image"
+                        />
+                    {% else %} {% endif %}
+                    <div class="card-body">
+                        <a class="card-title" href="{% url 'profile' post.user.id %}"
+                            ><h4>{{post.user.username}}</h4></a
+                        >
+                        <h4 class="card-text">{{post.content}}</h4>
+                        <p>{{post.created}}</p>
+
+                        {% if post.user == user %}
+                        <a href="{% url 'update-post' post.id %}">Edit Post</a>
+
+                        <a href="{% url 'delete-post' post.id %}">Delete Post</a>
+                        {% else %}
+                        <a href="{% url 'single-post' post.id %}">View Post</a>
+                        {% endif %}
+
+                        <form action="{% url 'like-post' post.id %}" method="POST">
+                            {% csrf_token %} {% if user not in post.liked.all %}
+                            <button
+                                type="submit"
+                                name="post_id"
+                                value="{{post.id}}"
+                                class="btn btn-danger"
+                            >
+                                Like
+                            </button>
+                            {% else %}
+                            <button
+                                type="submit"
+                                name="post_id"
+                                value="{{post.id}}"
+                                class="btn btn-info"
+                            >
+                                Unlike
+                            </button>
+                            - {{post.total_likes}} Likes - {% endif %}
+                        </form>
+                    </div>
+                </div>
+            </div>
+            </div>
+            </div>
+        {% empty %}
+        {% endfor %}
 {% endblock body %}

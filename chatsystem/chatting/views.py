@@ -167,6 +167,8 @@ def profile_view(request, id):
                 form.save()
                 return HttpResponseRedirect(reverse('profile', args=[id]))
 
+        default_image = 'avatar.png'
+
         
         # Idk if this is standard but it created the UserAvatar queries for each existing user(already created a signal to create the queries each time a user registers, so I commented it out)
         # users = User.objects.all()
@@ -174,7 +176,7 @@ def profile_view(request, id):
         #     UserAvatar.objects.create(user=user)
             
 
-    context = {'user': user, 'followed_user': followed_user, 'count': followed_user.total_followers, 'following': user.followers.all().count(), 'follow_bool': following_bool, 'posts': posts, 'user_avatar': user_avatar, 'form': form}
+    context = {'user': user, 'followed_user': followed_user, 'count': followed_user.total_followers, 'following': user.followers.all().count(), 'follow_bool': following_bool, 'posts': posts, 'user_avatar': user_avatar, 'form': form, 'default_mage': default_image}
     return render(request, "chatting/profile.html", context)
 
 def delete_avatar(request, id):
