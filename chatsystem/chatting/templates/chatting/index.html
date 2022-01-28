@@ -65,6 +65,10 @@
         </div>
     </form>
 </div>
+    
+    <div class="d-flex justify-content-around">
+        <div>flex Item</div>
+        <div>
         {% for post in follower_user_posts %}
             <div class="post-center">
             <div style="width: 40rem;">
@@ -120,4 +124,18 @@
             </div>
         {% empty %}
         {% endfor %}
+    </div>
+    <div>
+        <h5>People To Know</h5>
+        <div>
+            {% for users in available %}
+            <div class="mb-3">
+                <a href="{% url 'profile' users.id %}">
+                    <div>{{users.username}}</div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>      
 {% endblock body %}
