@@ -7,8 +7,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.urls import reverse
-from .models import Post, UserFollowing, UserAvatar
-from .forms import PostModelForm, UserAvatarModelForm, CustomUserCreationForm
+from .models import Post, UserFollowing, UserAvatar, Comments
+from .forms import PostModelForm, UserAvatarModelForm, CustomUserCreationForm, CommentsModelForm
 
 import random
 
@@ -28,8 +28,24 @@ def index(request):
                 user_form.user = user
                 form.save()
                 return redirect("index")
+        
+        comment_form = CommentsModelForm(request.POST or None)
+
+        if request.method == 'POST':
+            post_id = Post.objects.get(id=request.POST.get('comment_post_id'))
+            if comment_form.is_valid():
+                instance = comment_form.save(commit=False)
+                instance.user = main_user
+                instance.post = post_id
+                instance.save()
+                comment_form = CommentsModelForm()
+
+            # post_comments, created = Comments.objects.get_or_create(user=user, post=post_id)
+            # print(f"Post comments {post_comments}")
 
         all_posts = Post.objects.all()
+
+        
         
         # created the request.user query for UserFollowing
         followed_profiles = UserFollowing.objects.get(user=request.user)
@@ -43,7 +59,8 @@ def index(request):
 
         
         # queried the user from posts and linked it to followers from UserFollowing's following_user_id's related name and instanced followed_profiles to it 
-        follower_user_posts = Post.objects.filter(Q(user__followers=followed_profiles) | Q(user=request.user))
+        # using .distinct() helps eliminate duplicate values
+        follower_user_posts = Post.objects.filter(Q(user__followers=followed_profiles) | Q(user=main_user)).distinct()
         print(f"Follower Ids {follower_user_posts}")
 
         # profiles = Profile.objects.all().exclude(user=self.user)
@@ -66,7 +83,7 @@ def index(request):
         
         
     
-    context = {'follower_user_posts': follower_user_posts, 'form': form, 'user': user, 'available': available[:3]}
+    context = {'follower_user_posts': follower_user_posts, 'form': form, 'comment_form': comment_form, 'user': user, 'available': available[:3]}
     return render(request, "chatting/index.html", context)
 
 @login_required(login_url='login')

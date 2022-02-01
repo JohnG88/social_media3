@@ -1,4 +1,7 @@
-{% extends "chatting/layout.html" %} {% load widget_tweaks %} {% block body %}
+{% extends "chatting/layout.html" %} 
+{% load widget_tweaks %} 
+{% comment %} if saving with ctrl + s, make sure none of the django tags are on same line or are cut because will throw template tag error {% endcomment %}
+{% block body %}
 
 <!-- Button trigger modal -->
 <button
@@ -29,12 +32,12 @@
                     aria-label="Close"
                 ></button>
             </div>
-            {% for users in available %}
+            {% comment %} {% for users in available %}
             <a href="{% url 'profile' users.id %}">
                 <div class="modal-body">{{users.username}}</div>
                 <hr />
             </a>
-            {% endfor %}
+            {% endfor %} {% endcomment %}
             <div class="modal-footer">
                 <button
                     type="button"
@@ -65,64 +68,106 @@
         </div>
     </form>
 </div>
-    
-    <div class="d-flex justify-content-around">
-        <div>flex Item</div>
-        <div>
+
+<div class="d-flex justify-content-around">
+    <div>flex Item</div>
+    <div>
         {% for post in follower_user_posts %}
-            <div class="post-center">
-            <div style="width: 40rem;">
-            <div class="card">
-                <div>
-                    {% if post.image %}
+        <div class="post-center">
+            <div style="width: 40rem">
+                <div class="card">
+                    <div>
+                        {% if post.image %}
                         <img
                             src="{{post.imageURL}}"
                             class="card-img-top"
                             alt="Post Image"
                         />
-                    {% else %} {% endif %}
-                    <div class="card-body">
-                        <a class="card-title" href="{% url 'profile' post.user.id %}"
-                            ><h4>{{post.user.username}}</h4></a
-                        >
-                        <h4 class="card-text">{{post.content}}</h4>
-                        <p>{{post.created}}</p>
-
-                        {% if post.user == user %}
-                        <a href="{% url 'update-post' post.id %}">Edit Post</a>
-
-                        <a href="{% url 'delete-post' post.id %}">Delete Post</a>
                         {% else %}
-                        <a href="{% url 'single-post' post.id %}">View Post</a>
                         {% endif %}
+                        <div class="card-body">
+                            <a
+                                class="card-title"
+                                href="{% url 'profile' post.user.id %}"
+                                ><h4>{{post.user.username}}</h4></a
+                            >
+                            <h4 class="card-text">{{post.content}}</h4>
+                            <p>{{post.created}}</p>
 
-                        <form action="{% url 'like-post' post.id %}" method="POST">
-                            {% csrf_token %} {% if user not in post.liked.all %}
-                            <button
-                                type="submit"
-                                name="post_id"
-                                value="{{post.id}}"
-                                class="btn btn-danger"
+                            {% if post.user == user %}
+                            <a href="{% url 'update-post' post.id %}"
+                                >Edit Post</a
                             >
-                                Like
-                            </button>
+
+                            <a href="{% url 'delete-post' post.id %}"
+                                >Delete Post</a
+                            >
                             {% else %}
-                            <button
-                                type="submit"
-                                name="post_id"
-                                value="{{post.id}}"
-                                class="btn btn-info"
+                            <a href="{% url 'single-post' post.id %}"
+                                >View Post</a
                             >
-                                Unlike
-                            </button>
-                            - {{post.total_likes}} Likes - {% endif %}
-                        </form>
+                            {% endif %}
+                            <div>
+                                <form
+                                    action="{% url 'like-post' post.id %}"
+                                    method="POST"
+                                >
+                                    {% csrf_token %}
+                                    {% if user not in post.liked.all %}
+                                    <button
+                                        type="submit"
+                                        name="post_id"
+                                        value="{{post.id}}"
+                                        class="btn btn-danger"
+                                    >
+                                        Like
+                                    </button>
+                                    {% else %}
+                                    <button
+                                        type="submit"
+                                        name="post_id"
+                                        value="{{post.id}}"
+                                        class="btn btn-info"
+                                    >
+                                        Unlike
+                                    </button>
+                                    - {{post.total_likes}} Likes - {% endif %}
+                                </form>
+                            </div>
+                            
+                            <div>
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <input
+                                        type="hidden"
+                                        name="comment_post_id"
+                                        value="{{post.id}}"
+                                    />
+                                    <div class="input-group mb-3">
+                                        <button
+                                            type="submit"
+                                            class="input-group-text"
+                                        >
+                                            Post
+                                        </button>
+                                        {{comment_form.body|add_class:"form-control"}}
+                                    </div>
+                                </form>
+                            </div>
+                            <div>
+                                {% for c in post.comments_set.all %}
+                                    <div>
+                                        {{c.user}}
+                                        {{c.body}}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            </div>
-            </div>
-        {% empty %}
+        </div>
+        {% empty %} 
         {% endfor %}
     </div>
     <div>
@@ -137,5 +182,5 @@
             {% endfor %}
         </div>
     </div>
-</div>      
+</div>
 {% endblock body %}
