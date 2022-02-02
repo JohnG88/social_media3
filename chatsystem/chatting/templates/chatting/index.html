@@ -157,6 +157,10 @@
                             <div>
                                 {% for c in post.comments_set.all %}
                                     <div>
+                                        {% for ua in c.user.useravatar_set.all %}
+                                        <img src="{{ua.avatar.url}}" class="rounded-circle" width="40px" height="40px">
+                                        {% endfor %}
+                                        
                                         {{c.user}}
                                         {{c.body}}
                                     </div>

@@ -67,6 +67,11 @@ def index(request):
         users = User.objects.all().exclude(id=main_user.id)
         print(f"Users {users}")
 
+        user_avatars = UserAvatar.objects.all()
+        for ua in user_avatars:
+            print(f"ua {ua.avatar}")
+        print(f"user_avatars {user_avatars}")
+
         # I still don't know how list comprehensions work, I tweaked one example I copied from a tutorial, It seems to be working 
         available = [user for user in users if user not in all_followed_profiles]
         print(f"Available {available}")
