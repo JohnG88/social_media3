@@ -178,11 +178,18 @@
         <h5>People To Know</h5>
         <div>
             {% for users in available %}
-            <div class="mb-3">
-                <a href="{% url 'profile' users.id %}">
-                    <div>{{users.username}}</div>
-                </a>
-            </div>
+                <div class="mb-3 d-flex align-item-center">
+                    {% for img_avatar in users.useravatar_set.all %}
+                    <div class="flex-shrink-0">
+                    <img src="{{img_avatar.avatar.url}}" class="rounded-circle" width="30px" height="30px">
+                    </div>
+                    {% endfor %}
+                    <div class="flex-grow-1 ms-3">
+                    <a href="{% url 'profile' users.id %}">
+                        <div>{{users.username}}</div>
+                    </a>
+                    </div>
+                </div>
             {% endfor %}
         </div>
     </div>
