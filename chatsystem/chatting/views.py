@@ -90,7 +90,7 @@ def index(request):
         
         
     
-    context = {'follower_user_posts': follower_user_posts, 'form': form, 'comment_form': comment_form, 'user': user, 'available': available[:3]}
+    context = {'follower_user_posts': follower_user_posts, 'all_followed_profiles': all_followed_profiles, 'form': form, 'comment_form': comment_form, 'user': user, 'available': available[:3]}
     return render(request, "chatting/index.html", context)
 
 @login_required(login_url='login')

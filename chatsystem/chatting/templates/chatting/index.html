@@ -210,6 +210,23 @@
                 </div>
             {% endfor %}
         </div>
+        <div class="mt-5">
+            <h5>Contacts</h5>
+            {% for f_users in all_followed_profiles %}
+            <div class="mb-3 d-flex align-item-center">
+                {% for img_avatar in f_users.useravatar_set.all %}
+                <div class="flex-shrink-0">
+                <img src="{{img_avatar.avatar.url}}" class="rounded-circle" width="30px" height="30px">
+                </div>
+                {% endfor %}
+                <div class="flex-grow-1 ms-3">
+                <a href="{% url 'profile' f_users.id %}">
+                    <div>{{f_users.username}}</div>
+                </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
     </div>
 </div>
 {% endblock body %}

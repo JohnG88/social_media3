@@ -2,6 +2,10 @@ a {
     text-decoration: none;
 }
 
+a:hover {
+    text-decoration: underline;
+}
+
 .center {
     display: flex;
     justify-content: center;
