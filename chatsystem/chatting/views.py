@@ -27,7 +27,8 @@ def index(request):
                 user_form = form.save(commit=False)
                 user_form.user = user
                 form.save()
-                return redirect("index")
+                form = PostModelForm()
+                return redirect('index')
         
         comment_form = CommentsModelForm(request.POST or None)
 
@@ -39,6 +40,7 @@ def index(request):
                 instance.post = post_id
                 instance.save()
                 comment_form = CommentsModelForm()
+                return redirect('index')
 
             # post_comments, created = Comments.objects.get_or_create(user=user, post=post_id)
             # print(f"Post comments {post_comments}")
