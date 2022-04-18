@@ -1,79 +1,120 @@
 {% extends 'chatting/layout.html' %} 
 {% load widget_tweaks %} 
-
 {% block body %}
-<h1>Profile Page</h1>
-<div>
-    <img src="{{user_avatar.avatar.url}}" alt="User Avatar" width="150px" height="150px">
-</div>
-
-{% if user == request.user %}
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class="input-group mb-3">
-            {{form.avatar|add_class:"form-control"}}
-        </div>
-        <div class="input-group mb-3">
-            <button class="input-group-text">Update Avatar</button>
-        </div>
-    </form>
-    {% if user_avatar.avatar != default_mage%}
-        <form method="POST" enctype="multipart/form-data" action="{% url 'delete-avatar' user.id %}">
-            {% csrf_token %}
-            <div class="input-group mb-3">
-                <button class="input-group-text">Delete Avatar</button>
+    <div class="d-flex justify-content-center">
+        <div class="card" style="width: 35rem">
+            <h1>Profile Page</h1>
+            <div>
+                <img
+                    src="{{user_avatar.avatar.url}}"
+                    class="rounded-circle"
+                    alt="User Avatar"
+                    width="150px"
+                    height="150px"
+                />
             </div>
-        </form>
-    {% else %}
-    {% endif %}
-    
-{% else %}
-{% endif %}
+            <div class="row">
+            {% if user == request.user %}
+                <div class="col-auto">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="input-group mb-3">
+                            {{form.avatar|add_class:"form-control"}}
+                        </div>
+                        <div class="input-group mb-3">
+                            <button class="input-group-text">Change Avatar</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-auto">
+                    {% if user_avatar.avatar != default_mage %}
 
-{{user.id}} {{user.username}} {{user.email}}
-<form action="{% url 'follow-unfollow' user.id %}" method="POST">
-    {% csrf_token %}
-    
-    <p>following - {{count}}</p>
-    {% if request.user == user %}
-        
-    {% else %}
-        {% if follow_bool %}
-            <button
-                type="submit"
-                name="user_id"
-                value="{{user.id}}"
-                class="btn btn-info"
-            >
-                Unfollow
-            </button>
-        
-        {% else %}
-            <button
-            type="submit"
-            name="user_id"
-            value="{{user.id}}"
-            class="btn btn-danger"
-            >
-                Follow
-            </button>
-        {% endif %}
-    {% endif %}
-    
-    Followers - {{following}}
-    
-</form>
-<a class="btn btn-warning" href="{% url 'index' %}">Home</a>
-
-    <div>
-        {% for post in posts %}
-            <h5>{{post.content}}</h5>
-            {% if post.image %}
-            <img src="{{post.imageURL}}" width="200px" height="200px" />
-            {% else %}
+                        <form
+                            method="POST"
+                            enctype="multipart/form-data"
+                            action="{% url 'delete-avatar' user.id %}"
+                        >
+                            {% csrf_token %}
+                            <div class="input-group mb-3">
+                                <button class="input-group-text">Delete Avatar</button>
+                            </div>
+                        </form>
+                
+                    {% else %} 
+                    {% endif %}
+                </div>
+            {% else %} 
             {% endif %}
-        {% empty %}
-            <div class="no-posts-center">No posts to view</div>
-        {% endfor %}
+            </div>
+
+            <form action="{% url 'follow-unfollow' user.id %}" method="POST">
+                {% csrf_token %}
+
+                <p>following - {{count}}</p>
+                {% if request.user == user %} 
+                {% else %} 
+                    {% if follow_bool %}
+                        <button
+                            type="submit"
+                            name="user_id"
+                            value="{{user.id}}"
+                            class="btn btn-info"
+                        >
+                            Unfollow
+                        </button>
+
+                    {% else %}
+                        <button
+                            type="submit"
+                            name="user_id"
+                            value="{{user.id}}"
+                            class="btn btn-danger"
+                        >
+                            Follow
+                        </button>
+                    {% endif %} 
+                {% endif %} 
+                Followers - {{following}}
+            </form>
+            <div class="d-flex">
+            <a class="btn btn-warning" href="{% url 'index' %}">Home</a>
+            </div>
+        </div>
+        <div style="width: 35rem" class="ms-4">
+            {% if user == request.user %}
+                <div>
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                
+                        <div class="input-group mb-3">
+                            <button type="submit" class="input-group-text">Post</button>
+                            {{profile_post_form.content|add_class:"form-control"}}
+                        </div>
+        
+                        <div class="input-group mb-3">
+                            {{profile_post_form.image|add_class:"form-control"}}
+                        </div>
+        
+                    </form>
+                </div>
+                {% else %}
+                {% endif %}
+            
+            <div class="card" style="width: 35rem;">
+                {% for post in posts %}
+                    {% if post.image %}
+                        <img src="{{post.imageURL}}" class="card-img-top" alt="Post Image"/>
+                    {% else %}
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{post.user.username}}</h5>
+                        <p class="card-text">{{post.content}}</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                {% empty %}
+                    <div class="no-posts-center">No posts to view</div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
 {% endblock body %}

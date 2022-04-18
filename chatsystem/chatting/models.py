@@ -45,6 +45,9 @@ class Comments(models.Model):
     def __str__(self):
         return str(self.user.username )
 
+    class Meta:
+        ordering = ['-created']
+
 class UserFollowing(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="following")
     following_user_id = models.ManyToManyField(User, related_name="followers")

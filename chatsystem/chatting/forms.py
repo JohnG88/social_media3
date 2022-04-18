@@ -37,7 +37,10 @@ class EditPostModelForm(forms.ModelForm):
         model = Post
         exclude = ('user','created', 'updated')
 
-        
+class ProfilePostModelForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        exclude = ('user', 'created', 'updated')        
 
 # class LoginModelForm(forms.ModelForm):
 #     class Meta:

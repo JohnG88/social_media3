@@ -5,10 +5,11 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator
 from django.db.models import Q
 from django.urls import reverse
 from .models import Post, UserFollowing, UserAvatar, Comments
-from .forms import PostModelForm, UserAvatarModelForm, CustomUserCreationForm, CommentsModelForm
+from .forms import PostModelForm, UserAvatarModelForm, CustomUserCreationForm, CommentsModelForm, ProfilePostModelForm
 
 import random
 
@@ -46,7 +47,7 @@ def index(request):
             # print(f"Post comments {post_comments}")
 
         all_posts = Post.objects.all()
-
+        
         
         
         # created the request.user query for UserFollowing
@@ -64,6 +65,11 @@ def index(request):
         # using .distinct() helps eliminate duplicate values
         follower_user_posts = Post.objects.filter(Q(user__followers=followed_profiles) | Q(user=main_user)).distinct()
         print(f"Follower Ids {follower_user_posts}")
+
+        paginator = Paginator(follower_user_posts, 10)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        print(f'Pagination Post {paginator}')
 
         # profiles = Profile.objects.all().exclude(user=self.user)
         users = User.objects.all().exclude(id=main_user.id)
@@ -90,7 +96,7 @@ def index(request):
         
         
     
-    context = {'follower_user_posts': follower_user_posts, 'all_followed_profiles': all_followed_profiles, 'form': form, 'comment_form': comment_form, 'user': user, 'available': available[:3]}
+    context = {'follower_user_posts': follower_user_posts, 'all_followed_profiles': all_followed_profiles, 'form': form, 'comment_form': comment_form, 'user': user, 'available': available[:3], 'page_obj': page_obj}
     return render(request, "chatting/index.html", context)
 
 @login_required(login_url='login')
@@ -173,13 +179,23 @@ def profile_view(request, id):
         else:
             following_bool = False
         print(f"This is the followed user boolean {following_bool}")
-
-        posts = Post.objects.filter(user=user).all()
         
-        r_user = User.objects.get(id=id)
+        r_user = User.objects.get(id=request.user.id)
         print(f"r_user {r_user}")
-        user_avatar = UserAvatar.objects.get(user=r_user)
+        user_avatar = UserAvatar.objects.get(user=user)
         print(f"User Avatar {user_avatar}" )
+        
+        # for some reason post worked by moving it above UserAvatarModelForm, idk why that is, it doesn't work if placed below UserAvatarModelForm
+        profile_post_form = PostModelForm(request.POST or None, request.FILES or None)
+        # print(f"post model form {profile_post_form}")
+
+        if request.method == 'POST':
+            if profile_post_form.is_valid():
+                post_form = profile_post_form.save(commit=False)
+                post_form.user = r_user
+                profile_post_form.save()
+                # post_form = PostModelForm()
+                return HttpResponseRedirect(reverse('profile', args=[id]))
         
         # Add the instance to form not keep creating UserAvatar queries
         form = UserAvatarModelForm(request.POST or None, request.FILES or None, instance=user_avatar)
@@ -193,14 +209,14 @@ def profile_view(request, id):
 
         default_image = 'avatar.png'
 
-        
+        posts = Post.objects.filter(user=user).all()
         # Idk if this is standard but it created the UserAvatar queries for each existing user(already created a signal to create the queries each time a user registers, so I commented it out)
         # users = User.objects.all()
         # for user in users:
         #     UserAvatar.objects.create(user=user)
             
 
-    context = {'user': user, 'followed_user': followed_user, 'count': followed_user.total_followers, 'following': user.followers.all().count(), 'follow_bool': following_bool, 'posts': posts, 'user_avatar': user_avatar, 'form': form, 'default_mage': default_image}
+    context = {'user': user, 'followed_user': followed_user, 'count': followed_user.total_followers, 'following': user.followers.all().count(), 'follow_bool': following_bool, 'posts': posts, 'user_avatar': user_avatar, 'form': form, 'default_mage': default_image, 'profile_post_form': profile_post_form}
     return render(request, "chatting/profile.html", context)
 
 def delete_avatar(request, id):

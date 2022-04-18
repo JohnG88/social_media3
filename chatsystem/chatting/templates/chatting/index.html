@@ -56,29 +56,40 @@
 
 
 
-<div class="d-flex justify-content-around mt-3">
-    <div>flex Item</div>
+<div class="d-flex justify-content-between mt-3">
+    <div class="ms-4" style="width: 15rem">Advertisements/Games</div>
     <div>
         <div>
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
         
                 <div class="input-group mb-3">
-                    {{form.image|add_class:"form-control"}}
-                </div>
-        
-                <div class="input-group mb-3">
                     <button type="submit" class="input-group-text">Post</button>
                     {{form.content|add_class:"form-control"}}
                 </div>
+
+                <div class="input-group mb-3">
+                    {{form.image|add_class:"form-control"}}
+                </div>
+
             </form>
         </div>
-        {% for post in follower_user_posts %}
+        {% for post in page_obj %}
         <div class="post-center">
 
             <div style="width: 40rem">
                 <div class="card">
                     <div>
+                        <div class="card-body d-flex">
+                            {% for a in post.user.useravatar_set.all %}
+                                <a href="{% url 'profile' a.user.id %}"> <img src="{{a.avatar.url}}" class="rounded-circle" width="35px" height="35px"></a>
+                            {% endfor %}
+                            
+                            <a class="card-title ms-2" href="{% url 'profile' post.user.id %}">
+                                <h4>{{post.user.username}}</h4>
+                            </a>
+                        </div>
+    
                         {% if post.image %}
                         <img
                             src="{{post.imageURL}}"
@@ -88,11 +99,7 @@
                         {% else %}
                         {% endif %}
                         <div class="card-body">
-                            <a
-                                class="card-title"
-                                href="{% url 'profile' post.user.id %}"
-                                ><h4>{{post.user.username}}</h4></a
-                            >
+                            
                             <h4 class="card-text">{{post.content}}</h4>
                             <p>{{post.created}}</p>
 
@@ -101,7 +108,7 @@
                                 >Edit Post</a
                             >
 
-                            <a href="{% url 'delete-post' post.id %}"
+                            <a class="ms-1" href="{% url 'delete-post' post.id %}"
                                 >Delete Post</a
                             >
                             {% else %}
@@ -120,7 +127,7 @@
                                         type="submit"
                                         name="post_id"
                                         value="{{post.id}}"
-                                        class="btn btn-danger"
+                                        class="btn btn-info"
                                     >
                                         Like
                                     </button>
@@ -129,7 +136,7 @@
                                         type="submit"
                                         name="post_id"
                                         value="{{post.id}}"
-                                        class="btn btn-info"
+                                        class="btn btn-danger"
                                     >
                                         Unlike
                                     </button>
@@ -182,17 +189,36 @@
                                         </div>
                                         {% endfor %}
                                 </div>
-                                </div>
+                            </div>
                             
                         </div>
+                        
                     </div>
                 </div>
             </div>
         </div>
-        {% empty %} 
+        {% empty %}
+            <p>Post your first Post.</p>
         {% endfor %}
+        <div class="pagination">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1">&laquo; first</a>
+                    <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+        
+                <span class="current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+        
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">next</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
     </div>
-    <div>
+    <div class="me-4" style="width: 15rem">
         <h5>People To Know</h5>
         <div>
             {% for users in available %}
@@ -210,7 +236,8 @@
                 </div>
             {% endfor %}
         </div>
-        <div class="mt-5">
+        <hr>
+        <div class="mt-1">
             <h5>Contacts</h5>
             {% for f_users in all_followed_profiles %}
             <div class="mb-3 d-flex align-item-center">
