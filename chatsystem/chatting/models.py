@@ -77,6 +77,14 @@ class UserAvatar(models.Model):
         self.avatar.delete()
         super().delete(*args, **kwargs)
 
+    @property
+    def imageURL(self):
+        try:
+            url = self.avatar.url
+        except:
+            url = ''
+        return url
+
 def create_avatar_query(sender, instance, created, *args, **kwargs):
     if created:
         UserAvatar.objects.get_or_create(user=instance)

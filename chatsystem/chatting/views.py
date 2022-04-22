@@ -3,10 +3,12 @@ from django.shortcuts import redirect, render,get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import AuthenticationForm
+import json
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.template.loader import render_to_string
 from django.urls import reverse
 from .models import Post, UserFollowing, UserAvatar, Comments
 from .forms import PostModelForm, UserAvatarModelForm, CustomUserCreationForm, CommentsModelForm, ProfilePostModelForm
@@ -46,43 +48,52 @@ def index(request):
             # post_comments, created = Comments.objects.get_or_create(user=user, post=post_id)
             # print(f"Post comments {post_comments}")
 
-        all_posts = Post.objects.all()
+        # all_posts_images = Post.objects.filter("image");
+        # print(f"Post image {all_posts_images}")
         
         
-        
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
         # created the request.user query for UserFollowing
         followed_profiles = UserFollowing.objects.get(user=request.user)
-        print(f"followed Profiles {followed_profiles}")
+        # print(f"followed Profiles {followed_profiles}")
 
         all_followed_profiles = followed_profiles.following_user_id.all()
-        print(f"all_followed_profiles {all_followed_profiles}")
+        # print(f"all_followed_profiles {all_followed_profiles}")
 
         all_followed_users_tables = UserFollowing.objects.all()
-        print(f"All followed Users {all_followed_users_tables}")
+        # print(f"All followed Users {all_followed_users_tables}")
 
         
         # queried the user from posts and linked it to followers from UserFollowing's following_user_id's related name and instanced followed_profiles to it 
         # using .distinct() helps eliminate duplicate values
         follower_user_posts = Post.objects.filter(Q(user__followers=followed_profiles) | Q(user=main_user)).distinct()
-        print(f"Follower Ids {follower_user_posts}")
-
+        # print(f"Follower Ids {follower_user_posts}")
+        data_page_num = request.GET.get('page')
+        # print(f"Data page Num {data_page_num}")
+        page_number = int(request.GET.get('page', 1))
+        # print(f'Page Number {page_number}')
         paginator = Paginator(follower_user_posts, 10)
-        page_number = request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
-        print(f'Pagination Post {paginator}')
+
+        try:
+            post_page = paginator.page(page_number)
+        except paginator.EmptyPage:
+            post_page = paginator.Page([], page_number, paginator)
+
+        # page_obj = paginator.get_page(page_number)
+        # print(f'Pagination Post {paginator}')
 
         # profiles = Profile.objects.all().exclude(user=self.user)
         users = User.objects.all().exclude(id=main_user.id)
-        print(f"Users {users}")
+        # print(f"Users {users}")
 
         user_avatars = UserAvatar.objects.all()
-        for ua in user_avatars:
-            print(f"ua {ua.avatar}")
-        print(f"user_avatars {user_avatars}")
+        # for ua in user_avatars:
+        #     print(f"ua {ua.avatar}")
+        # print(f"user_avatars {user_avatars}")
 
         # I still don't know how list comprehensions work, I tweaked one example I copied from a tutorial, It seems to be working 
         available = [user for user in users if user not in all_followed_profiles]
-        print(f"Available {available}")
+        # print(f"Available {available}")
         random.shuffle(available)
 
         # user_posts = Post.objects.filter(user=request.user).all()
@@ -92,12 +103,44 @@ def index(request):
         # followed_profiles = user.followers.all()
         # print(f"Followed Profiles {followed_profiles}")
         # followed_profiles_posts = Post.objects.filter(user__in=followed_profiles).all()
-
         
-        
+    if not is_ajax:
+        context = {'follower_user_posts': follower_user_posts, 'all_followed_profiles': all_followed_profiles, 'form': form, 'comment_form': comment_form, 'user': user, 'available': available[:3], 'post_page': post_page}
+        return render(request, "chatting/index.html", context)
     
-    context = {'follower_user_posts': follower_user_posts, 'all_followed_profiles': all_followed_profiles, 'form': form, 'comment_form': comment_form, 'user': user, 'available': available[:3], 'page_obj': page_obj}
-    return render(request, "chatting/index.html", context)
+    # This block below will get everything from a template and convert into a string to use for scroll
+    else:
+        # content = ''
+        # for post in post_page:
+        #     content += render_to_string("chatting/index.html", {'post': post}, request=request)
+        # 'image': post.image.url,
+        # 'liked': post.liked,
+        all_users = User.objects.all()
+        data = []
+        for post in post_page:
+            for img_useravatar in post.user.useravatar_set.all():
+                img_useravatar.imageURL
+
+            posts = {
+                'id': post.id,
+                'user': post.user.username,
+                'user_id': post.user.id,
+                'user_profile_img': img_useravatar.imageURL,
+                'image': post.imageURL,
+                'likes': True if user in post.liked.all() else False,
+                'likes_count': post.total_likes(),
+                'content': post.content,
+                'created': post.created.strftime("%b. %d, %Y, %I:%M:%S %p"),
+                'updated': post.updated
+            }
+            data.append(posts)
+            # print(f"Data: {data}")
+
+    return JsonResponse({
+        "data": data,
+        "end_pagination": True if page_number >= paginator.num_pages else False,
+        "user": main_user.id
+    })
 
 @login_required(login_url='login')
 def single_post_view(request, id):
@@ -165,25 +208,25 @@ def delete_post(request, id):
 def profile_view(request, id):
     if request.user.is_authenticated:
         user = User.objects.get(id=id)
-        print(f"Profile user {user}")
+        # print(f"Profile user {user}")
         main_user = UserFollowing.objects.get(user=request.user)
-        print(f"Main user {main_user}")
+        # print(f"Main user {main_user}")
         all_followers = request.user.followers.all()
-        print(f"{main_user} following {all_followers}")
+        # print(f"{main_user} following {all_followers}")
         following_bool = False
         followed_user = UserFollowing.objects.get(user=user)
-        print(f"this is followed user {followed_user}")
+        # print(f"this is followed user {followed_user}")
         if user in main_user.following_user_id.all():
         # if main_user.following_user_id.filter(user=followed_user).exists():
             following_bool = True
         else:
             following_bool = False
-        print(f"This is the followed user boolean {following_bool}")
+        # print(f"This is the followed user boolean {following_bool}")
         
         r_user = User.objects.get(id=request.user.id)
-        print(f"r_user {r_user}")
+        # print(f"r_user {r_user}")
         user_avatar = UserAvatar.objects.get(user=user)
-        print(f"User Avatar {user_avatar}" )
+        # print(f"User Avatar {user_avatar}" )
         
         # for some reason post worked by moving it above UserAvatarModelForm, idk why that is, it doesn't work if placed below UserAvatarModelForm
         profile_post_form = PostModelForm(request.POST or None, request.FILES or None)
