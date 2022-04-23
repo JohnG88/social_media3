@@ -150,9 +150,14 @@ def index(request):
             data_comments = []
 
             for comments in post.comments_set.all():
-                print(f"Comments {comments.id}")
+                print(f"Comments {comments.id}");
+
+                for comment_user_profile in comments.user.useravatar_set.all():
+                    comment_user_profile.imageURL
 
                 comments_post = {
+                    'comment_user_profile': comment_user_profile.imageURL,
+                    'comment_user': comments.user.username,
                     'body': comments.body
                 }
                 data_comments.append(comments_post)

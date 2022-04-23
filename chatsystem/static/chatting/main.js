@@ -249,9 +249,9 @@ if (window.location.href === "http://127.0.0.1:8000/") {
                         commentLinkCollapse.textContent = "Comments";
                         commentP.append(commentLinkCollapse);
 
-                        const commentsDiv = document.createElement("div");
-                        commentsDiv.classList.add("card", "card-body")
-                        cardBodyDiv.append(commentsDiv)
+                        // const commentsDiv = document.createElement("div");
+                        // commentsDiv.classList.add("card", "card-body")
+                        // cardBodyDiv.append(commentsDiv)
 
                         // const commentsFlexDiv = document.createElement("div");
                         // commentsFlexDiv.classList.add("d-flex", "mb-1")
@@ -280,6 +280,10 @@ if (window.location.href === "http://127.0.0.1:8000/") {
                         for (let j = 0; j < data.data[i].comments.length; j++) {
                             console.log("comments", data.data[i].comments[j]);
 
+                            const commentsDiv = document.createElement("div");
+                            commentsDiv.classList.add("card", "card-body")
+                            cardBodyDiv.append(commentsDiv)
+
                             const commentsFlexDiv = document.createElement("div");
                             commentsFlexDiv.classList.add("d-flex", "mb-1")
                             commentsDiv.append(commentsFlexDiv);
@@ -289,7 +293,7 @@ if (window.location.href === "http://127.0.0.1:8000/") {
                             commentsFlexDiv.append(commentsFlexShrinkDiv);
 
                             const commentsProfileImage = document.createElement("img")
-                            commentsProfileImage.src = "#";
+                            commentsProfileImage.src = data.data[i].comments[j].comment_user_profile;
                             commentsProfileImage.classList.add("rounded-circle");
                             commentsProfileImage.style.width = "30px";
                             commentsProfileImage.style.height = "30px";
@@ -301,11 +305,11 @@ if (window.location.href === "http://127.0.0.1:8000/") {
 
                             const usernameComments = document.createElement("div");
                             usernameComments.classList.add("ms-3", "me-5");
-                            usernameComments.textContent = "Username";
+                            usernameComments.textContent = data.data[i].comments[j].comment_user;
                             renderedComments.append(usernameComments);
 
                             const commentsP = document.createElement("p");
-                            commentsP.classList.add("ms-3", "ms-5");
+                            commentsP.classList.add("ms-3", "me-5");
                             commentsP.textContent = data.data[i].comments[j].body
                             renderedComments.append(commentsP);
 
