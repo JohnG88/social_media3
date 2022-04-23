@@ -242,16 +242,21 @@ if (window.location.href === "http://127.0.0.1:8000/") {
 
                         const commentLinkCollapse = document.createElement("a");
                         commentLinkCollapse.setAttribute("data-bs-toggle", "collapse");
-                        commentLinkCollapse.href = "#collapseExample";
-                        commentLinkCollapse.role = "button";
+                        commentLinkCollapse.href = `#collapseExample-${data.data[i].id}`;
+                        commentLinkCollapse.setAttribute("role", "button");
                         commentLinkCollapse.setAttribute("aria-expanded", "false");
-                        commentLinkCollapse.setAttribute("aria-controls", "collapseExample");
+                        commentLinkCollapse.setAttribute("aria-controls", `#collapseExample-${data.data[i].id}`);
                         commentLinkCollapse.textContent = "Comments";
                         commentP.append(commentLinkCollapse);
 
-                        // const commentsDiv = document.createElement("div");
-                        // commentsDiv.classList.add("card", "card-body")
-                        // cardBodyDiv.append(commentsDiv)
+                        const divCollapse = document.createElement("div");
+                        divCollapse.classList.add("collapse");
+                        divCollapse.id = `collapseExample-${data.data[i].id}`;
+                        cardBodyDiv.append(divCollapse);
+
+                        const commentsDiv = document.createElement("div");
+                        commentsDiv.classList.add("card", "card-body")
+                        divCollapse.append(commentsDiv)
 
                         // const commentsFlexDiv = document.createElement("div");
                         // commentsFlexDiv.classList.add("d-flex", "mb-1")
@@ -276,13 +281,27 @@ if (window.location.href === "http://127.0.0.1:8000/") {
                         // usernameComments.classList.add("ms-3", "me-5");
                         // usernameComments.textContent = "Username";
                         // renderedComments.append(usernameComments);
+                        
+                        if (data.data[i].comments.length === 0) {
+                            const noComments = document.createElement("p");
+                            noComments.classList.add("no-comments");
+                            noComments.textContent = "Be the first to comment.";
+                            commentsDiv.append(noComments);
+                        }
 
                         for (let j = 0; j < data.data[i].comments.length; j++) {
                             console.log("comments", data.data[i].comments[j]);
 
-                            const commentsDiv = document.createElement("div");
-                            commentsDiv.classList.add("card", "card-body")
-                            cardBodyDiv.append(commentsDiv)
+                            // if (data.data[i].comments[j].length === 0) {
+                            //     const noComments = document.createElement("p");
+                            //     noComments.classList.add("no-comments");
+                            //     noComments.textContent = "Be the first to comment.";
+                            //     commentsDiv.append(noComments);
+                            // }
+
+                            // const commentsDiv = document.createElement("div");
+                            // commentsDiv.classList.add("card", "card-body")
+                            // divCollapse.append(commentsDiv)
 
                             const commentsFlexDiv = document.createElement("div");
                             commentsFlexDiv.classList.add("d-flex", "mb-1")

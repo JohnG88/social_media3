@@ -169,7 +169,7 @@
                                     </form>
                                 </div>
                                 <p>
-                                    <a data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                    <a data-bs-toggle="collapse" href="#collapseExample-{{post.id}}" role="button" aria-expanded="false" aria-controls="collapseExample-{{post.id}}">
                                         Comments
                                     </a>
                                     {% comment %} <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
@@ -177,8 +177,8 @@
                                     </button> {% endcomment %}
                                     </p>
 
-                                    <div class="collapse" id="collapseExample">
-                                    <div class="card card-body">
+                                    <div class="collapse" id="collapseExample-{{post.id}}">
+                                        <div class="card card-body">
                                         
                                             {% for c in post.comments_set.all %}
                                             <div class="d-flex mb-1">
@@ -192,6 +192,8 @@
                                                     <p class="ms-3 me-5">{{c.body}}</p>
                                                 </div>
                                             </div>
+                                            {% empty %}
+                                            <p class="no-comments">Be the first to comment.</p>
                                             {% endfor %}
                                     </div>
                                 </div>
