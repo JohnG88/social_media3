@@ -228,7 +228,7 @@ if (window.location.href === "http://127.0.0.1:8000/") {
                         commentButton.textContent = "Post";
                         commentInputGroup.append(commentButton)
 
-                        const commentInputBody = document.createElement("div");
+                        const commentInputBody = document.createElement("input");
                         commentInputBody.type = "text";
                         commentInputBody.name = "body";
                         commentInputBody.maxlength = 500;
