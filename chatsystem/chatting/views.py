@@ -115,11 +115,48 @@ def index(request):
         #     content += render_to_string("chatting/index.html", {'post': post}, request=request)
         # 'image': post.image.url,
         # 'liked': post.liked,
-        all_users = User.objects.all()
+        # all_users = User.objects.all()
+        # for users in all_users:
+        #     users.comments_set.filter()
+        all_posts = Post.objects.all()
+        # indiv_post_comments = all_posts.comments_set.all()
+        # for user_comments in all_posts.comments_set.all():
+        #     print(f"All comments {user_comments.body}")
+        #     user_comments.body
+        # print(f"All posts {all_posts}")
+        
+        
+        # print(f"Comments {comments}")
         data = []
+
         for post in post_page:
             for img_useravatar in post.user.useravatar_set.all():
+                print(f" IMG AVA {img_useravatar.imageURL}")
                 img_useravatar.imageURL
+
+            # for post_comments in post.user.comments_set.filter(id=post.id):
+            #     print(f"Post comments {post_comments.body}")
+
+            # all_users = User.objects.all()
+            # for users in all_users:
+            #     print(f"Users {users}")
+            #     users.comments_set.all()
+            #     print(f"All comments {users.comments_set.all()}")
+            #     if users.comments_set.filter(user=post.user):
+            #         for user_comments in users.comments_set.filter(post=post.id):
+            #                 print(f"User comments{user_comments.body}")
+            #                 # user_comments
+            #     return user_comments
+            data_comments = []
+
+            for comments in post.comments_set.all():
+                print(f"Comments {comments.id}")
+
+                comments_post = {
+                    'body': comments.body
+                }
+                data_comments.append(comments_post)
+                
 
             posts = {
                 'id': post.id,
@@ -131,7 +168,8 @@ def index(request):
                 'likes_count': post.total_likes(),
                 'content': post.content,
                 'created': post.created.strftime("%b. %d, %Y, %I:%M:%S %p"),
-                'updated': post.updated
+                'updated': post.updated,
+                'comments': data_comments
             }
             data.append(posts)
             # print(f"Data: {data}")
