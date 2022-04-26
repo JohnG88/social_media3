@@ -1,19 +1,24 @@
 {% extends "chatting/layout.html" %} 
 {% load widget_tweaks %} 
 {% block body %}
-    <div class="center">
-        <h3>Do you wish to delete:</h3>
-        <p>{{post.content}}</p>
+
+    <div class="form-center">
+    <div class="edit-form-center">
+        
+        <h3>Do you wish to delete post:</h3>
         {% if  post.image  %}
-        <img src="{{post.imageURL}}" width="200px" height="200px" />
+        <img src="{{post.imageURL}}" width="100%" height="200px" />
         {% else %}
         {% endif %}
+        <p>{{post.content}}</p>
         
-
+        
         <form action="{% url 'delete-post' post.id %}" method="POST">
             {% csrf_token %}
             <a class="btn btn-warning" href="{% url 'index' %}">Cancel</a>
             <input class="btn btn-danger" type="submit" name="Confirm" />
         </form>
+        
+    </div>
     </div>
 {% endblock body %}

@@ -6,6 +6,10 @@ const loading = document.querySelector(".loading");
 const cardCenter = document.querySelector(".card");
 const postCenterBody = document.querySelector(".post-center-body");
 
+const postForm = document.querySelector("#post-form");
+
+
+
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -28,6 +32,43 @@ const csrftoken = getCookie('csrftoken');
 var page = 1;
 var blockRequest = false;
 var endPagination = false;
+
+postForm.addEventListener("submit", (e) => {
+    e.preventDefault()
+    const inputContent = document.querySelector("#id_content").value;
+    const inputImageContent = document.querySelector("#id_image").files;
+    // console.log("Input value", inputContent)
+    console.log("Input image value files 0", inputImageContent[0])
+    // const data = {content: inputContent, image:inputImageContent}
+
+    let formData = new FormData()
+    formData.append('image', inputImageContent[0])
+    formData.append('content', inputContent )
+
+    console.log("Form data", formData)
+
+    // var url = new URL("http://127.0.0.1:8000/"),
+    //     params = {data:inputContent}
+    //     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
+    fetch("http://127.0.0.1:8000/", {
+        method: "POST",
+        headers: {
+            // "Content-type": "application/json",
+            // 'Content-Type': 'multipart/form-data; boundary=—-WebKitFormBoundaryfgtsKTYLsT7PNUVD',
+            "X-Requested-With": "XMLHttpRequest",
+            'X-CSRFToken': csrftoken,
+        },
+        // body: JSON.stringify(formData)
+        body: formData
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            console.log('Success ', data)
+        })
+        .catch((error) => {
+            console.log("Error ", error)
+        })
+})
 
 // Add this if statement to only use in index page
 if (window.location.href === "http://127.0.0.1:8000/") {

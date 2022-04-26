@@ -23,19 +23,52 @@ def index(request):
         main_user = request.user
         user = User.objects.get(id=main_user.id)
         # print(f"INdex user {user}")
-        form = PostModelForm(request.POST or None, request.FILES or None)
-        
+        form = PostModelForm()
+
+        # is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
         if request.method == 'POST':
-            if form.is_valid():
-                user_form = form.save(commit=False)
-                user_form.user = user
-                form.save()
-                form = PostModelForm()
-                return redirect('index')
+            data_answer = request.POST.get("content");
+            data_image_answer = request.FILES.get("image")
+            # form = PostModelForm(request.POST or None, request.FILES or None)
+            # data = json.loads(request.body)
+            # data = json.loads(request.body)
+            # data_answer = data.get('content')
+            # data_image_answer = data.get('image')
+            # print(f"Data raw {data}")
+            print(f"Data answer {data_answer}")
+            print(f"Data image answer {data_image_answer}")
+        # print(f"Request post data {request.POST.get('data')}")
+            # if form.is_valid():
+                # print(f"Request post data {request.POST.get('data')}")
+                # user_form = form.save(commit=False)
+                # user_form.user = user.id
+                # user_form.content = data.get('content')
+                # user_form.save()
+                # form = PostModelForm()
+                # return redirect('index')
+            new_post = Post.objects.create(user=user)
+            # new_post = Post(user=user.id, content=data_answer)
+            # new_post.user = user.id
+            new_post.content = data_answer
+            new_post.image = data_image_answer
+            new_post.save()
+            return JsonResponse({
+                'id': new_post.id,
+                'user': new_post.user.username,
+                'content': new_post.content,
+                'image': new_post.imageURL,
+                'created': new_post.created
+            })
+                
         
         comment_form = CommentsModelForm(request.POST or None)
 
         if request.method == 'POST':
+            print(f"Comment post id {request.POST.get('comment_post_id')}")
+            # try:
+            #     post_id = Post.objects.get(id=request.POST.get('comment_post_id'))
+            # except Post.DoesNotExist:
+            #     post_id = None
             post_id = Post.objects.get(id=request.POST.get('comment_post_id'))
             if comment_form.is_valid():
                 instance = comment_form.save(commit=False)
@@ -43,7 +76,7 @@ def index(request):
                 instance.post = post_id
                 instance.save()
                 comment_form = CommentsModelForm()
-                return redirect('index')
+                # return redirect('index')
 
             # post_comments, created = Comments.objects.get_or_create(user=user, post=post_id)
             # print(f"Post comments {post_comments}")
@@ -127,6 +160,7 @@ def index(request):
         
         
         # print(f"Comments {comments}")
+    
         data = []
 
         for post in post_page:
@@ -180,6 +214,11 @@ def index(request):
             # print(f"Data: {data}")
 
     return JsonResponse({
+        # 'id': new_post.id,
+        # 'user': new_post.user.username,
+        # 'content': new_post.content,
+        # 'image': new_post.imageURL,
+        # 'created': new_post.created,
         "data": data,
         "end_pagination": True if page_number >= paginator.num_pages else False,
         "user": main_user.id
