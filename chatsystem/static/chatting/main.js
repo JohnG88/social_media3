@@ -64,6 +64,229 @@ postForm.addEventListener("submit", (e) => {
         .then((response) => response.json())
         .then((data) => {
             console.log('Success ', data)
+            const dataDiv = document .createElement("div");
+            dataDiv.classList.add("post-center");
+            // dataDiv.textContent = data.data[i].id;
+            postCenterBody.prepend(dataDiv);
+
+            const styleDiv = document.createElement("div");
+            styleDiv.style.width = "40rem";
+            dataDiv.append(styleDiv);
+
+            const cardDiv = document.createElement("div");
+            cardDiv.classList.add("card");
+            styleDiv.append(cardDiv);
+
+            const normalDiv = document.createElement("div");
+            cardDiv.append(normalDiv);
+
+            const cardBodyFlexDiv = document.createElement("div");
+            cardBodyFlexDiv.classList.add("card-body", "d-flex");
+            normalDiv.append(cardBodyFlexDiv);
+
+            const userLinkProfileImage = document.createElement("a");
+            userLinkProfileImage.href = "#";
+            cardBodyFlexDiv.append(userLinkProfileImage)
+
+            const userProfileImage = document.createElement("img");
+            userProfileImage.src = "#";
+            userProfileImage.classList.add("rounded-circle");
+            userProfileImage.style.width = "35px";
+            userProfileImage.style.height = "35px";
+            userLinkProfileImage.append(userProfileImage);
+
+            const usernameLink = document.createElement("a");
+            usernameLink.href = `#`;
+            usernameLink.classList.add("card-title", "ms-2");
+            cardBodyFlexDiv.append(usernameLink)
+
+            const username = document.createElement("h4");
+            username.textContent = data.user
+            usernameLink.append(username);
+
+            // Everything below goes in normal div, also have to check if image exists and if it doesn't leave empty
+            if (data.image != "") {
+                const normalImage = document.createElement("img");
+                normalImage.src = data.image;
+                normalImage.classList.add("card-img-top")
+                normalImage.alt = "Post Image";
+                normalDiv.append(normalImage);
+            }
+
+            const cardBodyDiv = document.createElement("div");
+            cardBodyDiv.classList.add("card-body");
+            normalDiv.append(cardBodyDiv);
+
+            const postContent = document.createElement("h4");
+            postContent.classList.add("card-text");
+            postContent.textContent = data.content;
+            cardBodyDiv.append(postContent);
+
+            const createdDate = document.createElement("p");
+            createdDate.textContent = data.created;
+            cardBodyDiv.append(createdDate);
+
+            // check to see if post.user = user to hide or show links below;
+            if (data.user_id === data.post_user_id ) {
+                const editPost = document.createElement("a");
+                editPost.href = `/update-post/${data.id}/`;
+                editPost.textContent = "Edit Post";
+                cardBodyDiv.append(editPost)
+
+                const deletePost = document.createElement("a");
+                deletePost.classList.add("ms-1");
+                deletePost.href = `/delete-post/${data.id}`
+                deletePost.textContent = "Delete Post"
+                cardBodyDiv.append(deletePost);
+
+            }
+
+            const viewPost = document.createElement("a");
+            viewPost.href = `/single-post/${data.id}`;
+            viewPost.textContent = "View Post";
+            cardBodyDiv.append(viewPost);
+
+            const normalDivTwo = document.createElement("div");
+            cardBodyDiv.append(normalDivTwo);
+
+            const likeForm = document.createElement("form");
+            likeForm.action = `/like-post/${data.id}`;
+            likeForm.method = "POST";
+            likeForm.classList.add("like-unlike-form");
+            normalDivTwo.append(likeForm);
+
+            // will add csrftoken
+            const csrfInput = document.createElement("input");
+            csrfInput.type = "hidden";
+            csrfInput.name = "csrfmiddlewaretoken";
+            csrfInput.value = csrftoken;
+            likeForm.append(csrfInput);
+
+            // check to see if user already liked or hasn't liked
+            const likeButton = document.createElement("button");
+            likeButton.type = "submit";
+            likeButton.name = "post_id";
+            likeButton.value = `${data.id}`;
+            // if (data.data[i].likes === true) {
+            likeButton.classList.add("btn", "btn-danger");
+            likeButton.textContent = "Unlike";
+            // } else {
+            //     likeButton.classList.add("btn", "btn-info");
+            //     likeButton.textContent = "Like";
+            // }
+            // if (data.data[i].likes_count) {
+            //     likeForm.textContent = `- ${data.data[i].likes_count} Likes -`;
+            // }
+            likeForm.append(likeButton);
+
+            // likeForm.textContent = "- Likes -";
+            
+            const likeDisplay = document.createElement("p");
+            if (data.id) {
+                likeDisplay.textContent = `- ${data.id} Likes -`;
+            }
+            likeForm.append(likeDisplay)
+
+            const normalDivThree = document.createElement("div");
+            cardBodyDiv.append(normalDivThree);
+
+            const commentForm = document.createElement("form");
+            commentForm.method = "POST";
+            normalDivThree.append(commentForm);
+
+            // will add csrftoken
+            const csrfCommentInput = document.createElement("input");
+            csrfCommentInput.type = "hidden";
+            csrfCommentInput.name = "csrfmiddlewaretoken";
+            csrfCommentInput.value = csrftoken;
+            commentForm.append(csrfCommentInput);
+
+            const commentHiddenInput = document.createElement("input");
+            commentHiddenInput.type = "hidden";
+            commentHiddenInput.name = "comment_post_id";
+            commentHiddenInput.value = data.id;
+            commentForm.append(commentHiddenInput);
+
+            const commentInputGroup = document.createElement("div");
+            commentInputGroup.classList.add("input-group", "mb-3");
+            commentForm.append(commentInputGroup);
+
+            const commentButton = document.createElement("button");
+            commentButton.type = "submit";
+            commentButton.classList.add("input-group-text");
+            commentButton.textContent = "Post";
+            commentInputGroup.append(commentButton)
+
+            const commentInputBody = document.createElement("input");
+            commentInputBody.type = "text";
+            commentInputBody.name = "body";
+            commentInputBody.maxlength = 500;
+            commentInputBody.classList.add("form-control");
+            commentInputBody.required = true;
+            commentInputBody.id = "id_body";
+            commentInputGroup.append(commentInputBody);
+
+            const commentP = document.createElement("p");
+            cardBodyDiv.append(commentP);
+
+            const commentLinkCollapse = document.createElement("a");
+            commentLinkCollapse.setAttribute("data-bs-toggle", "collapse");
+            commentLinkCollapse.href = `#collapseExample-${data.id}`;
+            commentLinkCollapse.setAttribute("role", "button");
+            commentLinkCollapse.setAttribute("aria-expanded", "false");
+            commentLinkCollapse.setAttribute("aria-controls", `#collapseExample-${data.id}`);
+            commentLinkCollapse.textContent = "Comments";
+            commentP.append(commentLinkCollapse);
+
+            const divCollapse = document.createElement("div");
+            divCollapse.classList.add("collapse");
+            divCollapse.id = `collapseExample-${data.id}`;
+            cardBodyDiv.append(divCollapse);
+
+            const commentsDiv = document.createElement("div");
+            commentsDiv.classList.add("card", "card-body")
+            divCollapse.append(commentsDiv)
+
+            if (data.id === 0) {
+                const noComments = document.createElement("p");
+                noComments.classList.add("no-comments");
+                noComments.textContent = "Be the first to comment.";
+                commentsDiv.append(noComments);
+            }
+
+            // for (let j = 0; j < data.data[i].comments.length; j++) {
+            //     console.log("comments", data.data[i].comments[j]);
+
+            //     const commentsFlexDiv = document.createElement("div");
+            //     commentsFlexDiv.classList.add("d-flex", "mb-1")
+            //     commentsDiv.append(commentsFlexDiv);
+
+            //     const commentsFlexShrinkDiv = document.createElement("div")
+            //     commentsFlexShrinkDiv.classList.add("flex-shrink-0");
+            //     commentsFlexDiv.append(commentsFlexShrinkDiv);
+
+            //     const commentsProfileImage = document.createElement("img")
+            //     commentsProfileImage.src = data.data[i].comments[j].comment_user_profile;
+            //     commentsProfileImage.classList.add("rounded-circle");
+            //     commentsProfileImage.style.width = "30px";
+            //     commentsProfileImage.style.height = "30px";
+            //     commentsFlexShrinkDiv.append(commentsProfileImage)
+
+            //     const renderedComments = document.createElement("div");
+            //     renderedComments.classList.add("ms-2", "bd-highlight", "bg-secondary", "bg-gradient", "rounded-pill");
+            //     commentsFlexDiv.append(renderedComments);
+
+            //     const usernameComments = document.createElement("div");
+            //     usernameComments.classList.add("ms-3", "me-5");
+            //     usernameComments.textContent = data.data[i].comments[j].comment_user;
+            //     renderedComments.append(usernameComments);
+
+            //     const commentsP = document.createElement("p");
+            //     commentsP.classList.add("ms-3", "me-5");
+            //     commentsP.textContent = data.data[i].comments[j].body
+            //     renderedComments.append(commentsP);
+
+            // }
         })
         .catch((error) => {
             console.log("Error ", error)

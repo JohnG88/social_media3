@@ -53,8 +53,10 @@ def index(request):
             new_post.image = data_image_answer
             new_post.save()
             return JsonResponse({
+                'user_id': user.id,
                 'id': new_post.id,
                 'user': new_post.user.username,
+                'post_user_id': new_post.user.id,
                 'content': new_post.content,
                 'image': new_post.imageURL,
                 'created': new_post.created
