@@ -1,8 +1,9 @@
 from django.urls import path
-from .views import index, update_post, delete_post, login_view, register, logout_view, single_post_view, profile_view, like_post, follow_unfollow, delete_avatar
+from .views import index, update_post, delete_post, login_view, register, logout_view, single_post_view, profile_view, like_post, follow_unfollow, delete_avatar, comment_post
 
 urlpatterns = [
     path("", index, name="index"),
+    path("comments/<int:id>", comment_post, name="comments"),
     path("single-post/<int:id>", single_post_view, name="single-post"),
     path("update-post/<int:id>/", update_post, name="update-post"),
     path("like-post/<int:id>", like_post, name="like-post"),

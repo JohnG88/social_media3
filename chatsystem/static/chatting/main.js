@@ -89,14 +89,14 @@ postForm.addEventListener("submit", (e) => {
             cardBodyFlexDiv.append(userLinkProfileImage)
 
             const userProfileImage = document.createElement("img");
-            userProfileImage.src = "#";
+            userProfileImage.src = `${data.user_profile_image}`;
             userProfileImage.classList.add("rounded-circle");
             userProfileImage.style.width = "35px";
             userProfileImage.style.height = "35px";
             userLinkProfileImage.append(userProfileImage);
 
             const usernameLink = document.createElement("a");
-            usernameLink.href = `#`;
+            usernameLink.href = `/profile/${data.post_user_id}`;
             usernameLink.classList.add("card-title", "ms-2");
             cardBodyFlexDiv.append(usernameLink)
 
@@ -167,13 +167,13 @@ postForm.addEventListener("submit", (e) => {
             likeButton.type = "submit";
             likeButton.name = "post_id";
             likeButton.value = `${data.id}`;
-            // if (data.data[i].likes === true) {
-            likeButton.classList.add("btn", "btn-danger");
-            likeButton.textContent = "Unlike";
-            // } else {
-            //     likeButton.classList.add("btn", "btn-info");
-            //     likeButton.textContent = "Like";
-            // }
+            if (data.likes === true) {
+                likeButton.classList.add("btn", "btn-danger");
+                likeButton.textContent = "Unlike";
+            } else {
+                likeButton.classList.add("btn", "btn-info");
+                likeButton.textContent = "Like";
+            }
             // if (data.data[i].likes_count) {
             //     likeForm.textContent = `- ${data.data[i].likes_count} Likes -`;
             // }
@@ -182,8 +182,8 @@ postForm.addEventListener("submit", (e) => {
             // likeForm.textContent = "- Likes -";
             
             const likeDisplay = document.createElement("p");
-            if (data.id) {
-                likeDisplay.textContent = `- ${data.id} Likes -`;
+            if (data.likes_count) {
+                likeDisplay.textContent = `- ${data.likes_count} Likes -`;
             }
             likeForm.append(likeDisplay)
 
@@ -191,6 +191,7 @@ postForm.addEventListener("submit", (e) => {
             cardBodyDiv.append(normalDivThree);
 
             const commentForm = document.createElement("form");
+            commentForm.action = `/comments/${data.id}`
             commentForm.method = "POST";
             normalDivThree.append(commentForm);
 
@@ -214,6 +215,7 @@ postForm.addEventListener("submit", (e) => {
             const commentButton = document.createElement("button");
             commentButton.type = "submit";
             commentButton.classList.add("input-group-text");
+            commentButton.name = "submit_c_form"
             commentButton.textContent = "Post";
             commentInputGroup.append(commentButton)
 
@@ -247,15 +249,15 @@ postForm.addEventListener("submit", (e) => {
             commentsDiv.classList.add("card", "card-body")
             divCollapse.append(commentsDiv)
 
-            if (data.id === 0) {
+            if (data.comments.length === 0) {
                 const noComments = document.createElement("p");
                 noComments.classList.add("no-comments");
                 noComments.textContent = "Be the first to comment.";
                 commentsDiv.append(noComments);
             }
 
-            // for (let j = 0; j < data.data[i].comments.length; j++) {
-            //     console.log("comments", data.data[i].comments[j]);
+            // for (let i = 0; i < data.comments.length; i++) {
+            //     // console.log("comments", data.data[i].comments[j]);
 
             //     const commentsFlexDiv = document.createElement("div");
             //     commentsFlexDiv.classList.add("d-flex", "mb-1")
@@ -266,7 +268,7 @@ postForm.addEventListener("submit", (e) => {
             //     commentsFlexDiv.append(commentsFlexShrinkDiv);
 
             //     const commentsProfileImage = document.createElement("img")
-            //     commentsProfileImage.src = data.data[i].comments[j].comment_user_profile;
+            //     commentsProfileImage.src = data.comments[i].comment_user_profile;
             //     commentsProfileImage.classList.add("rounded-circle");
             //     commentsProfileImage.style.width = "30px";
             //     commentsProfileImage.style.height = "30px";
@@ -278,12 +280,12 @@ postForm.addEventListener("submit", (e) => {
 
             //     const usernameComments = document.createElement("div");
             //     usernameComments.classList.add("ms-3", "me-5");
-            //     usernameComments.textContent = data.data[i].comments[j].comment_user;
+            //     usernameComments.textContent = data.comments[i].comment_user;
             //     renderedComments.append(usernameComments);
 
             //     const commentsP = document.createElement("p");
             //     commentsP.classList.add("ms-3", "me-5");
-            //     commentsP.textContent = data.data[i].comments[j].body
+            //     commentsP.textContent = data.comments[i].body
             //     renderedComments.append(commentsP);
 
             // }
@@ -466,6 +468,7 @@ if (window.location.href === "http://127.0.0.1:8000/") {
                         cardBodyDiv.append(normalDivThree);
 
                         const commentForm = document.createElement("form");
+                        commentForm.action = `/comments/${data.data[i].id}`
                         commentForm.method = "POST";
                         normalDivThree.append(commentForm);
 
@@ -485,10 +488,11 @@ if (window.location.href === "http://127.0.0.1:8000/") {
                         const commentInputGroup = document.createElement("div");
                         commentInputGroup.classList.add("input-group", "mb-3");
                         commentForm.append(commentInputGroup);
-
+                        
                         const commentButton = document.createElement("button");
                         commentButton.type = "submit";
                         commentButton.classList.add("input-group-text");
+                        commentButton.name = "submit_c_form"
                         commentButton.textContent = "Post";
                         commentInputGroup.append(commentButton)
 

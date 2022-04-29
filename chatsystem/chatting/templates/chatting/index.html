@@ -64,7 +64,7 @@
                 {% csrf_token %}
         
                 <div class="input-group mb-3">
-                    <button type="submit" class="input-group-text">Post</button>
+                    <button type="submit" class="input-group-text" name="submit_p_form">Post</button>
                     {{form.content|add_class:"form-control"}}
                 </div>
 
@@ -150,7 +150,7 @@
                                 </div>
                                 
                                 <div>
-                                    <form method="post">
+                                    <form action="{% url 'comments' post.id %}" method="post">
                                         {% csrf_token %}
                                         <input
                                             type="hidden"
@@ -161,10 +161,13 @@
                                             <button
                                                 type="submit"
                                                 class="input-group-text"
+                                                name="submit_c_form"
                                             >
                                                 Post
                                             </button>
-                                            {{comment_form.body|add_class:"form-control"}}
+                                            <input type="text" name="body" class="form-control" required id="id_body">
+                                            {% comment %} {{comment_form}} {% endcomment %}
+                                            {% comment %} {{comment_form.body|add_class:"form-control"}} {% endcomment %}
                                         </div>
                                     </form>
                                 </div>

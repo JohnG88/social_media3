@@ -19,6 +19,7 @@ import random
 
 @login_required(login_url='login')
 def index(request):
+    # post = Post.objects.all()
     if request.user.is_authenticated:
         main_user = request.user
         user = User.objects.get(id=main_user.id)
@@ -26,7 +27,9 @@ def index(request):
         form = PostModelForm()
 
         # is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
         if request.method == 'POST':
+            # if 'submit_p_form' in request.POST:
             data_answer = request.POST.get("content");
             data_image_answer = request.FILES.get("image")
             # form = PostModelForm(request.POST or None, request.FILES or None)
@@ -52,36 +55,56 @@ def index(request):
             new_post.content = data_answer
             new_post.image = data_image_answer
             new_post.save()
+            
+            for user_profile_image in new_post.user.useravatar_set.all():
+                user_profile_image.imageURL
+            
+            # post_data_comments = []
+            # for post_comments in new_post.comments_set.all():
+            #     for user_comments_profile_image in post_comments.user.useravatar_set.all():
+            #         user_comments_profile_image.imageURL
+
+            #     single_post_comments = {
+            #         'comment_user_profile': user_comments_profile_image.imageURL,
+            #         'comment_user': post_comments.user.username,
+            #         'body': comments.body
+            #     }
+            #     post_data_comments.append(single_post_comments)
+
             return JsonResponse({
                 'user_id': user.id,
                 'id': new_post.id,
                 'user': new_post.user.username,
                 'post_user_id': new_post.user.id,
+                'user_profile_image': user_profile_image.imageURL,
                 'content': new_post.content,
                 'image': new_post.imageURL,
-                'created': new_post.created
+                'likes': True if user in new_post.liked.all() else False,
+                'likes_count': new_post.total_likes(),
+                'created': new_post.created.strftime("%b. %d, %Y, %I:%M:%S %p"),
+                'comments': ''
             })
-                
+                    
         
-        comment_form = CommentsModelForm(request.POST or None)
+        # comment_form = CommentsModelForm(request.POST or None)
+        # if 'submit_c_form' in request.POST:
+        #     if request.method == 'POST':
+        #         print(f"Comment post id {request.POST.get('comment_post_id')}")
+        #         # try:
+        #         #     post_id = Post.objects.get(id=request.POST.get('comment_post_id'))
+        #         # except Post.DoesNotExist:
+        #         #     post_id = None
+        #         post_id = Post.objects.get(id=request.POST.get('comment_post_id'))
+        #         if comment_form.is_valid():
+        #             instance = comment_form.save(commit=False)
+        #             instance.user = main_user
+        #             instance.post = post_id
+        #             instance.save()
+        #             comment_form = CommentsModelForm()
+        #             # return redirect('index')
 
-        if request.method == 'POST':
-            print(f"Comment post id {request.POST.get('comment_post_id')}")
-            # try:
-            #     post_id = Post.objects.get(id=request.POST.get('comment_post_id'))
-            # except Post.DoesNotExist:
-            #     post_id = None
-            post_id = Post.objects.get(id=request.POST.get('comment_post_id'))
-            if comment_form.is_valid():
-                instance = comment_form.save(commit=False)
-                instance.user = main_user
-                instance.post = post_id
-                instance.save()
-                comment_form = CommentsModelForm()
-                # return redirect('index')
-
-            # post_comments, created = Comments.objects.get_or_create(user=user, post=post_id)
-            # print(f"Post comments {post_comments}")
+                # post_comments, created = Comments.objects.get_or_create(user=user, post=post_id)
+                # print(f"Post comments {post_comments}")
 
         # all_posts_images = Post.objects.filter("image");
         # print(f"Post image {all_posts_images}")
@@ -140,7 +163,7 @@ def index(request):
         # followed_profiles_posts = Post.objects.filter(user__in=followed_profiles).all()
         
     if not is_ajax:
-        context = {'follower_user_posts': follower_user_posts, 'all_followed_profiles': all_followed_profiles, 'form': form, 'comment_form': comment_form, 'user': user, 'available': available[:3], 'post_page': post_page}
+        context = {'follower_user_posts': follower_user_posts, 'all_followed_profiles': all_followed_profiles, 'form': form, 'user': user, 'available': available[:3], 'post_page': post_page}
         return render(request, "chatting/index.html", context)
     
     # This block below will get everything from a template and convert into a string to use for scroll
@@ -153,7 +176,7 @@ def index(request):
         # all_users = User.objects.all()
         # for users in all_users:
         #     users.comments_set.filter()
-        all_posts = Post.objects.all()
+        # all_posts = Post.objects.all()
         # indiv_post_comments = all_posts.comments_set.all()
         # for user_comments in all_posts.comments_set.all():
         #     print(f"All comments {user_comments.body}")
@@ -225,6 +248,33 @@ def index(request):
         "end_pagination": True if page_number >= paginator.num_pages else False,
         "user": main_user.id
     })
+
+def comment_post(request, id):
+    # post = get_object_or_404(Post, id=request.POST.get('post_id'))
+    main_user = request.user
+    user = User.objects.get(id=main_user.id)
+    # comment_form = CommentsModelForm()
+    # if 'submit_c_form' in request.POST:
+    if request.method == 'POST':
+        print(f"Comment post id {request.POST.get('comment_post_id')}")
+        # try:
+        post_id = Post.objects.get(id=request.POST.get('comment_post_id'))
+        # except Post.DoesNotExist:
+        #     post_id = None
+        body = request.POST.get("body")
+        # if comment_form.is_valid():
+        #     instance = comment_form.save(commit=False)
+        #     instance.user = main_user
+        #     instance.post = post_id
+        #     instance.save()
+            # comment_form = CommentsModelForm()
+            # return redirect('index')
+        new_comment = Comments.objects.create(user=user, post=post_id)
+        new_comment.body = body
+        new_comment.save()
+        return redirect('index')
+    # context = {'comment_form': comment_form}
+    # return render(request, "chatting/index.html", context)
 
 @login_required(login_url='login')
 def single_post_view(request, id):
