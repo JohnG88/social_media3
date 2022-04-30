@@ -317,15 +317,25 @@ def update_post(request, id):
 #     return render(request, "chatting/index.html", {"liked": liked})
 
 def like_post(request, id):
-    post = get_object_or_404(Post, id=request.POST.get('post_id'))
-    like_bool = False
-    if post.liked.filter(id=request.user.id).exists():
-        post.liked.remove(request.user)
+    # post = get_object_or_404(Post, id=request.POST.get('post_id'))
+    # is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+    if request.method == 'POST':
+    # if is_ajax:
+        post = get_object_or_404(Post, id=id)
+        # post = request.POST.get("id")
+        print(f"Post {post}")
         like_bool = False
-    else:
-        post.liked.add(request.user)
-        like_bool = True
-    return redirect("index")
+        if post.liked.filter(id=request.user.id).exists():
+            post.liked.remove(request.user)
+            like_bool = False
+        else:
+            post.liked.add(request.user)
+            like_bool = True
+        # return redirect("index")
+        return JsonResponse({
+            'like_bool': like_bool, 
+            'count': post.total_likes()
+        })
 
 @login_required(login_url='login')
 def delete_post(request, id):

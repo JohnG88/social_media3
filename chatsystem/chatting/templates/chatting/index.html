@@ -123,13 +123,22 @@
                                 {% endif %}
                                 <div>
                                     <form
-                                        action="{% url 'like-post' post.id %}"
-                                        method="POST"
+                                        class="like-unlike-forms"
+                                        data-form-id="{{post.id}}"
                                     >
-                                        {% csrf_token %}
+                                        {% comment %} <button
+                                        id="like-unlike-{{post.id}}"
+                                        name="post_id"
+                                        value="{{post.id}}"
+                                        class="btn btn-info"
+                                        >
+                                            Like
+                                        </button> {% endcomment %}
+
                                         {% if user not in post.liked.all %}
                                         <button
                                             type="submit"
+                                            id="like-unlike-{{post.id}}"
                                             name="post_id"
                                             value="{{post.id}}"
                                             class="btn btn-info"
@@ -139,13 +148,15 @@
                                         {% else %}
                                         <button
                                             type="submit"
+                                            id="like-unlike-{{post.id}}"
                                             name="post_id"
                                             value="{{post.id}}"
                                             class="btn btn-danger"
                                         >
                                             Unlike
                                         </button>
-                                        <p>- {{post.total_likes}} Likes - </p>{% endif %}
+                                        {% endif %}
+                                        <p class="render-likes-{{post.id}}">- {{post.total_likes}} Likes - </p>
                                     </form>
                                 </div>
                                 

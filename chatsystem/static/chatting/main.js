@@ -27,6 +27,65 @@ function getCookie(name) {
 }
 const csrftoken = getCookie('csrftoken');
 
+const likeUnlikePosts = () => {
+    const likeUnlikeForms = [...document.getElementsByClassName("like-unlike-forms")]
+    likeUnlikeForms.forEach(form => form.addEventListener("submit", (e) => {
+        e.preventDefault(); 
+        const dataLikeForm = e.target.getAttribute('data-form-id');
+        const clickedLikeBtn = document.getElementById(`like-unlike-${dataLikeForm}`);
+        const renderLikes = document.querySelector(`.render-likes-${dataLikeForm}`);
+        console.log("Data like form ", dataLikeForm)
+        console.log("clicked like btn ", clickedLikeBtn)
+        const url = `http://127.0.0.1:8000/like-post/${dataLikeForm}/`
+        // const url = "like-post/"
+
+        fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-Requested-With": "XMLHttpRequest",
+                "X-CSRFToken": csrftoken,
+            },
+            // body: JSON.stringify({"post_id": dataLikeForm})
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            console.log("Like success ", data)
+            // clickedLikeBtn.addEventListener("click", (e) => {
+            //     console.log("clicked like btn ", clickedLikeBtn)
+            //         clickedLikeBtn.classList.toggle("btn-info")
+                    // clickedLikeBtn.classList.remove("btn-info")
+                    // clickedLikeBtn.classList.add("btn-danger")
+                // if (clickedLikeBtn.classList.contains("btn btn-info")) {
+                //     clickedLikeBtn.classList.remove("btn btn-info")
+                //     clickedLikeBtn.classList.add("btn btn-danger")
+                // }
+            // })
+
+            // clickedLikeBtn.classList.remove('btn btn-info')
+
+            // if (clickedLikeBtn.classList.contains("btn btn-info")) {
+            //     clickedLikeBtn.classList.remove("btn btn-info")
+            // }
+
+            clickedLikeBtn.textContent = data.like_bool ? `Unlike` : `Like`;
+            // clickedLikeBtn.classList.remove('btn btn-info')
+            // clickedLikeBtn.classList.add('btn btn-danger')
+            // const displayAjaxLikes = document.createElement("p")
+            if (data.like_bool === false) {
+                clickedLikeBtn.classList.add('btn-info')
+                clickedLikeBtn.classList.remove('btn-danger')
+            } else {
+                clickedLikeBtn.classList.add('btn-danger')
+                clickedLikeBtn.classList.remove('btn-info')
+            }
+            renderLikes.textContent = data.count ? `- ${data.count} Likes -` : `- ${data.count} Likes -`
+
+        })
+    }))
+}
+
+
 
 
 var page = 1;
@@ -150,30 +209,32 @@ postForm.addEventListener("submit", (e) => {
             cardBodyDiv.append(normalDivTwo);
 
             const likeForm = document.createElement("form");
-            likeForm.action = `/like-post/${data.id}`;
-            likeForm.method = "POST";
+            // likeForm.action = `/like-post/${data.id}`;
+            // likeForm.method = "POST";
+            likeForm.dataset.formId = `${data.id}`
             likeForm.classList.add("like-unlike-form");
             normalDivTwo.append(likeForm);
 
             // will add csrftoken
-            const csrfInput = document.createElement("input");
-            csrfInput.type = "hidden";
-            csrfInput.name = "csrfmiddlewaretoken";
-            csrfInput.value = csrftoken;
-            likeForm.append(csrfInput);
+            // const csrfInput = document.createElement("input");
+            // csrfInput.type = "hidden";
+            // csrfInput.name = "csrfmiddlewaretoken";
+            // csrfInput.value = csrftoken;
+            // likeForm.append(csrfInput);
 
             // check to see if user already liked or hasn't liked
             const likeButton = document.createElement("button");
             likeButton.type = "submit";
             likeButton.name = "post_id";
             likeButton.value = `${data.id}`;
-            if (data.likes === true) {
-                likeButton.classList.add("btn", "btn-danger");
-                likeButton.textContent = "Unlike";
-            } else {
-                likeButton.classList.add("btn", "btn-info");
-                likeButton.textContent = "Like";
-            }
+            // if (data.likes === true) {
+            likeButton.textContent = data.likes ? `Unlike (${data.likes_count})` : `Like (${data.likes_count})`
+            //     likeButton.classList.add("btn", "btn-danger");
+            //     likeButton.textContent = "Unlike";
+            // } else {
+            //     likeButton.classList.add("btn", "btn-info");
+            //     likeButton.textContent = "Like";
+            // }
             // if (data.data[i].likes_count) {
             //     likeForm.textContent = `- ${data.data[i].likes_count} Likes -`;
             // }
@@ -289,6 +350,8 @@ postForm.addEventListener("submit", (e) => {
             //     renderedComments.append(commentsP);
 
             // }
+
+            likeUnlikePosts();
         })
         .catch((error) => {
             console.log("Error ", error)
@@ -427,30 +490,32 @@ if (window.location.href === "http://127.0.0.1:8000/") {
                         cardBodyDiv.append(normalDivTwo);
 
                         const likeForm = document.createElement("form");
-                        likeForm.action = `/like-post/${data.data[i].id}`;
-                        likeForm.method = "POST";
+                        // likeForm.action = `/like-post/${data.data[i].id}`;
+                        // likeForm.method = "POST";
                         likeForm.classList.add("like-unlike-form");
+                        likeForm.dataset.formId = `${data.data[i].id}`
                         normalDivTwo.append(likeForm);
 
                         // will add csrftoken
-                        const csrfInput = document.createElement("input");
-                        csrfInput.type = "hidden";
-                        csrfInput.name = "csrfmiddlewaretoken";
-                        csrfInput.value = csrftoken;
-                        likeForm.append(csrfInput);
+                        // const csrfInput = document.createElement("input");
+                        // csrfInput.type = "hidden";
+                        // csrfInput.name = "csrfmiddlewaretoken";
+                        // csrfInput.value = csrftoken;
+                        // likeForm.append(csrfInput);
 
                         // check to see if user already liked or hasn't liked
                         const likeButton = document.createElement("button");
-                        likeButton.type = "submit";
+                        likeButton.id = `like-unlike-${data.data[i].id}`;
                         likeButton.name = "post_id";
                         likeButton.value = `${data.data[i].id}`;
-                        if (data.data[i].likes === true) {
-                            likeButton.classList.add("btn", "btn-danger");
-                            likeButton.textContent = "Unlike";
-                        } else {
-                            likeButton.classList.add("btn", "btn-info");
-                            likeButton.textContent = "Like";
-                        }
+                        likeButton.textContent = data.data[i].likes ? `Unlike` : `Like`;
+                        // if (data.data[i].likes === true) {
+                        //     likeButton.classList.add("btn", "btn-danger");
+                        //     likeButton.textContent = "Unlike";
+                        // } else {
+                        //     likeButton.classList.add("btn", "btn-info");
+                        //     likeButton.textContent = "Like";
+                        // }
                         // if (data.data[i].likes_count) {
                         //     likeForm.textContent = `- ${data.data[i].likes_count} Likes -`;
                         // }
@@ -608,10 +673,14 @@ if (window.location.href === "http://127.0.0.1:8000/") {
                         // renderedComments.append(commentsP);
 
                     }
+
+                    likeUnlikePosts();
                 })
         }
     })
 }
+
+likeUnlikePosts()
 
 // const likeUnlikePosts = (e) => {
 //     const likeUnlikeForms = [...document.getElementsByClassName("like-unlike-form")]
