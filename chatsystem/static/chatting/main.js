@@ -360,6 +360,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 // }
 
                 likeUnlikePosts();
+                postForm.reset();
             })
             .catch((error) => {
                 console.log("Error ", error)
