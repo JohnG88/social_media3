@@ -317,9 +317,10 @@ def update_post(request, id):
 #     return render(request, "chatting/index.html", {"liked": liked})
 
 def like_post(request, id):
-    # post = get_object_or_404(Post, id=request.POST.get('post_id'))
     # is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
     if request.method == 'POST':
+        # post_id = get_object_or_404(Post, id=request.POST.get('post_id'))
+        # print(f"Post id {post_id}")
     # if is_ajax:
         post = get_object_or_404(Post, id=id)
         # post = request.POST.get("id")
