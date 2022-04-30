@@ -161,7 +161,7 @@
                                 </div>
                                 
                                 <div>
-                                    <form action="{% url 'comments' post.id %}" method="post">
+                                    <form class="all-comments-form" data-comment-id="{{post.id}}">
                                         {% csrf_token %}
                                         <input
                                             type="hidden"
@@ -171,12 +171,12 @@
                                         <div class="input-group mb-3">
                                             <button
                                                 type="submit"
-                                                class="input-group-text"
+                                                class="input-group-text comment-{{post.id}}"
                                                 name="submit_c_form"
                                             >
                                                 Post
                                             </button>
-                                            <input type="text" name="body" class="form-control" required id="id_body">
+                                            <input type="text" name="body" class="form-control comment-input-{{post.id}}" required id="id_body">
                                             {% comment %} {{comment_form}} {% endcomment %}
                                             {% comment %} {{comment_form.body|add_class:"form-control"}} {% endcomment %}
                                         </div>
@@ -192,7 +192,7 @@
                                     </p>
 
                                     <div class="collapse" id="collapseExample-{{post.id}}">
-                                        <div class="card card-body">
+                                        <div class="card card-body comments-div-{{post.id}}">
                                         
                                             {% for c in post.comments_set.all %}
                                             <div class="d-flex mb-1">
@@ -207,7 +207,7 @@
                                                 </div>
                                             </div>
                                             {% empty %}
-                                            <p class="no-comments">Be the first to comment.</p>
+                                            <p class="no-comments no-comments-{{post.id}}">Be the first to comment.</p>
                                             {% endfor %}
                                     </div>
                                 </div>

@@ -3,7 +3,7 @@ from .views import index, update_post, delete_post, login_view, register, logout
 
 urlpatterns = [
     path("", index, name="index"),
-    path("comments/<int:id>", comment_post, name="comments"),
+    path("comments/<int:id>/", comment_post, name="comments"),
     path("single-post/<int:id>", single_post_view, name="single-post"),
     path("update-post/<int:id>/", update_post, name="update-post"),
     path("like-post/<int:id>/", like_post, name="like-post"),

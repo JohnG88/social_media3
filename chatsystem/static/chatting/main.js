@@ -13,7 +13,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     const postForm = document.querySelector("#post-form");
 
 
-
     function getCookie(name) {
         let cookieValue = null;
         if (document.cookie && document.cookie !== '') {
@@ -91,6 +90,74 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     likeUnlikePosts();
 
+    const commentsForm = () => {
+        const allCommentsForm = [...document.getElementsByClassName("all-comments-form")]
+        allCommentsForm.forEach(form => form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const dataCommentForm = e.target.getAttribute("data-comment-id");
+            const clickedCommentBtn = document.querySelector(`.comment-${dataCommentForm}`)
+            const commentInput = document.querySelector(`.comment-input-${dataCommentForm}`).value
+            console.log("Comment input id", dataCommentForm)
+            console.log("Comment input ", commentInput)
+            
+            const data = {body: commentInput}
+
+            fetch(`http://127.0.0.1:8000/comments/${dataCommentForm}/`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": csrftoken
+                },
+                body: JSON.stringify(data)
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log("Success ", data)
+
+                    const noCommentsP = document.querySelector(`.no-comments-${dataCommentForm}`);
+
+                    const commentsDiv = document.querySelector(`.comments-div-${dataCommentForm}`)
+
+                    const divFlex = document.createElement("div");
+                    divFlex.classList.add("d-flex", "mb-1")
+
+                    const shrinkDiv = document.createElement("div")
+                    shrinkDiv.classList.add("flex-shrink-0");
+                    divFlex.append(shrinkDiv)
+
+                    const commentProfileImg = document.createElement("img");
+                    commentProfileImg.src= data.profile_image;
+                    commentProfileImg.classList.add("rounded-circle");
+                    commentProfileImg.style.width = "30px";
+                    commentProfileImg.style.height = "30px";
+                    shrinkDiv.append(commentProfileImg)
+
+
+                    const commentDiv = document.createElement("div");
+                    commentDiv.classList.add("ms-2", "bd-highlight", "bg-secondary", "bg-gradient", "rounded-pill")
+                    divFlex.append(commentDiv)
+
+                    const nameDiv = document.createElement("div")
+                    nameDiv.classList.add("ms-3", "me-5")
+                    nameDiv.textContent = data.user;
+                    commentDiv.append(nameDiv)
+
+                    const bodyP = document.createElement("p");
+                    bodyP.classList.add("ms-3", "me-5");
+                    bodyP.textContent = data.body;
+                    commentDiv.append(bodyP)
+
+                    commentsDiv.prepend(divFlex);
+                    
+                    form.reset();
+                    noCommentsP.remove();
+
+
+                })
+        }))
+    }
+
+    commentsForm();
 
     var page = 1;
     var blockRequest = false;
@@ -260,22 +327,24 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 cardBodyDiv.append(normalDivThree);
 
                 const commentForm = document.createElement("form");
-                commentForm.action = `/comments/${data.id}`
-                commentForm.method = "POST";
+                commentForm.classList.add("all-comments-form");
+                commentForm.dataset.commentId = data.id
+                // commentForm.action = `/comments/${data.id}`
+                // commentForm.method = "POST";
                 normalDivThree.append(commentForm);
 
                 // will add csrftoken
-                const csrfCommentInput = document.createElement("input");
-                csrfCommentInput.type = "hidden";
-                csrfCommentInput.name = "csrfmiddlewaretoken";
-                csrfCommentInput.value = csrftoken;
-                commentForm.append(csrfCommentInput);
+                // const csrfCommentInput = document.createElement("input");
+                // csrfCommentInput.type = "hidden";
+                // csrfCommentInput.name = "csrfmiddlewaretoken";
+                // csrfCommentInput.value = csrftoken;
+                // commentForm.append(csrfCommentInput);
 
-                const commentHiddenInput = document.createElement("input");
-                commentHiddenInput.type = "hidden";
-                commentHiddenInput.name = "comment_post_id";
-                commentHiddenInput.value = data.id;
-                commentForm.append(commentHiddenInput);
+                // const commentHiddenInput = document.createElement("input");
+                // commentHiddenInput.type = "hidden";
+                // commentHiddenInput.name = "comment_post_id";
+                // commentHiddenInput.value = data.id;
+                // commentForm.append(commentHiddenInput);
 
                 const commentInputGroup = document.createElement("div");
                 commentInputGroup.classList.add("input-group", "mb-3");
@@ -283,7 +352,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
                 const commentButton = document.createElement("button");
                 commentButton.type = "submit";
-                commentButton.classList.add("input-group-text");
+                commentButton.classList.add("input-group-text", `comment-${data.id}`);
                 commentButton.name = "submit_c_form"
                 commentButton.textContent = "Post";
                 commentInputGroup.append(commentButton)
@@ -292,7 +361,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 commentInputBody.type = "text";
                 commentInputBody.name = "body";
                 commentInputBody.maxlength = 500;
-                commentInputBody.classList.add("form-control");
+                commentInputBody.classList.add("form-control", `comment-input-${data.id}`);
                 commentInputBody.required = true;
                 commentInputBody.id = "id_body";
                 commentInputGroup.append(commentInputBody);
@@ -315,12 +384,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 cardBodyDiv.append(divCollapse);
 
                 const commentsDiv = document.createElement("div");
-                commentsDiv.classList.add("card", "card-body")
+                commentsDiv.classList.add("card", "card-body", `comments-div-${data.id}`)
                 divCollapse.append(commentsDiv)
 
                 if (data.comments.length === 0) {
                     const noComments = document.createElement("p");
-                    noComments.classList.add("no-comments");
+                    noComments.classList.add("no-comments", `no-comments-${data.id}`);
                     noComments.textContent = "Be the first to comment.";
                     commentsDiv.append(noComments);
                 }
@@ -360,6 +429,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 // }
 
                 likeUnlikePosts();
+                commentsForm();
                 postForm.reset();
             })
             .catch((error) => {
@@ -546,22 +616,24 @@ document.addEventListener("DOMContentLoaded", function(event) {
                             cardBodyDiv.append(normalDivThree);
 
                             const commentForm = document.createElement("form");
-                            commentForm.action = `/comments/${data.data[i].id}`
-                            commentForm.method = "POST";
+                            commentForm.classList.add("all-comments-form");
+                            commentForm.dataset.commentId = data.data[i].id
+                            // commentForm.action = `/comments/${data.data[i].id}`
+                            // commentForm.method = "POST";
                             normalDivThree.append(commentForm);
 
                             // will add csrftoken
-                            const csrfCommentInput = document.createElement("input");
-                            csrfCommentInput.type = "hidden";
-                            csrfCommentInput.name = "csrfmiddlewaretoken";
-                            csrfCommentInput.value = csrftoken;
-                            commentForm.append(csrfCommentInput);
+                            // const csrfCommentInput = document.createElement("input");
+                            // csrfCommentInput.type = "hidden";
+                            // csrfCommentInput.name = "csrfmiddlewaretoken";
+                            // csrfCommentInput.value = csrftoken;
+                            // commentForm.append(csrfCommentInput);
 
-                            const commentHiddenInput = document.createElement("input");
-                            commentHiddenInput.type = "hidden";
-                            commentHiddenInput.name = "comment_post_id";
-                            commentHiddenInput.value = data.data[i].id;
-                            commentForm.append(commentHiddenInput);
+                            // const commentHiddenInput = document.createElement("input");
+                            // commentHiddenInput.type = "hidden";
+                            // commentHiddenInput.name = "comment_post_id";
+                            // commentHiddenInput.value = data.data[i].id;
+                            // commentForm.append(commentHiddenInput);
 
                             const commentInputGroup = document.createElement("div");
                             commentInputGroup.classList.add("input-group", "mb-3");
@@ -569,7 +641,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                             
                             const commentButton = document.createElement("button");
                             commentButton.type = "submit";
-                            commentButton.classList.add("input-group-text");
+                            commentButton.classList.add("input-group-text", `comment-${data.data[i].id}`);
                             commentButton.name = "submit_c_form"
                             commentButton.textContent = "Post";
                             commentInputGroup.append(commentButton)
@@ -578,7 +650,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                             commentInputBody.type = "text";
                             commentInputBody.name = "body";
                             commentInputBody.maxlength = 500;
-                            commentInputBody.classList.add("form-control");
+                            commentInputBody.classList.add("form-control", `comment-input-${data.data[i].id}`);
                             commentInputBody.required = true;
                             commentInputBody.id = "id_body";
                             commentInputGroup.append(commentInputBody);
@@ -601,7 +673,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                             cardBodyDiv.append(divCollapse);
 
                             const commentsDiv = document.createElement("div");
-                            commentsDiv.classList.add("card", "card-body")
+                            commentsDiv.classList.add("card", "card-body", `comments-div-${data.data[i].id}`)
                             divCollapse.append(commentsDiv)
 
                             // const commentsFlexDiv = document.createElement("div");
@@ -630,7 +702,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                             
                             if (data.data[i].comments.length === 0) {
                                 const noComments = document.createElement("p");
-                                noComments.classList.add("no-comments");
+                                noComments.classList.add("no-comments", `no-comments-${data.data[i].id}`);
                                 noComments.textContent = "Be the first to comment.";
                                 commentsDiv.append(noComments);
                             }
@@ -688,6 +760,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                         }
 
                         likeUnlikePosts();
+                        commentsForm();
                     })
             }
         })

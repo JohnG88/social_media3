@@ -258,10 +258,12 @@ def comment_post(request, id):
     if request.method == 'POST':
         print(f"Comment post id {request.POST.get('comment_post_id')}")
         # try:
-        post_id = Post.objects.get(id=request.POST.get('comment_post_id'))
+        post_id = Post.objects.get(id=id)
         # except Post.DoesNotExist:
         #     post_id = None
-        body = request.POST.get("body")
+        # body = request.POST.get("body")
+        data = json.loads(request.body)
+        data_answer = data.get('body')
         # if comment_form.is_valid():
         #     instance = comment_form.save(commit=False)
         #     instance.user = main_user
@@ -270,9 +272,18 @@ def comment_post(request, id):
             # comment_form = CommentsModelForm()
             # return redirect('index')
         new_comment = Comments.objects.create(user=user, post=post_id)
-        new_comment.body = body
+        new_comment.body = data_answer
         new_comment.save()
-        return redirect('index')
+
+        for profile_image in new_comment.user.useravatar_set.all():
+            profile_image.imageURL
+        # return redirect('index')
+        return JsonResponse({
+            'id': new_comment.id,
+            'user': new_comment.user.username,
+            'profile_image': profile_image.imageURL,
+            'body': new_comment.body
+        })
     # context = {'comment_form': comment_form}
     # return render(request, "chatting/index.html", context)
 
