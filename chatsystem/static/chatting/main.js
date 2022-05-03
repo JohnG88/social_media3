@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     const postCenterBody = document.querySelector(".post-center-body");
 
     const postForm = document.querySelector("#post-form");
+    const beforeFirstPost = document.querySelector("#before-first-post");
 
 
     function getCookie(name) {
@@ -85,6 +86,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 renderLikes.textContent = data.count ? `- ${data.count} Likes -` : `- ${data.count} Likes -`
 
             })
+            e.stopImmediatePropagation();
+            // return false;
         }))
     }
 
@@ -154,6 +157,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 
                 })
+                e.stopImmediatePropagation();
         }))
     }
 
@@ -164,7 +168,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
     var endPagination = false;
 
     postForm.addEventListener("submit", (e) => {
-        e.preventDefault()
+        e.preventDefault();
+        
         const inputContent = document.querySelector("#id_content").value;
         const inputImageContent = document.querySelector("#id_image").files;
         // console.log("Input value", inputContent)
@@ -323,8 +328,28 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 // }
                 likeForm.append(likeDisplay)
 
+                
+                const commentP = document.createElement("p");
+                cardBodyDiv.append(commentP);
+
+                const commentLinkCollapse = document.createElement("a");
+                commentLinkCollapse.setAttribute("data-bs-toggle", "collapse");
+                commentLinkCollapse.href = `#collapseExample-${data.id}`;
+                commentLinkCollapse.setAttribute("role", "button");
+                commentLinkCollapse.setAttribute("aria-expanded", "false");
+                commentLinkCollapse.setAttribute("aria-controls", `#collapseExample-${data.id}`);
+                commentLinkCollapse.textContent = "Comments";
+                commentP.append(commentLinkCollapse);
+
+
+                const divCollapse = document.createElement("div");
+                divCollapse.classList.add("collapse");
+                divCollapse.id = `collapseExample-${data.id}`;
+                cardBodyDiv.append(divCollapse);
+
+                
                 const normalDivThree = document.createElement("div");
-                cardBodyDiv.append(normalDivThree);
+                divCollapse.append(normalDivThree);
 
                 const commentForm = document.createElement("form");
                 commentForm.classList.add("all-comments-form");
@@ -365,23 +390,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 commentInputBody.required = true;
                 commentInputBody.id = "id_body";
                 commentInputGroup.append(commentInputBody);
-
-                const commentP = document.createElement("p");
-                cardBodyDiv.append(commentP);
-
-                const commentLinkCollapse = document.createElement("a");
-                commentLinkCollapse.setAttribute("data-bs-toggle", "collapse");
-                commentLinkCollapse.href = `#collapseExample-${data.id}`;
-                commentLinkCollapse.setAttribute("role", "button");
-                commentLinkCollapse.setAttribute("aria-expanded", "false");
-                commentLinkCollapse.setAttribute("aria-controls", `#collapseExample-${data.id}`);
-                commentLinkCollapse.textContent = "Comments";
-                commentP.append(commentLinkCollapse);
-
-                const divCollapse = document.createElement("div");
-                divCollapse.classList.add("collapse");
-                divCollapse.id = `collapseExample-${data.id}`;
-                cardBodyDiv.append(divCollapse);
 
                 const commentsDiv = document.createElement("div");
                 commentsDiv.classList.add("card", "card-body", `comments-div-${data.id}`)
@@ -427,10 +435,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 //     renderedComments.append(commentsP);
 
                 // }
-
+                
                 likeUnlikePosts();
                 commentsForm();
                 postForm.reset();
+                if (document.body.contains(beforeFirstPost)){
+                    beforeFirstPost.remove()
+                }
             })
             .catch((error) => {
                 console.log("Error ", error)
@@ -612,8 +623,28 @@ document.addEventListener("DOMContentLoaded", function(event) {
                             // }
                             likeForm.append(likeDisplay)
 
+                            const commentP = document.createElement("p");
+                            cardBodyDiv.append(commentP);
+
+                            const commentLinkCollapse = document.createElement("a");
+                            commentLinkCollapse.setAttribute("data-bs-toggle", "collapse");
+                            commentLinkCollapse.href = `#collapseExample-${data.data[i].id}`;
+                            commentLinkCollapse.setAttribute("role", "button");
+                            commentLinkCollapse.setAttribute("aria-expanded", "false");
+                            commentLinkCollapse.setAttribute("aria-controls", `#collapseExample-${data.data[i].id}`);
+                            commentLinkCollapse.textContent = "Comments";
+                            commentP.append(commentLinkCollapse);
+
+                            
+
+
+                            const divCollapse = document.createElement("div");
+                            divCollapse.classList.add("collapse");
+                            divCollapse.id = `collapseExample-${data.data[i].id}`;
+                            cardBodyDiv.append(divCollapse);
+
                             const normalDivThree = document.createElement("div");
-                            cardBodyDiv.append(normalDivThree);
+                            divCollapse.append(normalDivThree);
 
                             const commentForm = document.createElement("form");
                             commentForm.classList.add("all-comments-form");
@@ -642,7 +673,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                             const commentButton = document.createElement("button");
                             commentButton.type = "submit";
                             commentButton.classList.add("input-group-text", `comment-${data.data[i].id}`);
-                            commentButton.name = "submit_c_form"
+                            commentButton.name = "submit_c_form";
                             commentButton.textContent = "Post";
                             commentInputGroup.append(commentButton)
 
@@ -655,22 +686,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
                             commentInputBody.id = "id_body";
                             commentInputGroup.append(commentInputBody);
 
-                            const commentP = document.createElement("p");
-                            cardBodyDiv.append(commentP);
-
-                            const commentLinkCollapse = document.createElement("a");
-                            commentLinkCollapse.setAttribute("data-bs-toggle", "collapse");
-                            commentLinkCollapse.href = `#collapseExample-${data.data[i].id}`;
-                            commentLinkCollapse.setAttribute("role", "button");
-                            commentLinkCollapse.setAttribute("aria-expanded", "false");
-                            commentLinkCollapse.setAttribute("aria-controls", `#collapseExample-${data.data[i].id}`);
-                            commentLinkCollapse.textContent = "Comments";
-                            commentP.append(commentLinkCollapse);
-
-                            const divCollapse = document.createElement("div");
-                            divCollapse.classList.add("collapse");
-                            divCollapse.id = `collapseExample-${data.data[i].id}`;
-                            cardBodyDiv.append(divCollapse);
 
                             const commentsDiv = document.createElement("div");
                             commentsDiv.classList.add("card", "card-body", `comments-div-${data.data[i].id}`)
@@ -762,6 +777,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                         likeUnlikePosts();
                         commentsForm();
                     })
+                // return false;
             }
         })
     }

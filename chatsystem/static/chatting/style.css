@@ -59,3 +59,23 @@ a:hover {
 .no-comments {
     margin: 0 auto;
 }
+
+@media (max-width: 900px) {
+    .whole-flex-div {
+        flex-direction: column;
+    }
+
+    .first-flex-div {
+        display: none;
+    }
+
+    .third-flex-div {
+        display: none;
+    }
+}
+
+@media (max-width: 600px) {
+    .whole-flex-div {
+        width: 100%;
+    }
+}

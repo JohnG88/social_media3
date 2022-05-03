@@ -6,7 +6,7 @@ from django.contrib.auth.forms import AuthenticationForm
 import json
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.core.paginator import Paginator
+from django.core.paginator import EmptyPage, Paginator
 from django.db.models import Q
 from django.template.loader import render_to_string
 from django.urls import reverse
@@ -132,10 +132,15 @@ def index(request):
         # print(f'Page Number {page_number}')
         paginator = Paginator(follower_user_posts, 10)
 
+        # post_page = paginator.page(page_number)
+
         try:
             post_page = paginator.page(page_number)
-        except paginator.EmptyPage:
-            post_page = paginator.Page([], page_number, paginator)
+        except EmptyPage:
+            # post_page = paginator.page(0)
+            return JsonResponse({
+                "end_pagination": True
+            })
 
         # page_obj = paginator.get_page(page_number)
         # print(f'Pagination Post {paginator}')
