@@ -599,15 +599,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
                             // likeButton.type = "submit";
                             // likeButton.name = "post_id";
                             likeButton.value = `${data.data[i].id}`;
-                            likeButton.classList.add("btn", "btn-info");
+                            // likeButton.classList.add("btn", "btn-info");
+                            if (data.data[i].likes === true) {
+                                likeButton.classList.add("btn", "btn-danger");
+                            } else {
+                                likeButton.classList.add("btn", "btn-info");
+                            }
                             likeButton.textContent = data.data[i].likes ? `Unlike` : `Like`;
-                            // if (data.data[i].likes === true) {
-                            //     likeButton.classList.add("btn", "btn-danger");
-                            //     likeButton.textContent = "Unlike";
-                            // } else {
-                            //     likeButton.classList.add("btn", "btn-info");
-                            //     likeButton.textContent = "Like";
-                            // }
                             // if (data.data[i].likes_count) {
                             //     likeForm.textContent = `- ${data.data[i].likes_count} Likes -`;
                             // }
@@ -782,7 +780,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         })
     }
 
-    // likeUnlikePosts()
+    likeUnlikePosts();
 
     // const likeUnlikePosts = (e) => {
     //     const likeUnlikeForms = [...document.getElementsByClassName("like-unlike-form")]

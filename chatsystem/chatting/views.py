@@ -237,7 +237,7 @@ def index(request):
                 'likes_count': post.total_likes(),
                 'content': post.content,
                 'created': post.created.strftime("%b. %d, %Y, %I:%M:%S %p"),
-                'updated': post.updated,
+                'updated': post.updated.strftime("%b. %d, %Y, %I:%M:%S %p"),
                 'comments': data_comments
             }
             data.append(posts)
@@ -301,16 +301,27 @@ def single_post_view(request, id):
 
 @login_required(login_url='login')
 def update_post(request, id):
+    all_users = User.objects.all()
     post = Post.objects.get(id=id)
+
+    # for all_users_liked in post.liked.all():
+    #     all_users_liked.id
+    #     print(f"All users id {all_users_liked.id}")
+    
+    print(f"Post edit {post.liked.all()}")
     content = post.content
     image = post.image
-    form = PostModelForm(request.POST or None, request.FILES or None, instance=post)
+    form = PostModelForm(instance=post)
 
     # form = EditPostModelForm(request.POST or None, request.FILES or None, instance=post)
     
     if request.method == 'POST':
+        form = PostModelForm(request.POST or None, request.FILES or None, instance=post)
         if form.is_valid():
-            form.save()
+            edit_form = form.save(commit=False)
+            edit_form.save()
+            edit_form.liked.set(post.liked.all())
+            # form.save_m2m()
             return redirect("index")
 
     context = {"form": form}
