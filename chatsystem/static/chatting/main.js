@@ -3,6 +3,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 
     console.log('main.js')
+    // console.log("Window ", window.location.href)
+
+    // const userId = document.querySelector("#current-user");
+
+    // if (document.body.contains(userId)) {
+    //     console.log("current_user ", userId)
+    // }
+
+    // const loggedUserId = userId.dataset.userId
+    // console.log("current user id ", loggedUserId)
 
     const paginator = document.querySelector(".paginator");
     const loading = document.querySelector(".loading");
@@ -162,10 +172,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
 
     commentsForm();
-
-    var page = 1;
-    var blockRequest = false;
-    var endPagination = false;
 
     postForm.addEventListener("submit", (e) => {
         e.preventDefault();
@@ -448,8 +454,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
             })
     })
 
+    var page = 1;
+    var blockRequest = false;
+    var endPagination = false;
+
     // Add this if statement to only use in index page
-    if (window.location.href === "http://127.0.0.1:8000/") {
+    // if (window.location.href === "http://127.0.0.1:8000/") {
         window.addEventListener("scroll", (e) => {
             // console.log('Scrolling')
             // console.log("Document height ", document.body.clientHeight)
@@ -721,7 +731,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                             }
 
                             for (let j = 0; j < data.data[i].comments.length; j++) {
-                                console.log("comments", data.data[i].comments[j]);
+                                // console.log("comments", data.data[i].comments[j]);
 
                                 // if (data.data[i].comments[j].length === 0) {
                                 //     const noComments = document.createElement("p");
@@ -778,16 +788,24 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 // return false;
             }
         })
-    }
+    // }
 
     likeUnlikePosts();
 
-    // const likeUnlikePosts = (e) => {
-    //     const likeUnlikeForms = [...document.getElementsByClassName("like-unlike-form")]
-    //     for (let i = 0; i < likeUnlikeForms.length; i++) {
-    //         likeUnlikeForms[i].addEventListener("submit", () => {
-    //             const getPostValue = 
-    //         })
-    //     }
+    // const availableUsers = () =>  {
+    //     fetch("http://127.0.0.1:8000/available-users", {
+    //         method: "GET",
+    //         headers : {
+    //             "Content-Type": "application/json",
+    //             "X-Requested-With": "XMLHttpRequest",
+    //         }
+    //     })
+    //     .then((response) => response.json())
+    //     .then((data) => {
+    //         console.log("data", data)
+    //     })
     // }
+
+    // availableUsers();\
+    
 });

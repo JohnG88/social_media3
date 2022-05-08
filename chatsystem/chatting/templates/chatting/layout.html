@@ -19,12 +19,14 @@
             crossorigin="anonymous">
         </script>
         <link rel="stylesheet" href="{% static 'chatting/style.css' %}">
-        <script src="{% static 'chatting/main.js' %}" defer></script>
     </head>
     <body>
         {% include "chatting/navbar.html" %}
         {% block body %}
-        {% endblock body %}
+        {% endblock %}
+
+        {% block page_script %}
+        {% endblock %}
 
     </body>
 </html>

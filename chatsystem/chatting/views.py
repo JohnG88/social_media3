@@ -156,6 +156,12 @@ def index(request):
 
         # I still don't know how list comprehensions work, I tweaked one example I copied from a tutorial, It seems to be working 
         available = [user for user in users if user not in all_followed_profiles]
+        # for user_data in available:
+        #     return JsonResponse({
+        #     "available_user_id": user_data.id,
+        #     "available_user_username": user_data.username,
+        # })
+            # print(f"User id {user_data.id}")
         # print(f"Available {available}")
         random.shuffle(available)
 
@@ -173,6 +179,7 @@ def index(request):
     
     # This block below will get everything from a template and convert into a string to use for scroll
     else:
+
         # content = ''
         # for post in post_page:
         #     content += render_to_string("chatting/index.html", {'post': post}, request=request)
@@ -251,7 +258,7 @@ def index(request):
         # 'created': new_post.created,
         "data": data,
         "end_pagination": True if page_number >= paginator.num_pages else False,
-        "user": main_user.id
+        "user": main_user.id,
     })
 
 def comment_post(request, id):
@@ -376,6 +383,63 @@ def delete_post(request, id):
 
     return render(request, "chatting/delete_post.html", context)
 
+def available_users(request):
+    main_user = request.user
+    user = User.objects.get(id=main_user.id)
+    users = User.objects.all().exclude(id=user.id)
+    
+    followed_profiles = UserFollowing.objects.get(user=request.user)
+    print(f"Followed profiles {followed_profiles}")
+
+    data_followed_info = []
+    all_followed_profiles = followed_profiles.following_user_id.all()
+    print(f"all followed profiles {all_followed_profiles}")
+    for already_followed_profiles in all_followed_profiles:
+        user_followed_info = {
+            "users_followed_id": already_followed_profiles.id,
+            "users_followed_username": already_followed_profiles.username,
+        }
+        data_followed_info.append(user_followed_info)
+
+    available_profiles = [user for user in users if user not in all_followed_profiles]
+    print(f"available profiles {available_profiles}")
+    
+    data_available_info = []
+    for user_data in available_profiles:
+        print(f"User data id {user_data.id}")
+        user_data_info = {
+            "users_data_id": user_data.id,
+            "users_data_usernames": user_data.username,
+        }
+        data_available_info.append(user_data_info)
+
+    return JsonResponse({
+        "data_available_info": data_available_info,
+        "data_followed_info": data_followed_info,
+    })
+
+    # for already_followed_users in all_followed_profiles:
+    #     return JsonResponse({
+    #         "followed_user_id": already_followed_users.id,
+    #         "followed_user_username": already_followed_users.username
+    #     })
+
+    # for user_data_info in available_profiles:
+    #     # user_data.id
+    #     # user_data.username
+    #     # print(f"user data id {user_data_info.id}")
+    #     return JsonResponse({
+    #         "available_user_id": user_data_info.id,
+    #         "available_user_username": user_data_info.username,
+    #     })
+
+    # for already_followed_users in all_followed_profiles:
+    #     return JsonResponse({
+    #         "followed_user_id": already_followed_users.id,
+    #         "followed_user_username": already_followed_users.username
+    #     })
+
+
 @login_required(login_url='login')
 def profile_view(request, id):
     if request.user.is_authenticated:
@@ -424,15 +488,63 @@ def profile_view(request, id):
 
         default_image = 'avatar.png'
 
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
         posts = Post.objects.filter(user=user).all()
+        page_number = int(request.GET.get('page', 1))
+        paginator = Paginator(posts, 10)
+        try:
+            post_page = paginator.page(page_number)
+        except EmptyPage:
+            return JsonResponse({
+                "end_pagination": True
+            })
         # Idk if this is standard but it created the UserAvatar queries for each existing user(already created a signal to create the queries each time a user registers, so I commented it out)
         # users = User.objects.all()
         # for user in users:
         #     UserAvatar.objects.create(user=user)
             
+    if not is_ajax:
+        context = {'user': user, 'followed_user': followed_user, 'count': followed_user.total_followers, 'following': user.followers.all().count(), 'follow_bool': following_bool, 'post_page': post_page, 'user_avatar': user_avatar, 'form': form, 'default_mage': default_image, 'profile_post_form': profile_post_form}
+        return render(request, "chatting/profile.html", context)
+    else:
+        data = []
 
-    context = {'user': user, 'followed_user': followed_user, 'count': followed_user.total_followers, 'following': user.followers.all().count(), 'follow_bool': following_bool, 'posts': posts, 'user_avatar': user_avatar, 'form': form, 'default_mage': default_image, 'profile_post_form': profile_post_form}
-    return render(request, "chatting/profile.html", context)
+        for post_data in post_page:
+            for img_useravatar in post_data.user.useravatar_set.all():
+                img_useravatar.imageURL
+
+            data_comments = []
+            for comments in post_data.comments_set.all():
+                for comment_user_profile in comments.user.useravatar_set.all():
+                    comment_user_profile.imageURL
+
+                comments_post = {
+                    'comment_user_profile': comment_user_profile.imageURL,
+                    'comment_user': comments.user.username,
+                    'body': comments.body
+                }
+                data_comments.append(comments_post)
+
+            all_user_posts = {
+                'id': post_data.id,
+                'user': post_data.user.username,
+                'user_id': post_data.user.id,
+                'user_profile_img': img_useravatar.imageURL,
+                'image': post_data.imageURL,
+                'likes': True if request.user in post_data.liked.all() else False,
+                'likes_count': post_data.total_likes(),
+                'content': post_data.content,
+                'created': post_data.created.strftime("%b. %d, %Y, %I:%M:%S %p"),
+                'updated': post_data.updated.strftime("%b. %d, %Y, %I:%M:%S %p"),
+                'comments': data_comments
+            }
+            data.append(all_user_posts)
+    return JsonResponse({
+        'data': data,
+        "end_pagination": True if page_number >= paginator.num_pages else False,
+        'user': request.user.id,
+    })
 
 def delete_avatar(request, id):
     r_user = request.user
