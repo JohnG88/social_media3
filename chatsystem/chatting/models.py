@@ -50,13 +50,13 @@ class Comments(models.Model):
 
 class UserFollowing(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="following")
-    following_user_id = models.ManyToManyField(User, related_name="followers")
+    following_user_id = models.ManyToManyField(User, blank=True, related_name="followers")
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.user.username
 
-    def total_followers(self):
+    def total_following(self):
         return self.following_user_id.all().count()
 
 def create_follow_query(sender, instance, created, *args, **kwargs):

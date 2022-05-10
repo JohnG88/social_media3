@@ -48,34 +48,33 @@
             {% endif %}
             </div>
 
-            <form action="{% url 'follow-unfollow' user.id %}" method="POST">
+            <form class="follow-form" data-user-id="{{user.id}}" method="POST">
                 {% csrf_token %}
 
                 <p>following - {{count}}</p>
                 {% if request.user == user %} 
                 {% else %} 
-                    {% if follow_bool %}
-                        <button
-                            type="submit"
-                            name="user_id"
-                            value="{{user.id}}"
-                            class="btn btn-info"
-                        >
-                            Unfollow
-                        </button>
-
-                    {% else %}
+                    {% if following_bool %}
                         <button
                             type="submit"
                             name="user_id"
                             value="{{user.id}}"
                             class="btn btn-danger"
                         >
+                            Unfollow
+                        </button>
+                    {% else %}
+                        <button
+                            type="submit"
+                            name="user_id"
+                            value="{{user.id}}"
+                            class="btn btn-info"
+                        >
                             Follow
                         </button>
                     {% endif %} 
                 {% endif %} 
-                Followers - {{following}}
+                Followers - {{followers}}
             </form>
             <div class="d-flex">
             <a class="btn btn-warning" href="{% url 'index' %}">Home</a>

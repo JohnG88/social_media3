@@ -444,22 +444,27 @@ def available_users(request):
 def profile_view(request, id):
     if request.user.is_authenticated:
         user = User.objects.get(id=id)
-        # print(f"Profile user {user}")
-        main_user = UserFollowing.objects.get(user=request.user)
+        print(f"Profile user {user}")
+        r_user = User.objects.get(id=request.user.id)
+        print(f"Main user {r_user}")
+        # main_user = User.objects.get(user=request.user.id)
+        # main_user_all = UserFollowing.objects.get(user=main_user)
         # print(f"Main user {main_user}")
-        all_followers = request.user.followers.all()
+        # all_followers = request.user.followers.all()
         # print(f"{main_user} following {all_followers}")
-        following_bool = False
-        followed_user = UserFollowing.objects.get(user=user)
-        # print(f"this is followed user {followed_user}")
-        if user in main_user.following_user_id.all():
+        # following_bool = False
+        followed_by_main_user = UserFollowing.objects.get(user=r_user)
+        following_other_users = UserFollowing.objects.get(user=user)
+        print(f"this is followed user {followed_by_main_user.following_user_id.all()}")
+        if user in followed_by_main_user.following_user_id.all():
         # if main_user.following_user_id.filter(user=followed_user).exists():
+            print("True")
             following_bool = True
         else:
             following_bool = False
+            print("False")
         # print(f"This is the followed user boolean {following_bool}")
         
-        r_user = User.objects.get(id=request.user.id)
         # print(f"r_user {r_user}")
         user_avatar = UserAvatar.objects.get(user=user)
         # print(f"User Avatar {user_avatar}" )
@@ -505,7 +510,7 @@ def profile_view(request, id):
         #     UserAvatar.objects.create(user=user)
             
     if not is_ajax:
-        context = {'user': user, 'followed_user': followed_user, 'count': followed_user.total_followers, 'following': user.followers.all().count(), 'follow_bool': following_bool, 'post_page': post_page, 'user_avatar': user_avatar, 'form': form, 'default_mage': default_image, 'profile_post_form': profile_post_form}
+        context = {'user': user, 'r_user': r_user, 'followed_user': followed_by_main_user, 'count': following_other_users.total_following, 'followers': user.followers.all().count(), 'following_bool': following_bool, 'post_page': post_page, 'user_avatar': user_avatar, 'form': form, 'default_mage': default_image, 'profile_post_form': profile_post_form}
         return render(request, "chatting/profile.html", context)
     else:
         data = []
@@ -557,18 +562,29 @@ def delete_avatar(request, id):
         return HttpResponseRedirect(reverse('profile', args=[id]))
 
 def follow_unfollow(request, id):
+    main_user = User.objects.get(id=request.user.id)
     other_user = User.objects.get(id=id)
     # print(f"Other user {other_user}")
-    follow_user = UserFollowing.objects.get(user=request.user)
+    follow_user = UserFollowing.objects.get(user=main_user)
     # print(f"following user {follow_user}")
+    if request.method == 'POST':
+        if other_user in follow_user.following_user_id.all():
+            following_bool = False
+            follow_user.following_user_id.remove(other_user)
+        else:
+            following_bool = True
+            follow_user.following_user_id.add(other_user)
+        # follow_user.save()
+        all_follow_count = other_user.followers.all().count()
+        follow_user_count = follow_user.total_following
+        # print(f"follow user {follow_user_count.count()}")
+        return JsonResponse({
+            "followers_bool": following_bool,
+            "count": other_user.following.all().count(),
+            "followers_count": other_user.followers.all().count()
+        })
 
-    if other_user in follow_user.following_user_id.all():
-        # followers = False
-        follow_user.following_user_id.remove(other_user)
-    else:
-        # followers = True
-        follow_user.following_user_id.add(other_user)
-    follow_user.save()
+    # 'followers': other_user.followers.all().count()
     # to reference attribute/field from same model use its name
     # ex follow_user is variable of UserFollowing and UserFollowing, and you can use lines such as below,
     # follow_user.following_user_id.all()
@@ -576,9 +592,16 @@ def follow_unfollow(request, id):
     # user.followers.all()
     # And if you do not have a related_name you can just use variable lowercase name of model _set
     # user.userfollowing_set.all()
-    
-    
-    return HttpResponseRedirect(reverse('profile', args=[id]))
+    # print(f"followers {other_user.followers.all().count()}")
+    # print(f"followers_bool {following_bool}")
+    # print(f"followers count {follow_user.total_following()}")
+    # return HttpResponseRedirect(reverse('profile', args=[id]))
+
+    # return JsonResponse({
+    #     "followers_bool": following_bool,
+    #     "count": follow_user.count(),
+    #     "followers_count": other_user.followers.all().count()
+    # })
 
 
 

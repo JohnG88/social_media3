@@ -28,6 +28,33 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
     const csrftoken = getCookie('csrftoken');
 
+    const followUnfollow = () => {
+        const followForm = document.querySelector(".follow-form");
+
+        followForm.addEventListener("submit", (e) => {
+            e.preventDefault()
+            const formId = e.target.getAttribute('data-user-id')
+            console.log("form id ", formId)
+            const url = `http://127.0.0.1:8000/follow-unfollow/${formId}/`
+
+            fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-Requested-With": "XMLHttpRequest",
+                    "X-CSRFToken": csrftoken,
+                },
+                // body: JSON.stringify({
+
+                // })
+                })
+                .then((response) => response.text())
+                .then((data) => {
+                    console.log("Follow Success ", data)
+            })
+        })
+    }
+
     const likeUnlikePosts = () => {
         const likeUnlikeForms = [...document.getElementsByClassName("like-unlike-forms")]
         likeUnlikeForms.forEach(form => form.addEventListener("submit", (e) => {
@@ -156,6 +183,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         }))
     }
     
+    followUnfollow();
     commentsForm();
     likeUnlikePosts();
     
