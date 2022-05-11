@@ -59,7 +59,7 @@
                             type="submit"
                             name="user_id"
                             value="{{user.id}}"
-                            class="btn btn-danger"
+                            class="btn btn-danger follow-button"
                         >
                             Unfollow
                         </button>
@@ -68,16 +68,16 @@
                             type="submit"
                             name="user_id"
                             value="{{user.id}}"
-                            class="btn btn-info"
+                            class="btn btn-info follow-button"
                         >
                             Follow
                         </button>
                     {% endif %} 
                 {% endif %} 
-                Followers - {{followers}}
+                Followers - <span class="followers-number">{{followers}}</span>
             </form>
             <div class="d-flex">
-            <a class="btn btn-warning" href="{% url 'index' %}">Home</a>
+                <a class="btn btn-warning" href="{% url 'index' %}">Home</a>
             </div>
         </div>
         <div style="width: 35rem" class="ms-4">

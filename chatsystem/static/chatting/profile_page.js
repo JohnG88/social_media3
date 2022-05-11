@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             const url = `http://127.0.0.1:8000/follow-unfollow/${formId}/`
 
             fetch(url, {
-                method: "POST",
+                method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                     "X-Requested-With": "XMLHttpRequest",
@@ -48,9 +48,24 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
                 // })
                 })
-                .then((response) => response.text())
+                .then((response) => response.json())
                 .then((data) => {
                     console.log("Follow Success ", data)
+
+                    const followButton = document.querySelector(".follow-button")
+                    const followersNum = document.querySelector(".followers-number")
+                    console.log("Followers number ", followersNum.textContent)
+                    
+                    followButton.textContent = data.followers_bool ? "Unfollow" : "Follow";
+                    if (data.followers_bool === false) {
+                        followButton.classList.add('btn-info')
+                        followButton.classList.remove('btn-danger')
+                    } else {
+                        followButton.classList.add('btn-danger')
+                        followButton.classList.remove('btn-info')
+                    }
+
+                    followersNum.textContent = data.followers_count ? `${data.followers_count}` : `${data.followers_count}`
             })
         })
     }

@@ -567,7 +567,7 @@ def follow_unfollow(request, id):
     # print(f"Other user {other_user}")
     follow_user = UserFollowing.objects.get(user=main_user)
     # print(f"following user {follow_user}")
-    if request.method == 'POST':
+    if request.method == 'PUT':
         if other_user in follow_user.following_user_id.all():
             following_bool = False
             follow_user.following_user_id.remove(other_user)
