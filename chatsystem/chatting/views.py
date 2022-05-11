@@ -474,12 +474,37 @@ def profile_view(request, id):
         # print(f"post model form {profile_post_form}")
 
         if request.method == 'POST':
-            if profile_post_form.is_valid():
-                post_form = profile_post_form.save(commit=False)
-                post_form.user = r_user
-                profile_post_form.save()
-                # post_form = PostModelForm()
-                return HttpResponseRedirect(reverse('profile', args=[id]))
+            data_answer = request.POST.get("content")
+            data_image_answer = request.FILES.get("image")
+
+            new_post = Post.objects.create(user=r_user)
+            new_post.content = data_answer
+            new_post.image = data_image_answer
+            new_post.save()
+
+            for user_profile_image in new_post.user.useravatar_set.all():
+                user_profile_image.imageURL
+
+            return JsonResponse({
+                'main_user_id': r_user.id,
+                'user_id': user.id,
+                'id': new_post.id,
+                'user': new_post.user.username,
+                'post_user_id': new_post.user.id,
+                'user_profile_image': user_profile_image.imageURL,
+                'content': new_post.content,
+                'image': new_post.imageURL,
+                'likes': True if user in new_post.liked.all() else False,
+                'likes_count': new_post.total_likes(),
+                'created': new_post.created.strftime("%b. %d, %Y, %I:%M:%S %p"),
+                'comments': ''
+            })
+            # if profile_post_form.is_valid():
+            #     post_form = profile_post_form.save(commit=False)
+            #     post_form.user = r_user
+            #     profile_post_form.save()
+            #     # post_form = PostModelForm()
+            #     return HttpResponseRedirect(reverse('profile', args=[id]))
         
         # Add the instance to form not keep creating UserAvatar queries
         form = UserAvatarModelForm(request.POST or None, request.FILES or None, instance=user_avatar)

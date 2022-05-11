@@ -9,6 +9,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
     console.log("user id ", userId.dataset.userId)
     // console.log("window location ", hereUrl)
 
+    const profilePostForm = document.querySelector(".profile-post-form");
+
     const beforeFirstPost = document.querySelector("#before-first-post")
 
     function getCookie(name) {
@@ -69,6 +71,161 @@ document.addEventListener("DOMContentLoaded", function(event) {
             })
         })
     }
+
+    profilePostForm.addEventListener("submit", (e) => {
+        e.preventDefault()
+
+        const profileId = e.target.getAttribute("data-user-id")
+        console.log("Profile id ", profileId)
+
+        const url = `http://127.0.0.1:8000/profile/${profileId}/`
+        
+        const inputContent = document.querySelector("#id_content").value;
+        const inputImageContent = document.querySelector("#id_image").files;
+
+        let formData = new FormData()
+        formData.append("image", inputImageContent[0])
+        formData.append('content', inputContent)
+
+        fetch(url, {
+            method: "POST",
+            headers: {
+                // "Content-Type": "application/json",
+                "X-Requested-With": "XMLHttpRequest",
+                "X-CSRFToken": csrftoken,
+            },
+            body: formData
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            console.log("Success ", data)
+            console.log("data image ", data.user_profile_image)
+
+            postBody.insertAdjacentHTML("afterbegin", 
+                    `   
+                        <div class="card-body d-flex">
+                            <img src="${data.user_profile_image}" class="rounded-circle" width="35px" height="35px">
+                            <h5 class="card-title ms-2">
+                                ${data.user}
+                            </h5>
+                        </div>
+                        ${data.image &&
+                            `<img src="${data.image}" class="card-img-top" alt="Post Image">`
+                        }
+                        <div class="card-body">
+                            <p class="card-text">
+                                ${data.content}
+                            </p>
+                            <p>${data.created}</p>
+                            ${(data.main_user_id == data.user_id) ?
+                                `<a href="/update-post/${data.id}">
+                                    Edit Post
+                                </a>
+                                <a href="/delete-post/${data.id}">
+                                    Delete Post
+                                </a>`
+                                : ``
+                            }
+                            <a href="/single-post/${data.id}">
+                                View Post
+                            </a>
+                            <div>
+                                <form       class="like-unlike-forms"
+                                    data-form-id="${data.id}">
+                                    ${data.likes ?
+                                    `<button
+                                        type="submit"
+                                        id="like-unlike-${data.id}"
+                                        name="post_id"
+                                        value="${data.id}"
+                                        class="btn btn-danger">
+                                        Unlike
+                                    </button>` :
+                                    `<button
+                                        type="submit"
+                                        id="like-unlike-${data.id}"
+                                        name="post_id"
+                                        value="${data.id}"
+                                        class="btn btn-primary">
+                                        Like
+                                    </button>`
+                                    }
+                                    <p class="render-likes-${data.id}">- ${data.likes_count} Likes - </p>
+                                </form>
+                            </div>
+                            <p>
+                                <a 
+                                    data-bs-toggle="collapse"
+                                    href="#collapseExample-${data.id}"
+                                    role="button"
+                                    aria-expanded="false"
+                                    aria-controls="collapseExample-${data.id}"
+                                >
+                                    Comments
+                                </a>
+                            </p>
+                            <div
+                                class="collapse"
+                                id="collapseExample-${data.id}"
+                            >
+                                <div>
+                                    <form
+                                        class="all-comments-form"
+                                        data-comment-id="${data.id}"
+                                    >
+                                        <div class="input-group mb-3">
+                                            <button
+                                                type="submit"
+                                                class="input-group-text comment-${data.id}"
+                                                name="submit_c_form"
+                                            >
+                                                Post
+                                            </button>
+                                            <input 
+                                                type="text"
+                                                name="body"
+                                                class="form-control comment-input-${data.id}"
+                                                required
+                                                id="id_body"
+                                            >
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="card card-body comments-div-${data.id}">
+                                    ${(data.comments.length != 0) ?
+                                        data.comments.map(c =>
+                                        `<div class="d-flex mb-1">
+                                            <div class="flex-shrink-0">
+                                                <img src="${c.comment_user_profile}" class="rounded-circle" width="30px" height="30px">
+                                            </div>
+                                            <div class="ms-2 bd-highlight bg-secondary bg-gradient rounded-pill">
+                                                <div class="ms-3 me-5">
+                                                    ${c.comment_user}
+                                                </div>
+                                                <p class="ms-3 me-5">
+                                                    ${c.body}
+                                                </p>
+                                            </div>
+                                        </div>`).join("")
+                                    :
+                                    `<p class="no-comments no-comments-${data.id}">
+                                        Be the first to comment
+                                    </p>`
+                                }
+                                </div>
+                            </div>    
+                        </div>
+                    `
+                    )
+                    followUnfollow();
+                    likeUnlikePosts();
+                    commentsForm();
+                    profilePostForm.reset()
+                    // if (document.body.contains(beforeFirstPost)){
+                    //     beforeFirstPost.remove()
+                    // }
+        })
+    })
 
     const likeUnlikePosts = () => {
         const likeUnlikeForms = [...document.getElementsByClassName("like-unlike-forms")]
@@ -190,7 +347,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                     commentsDiv.prepend(divFlex);
                     
                     form.reset();
-                    // noCommentsP.remove();
+                    noCommentsP.remove();
 
 
                 })

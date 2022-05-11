@@ -83,7 +83,7 @@
         <div style="width: 35rem" class="ms-4">
             {% if user == request.user %}
                 <div>
-                    <form method="POST" enctype="multipart/form-data">
+                    <form class="profile-post-form" data-user-id="{{r_user.id}}" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                 
                         <div class="input-group mb-3">
