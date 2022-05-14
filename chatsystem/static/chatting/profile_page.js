@@ -30,6 +30,47 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
     const csrftoken = getCookie('csrftoken');
 
+    const changeAvatar = () => {
+        const avatarForm = document.querySelector(".avatar-form")
+        avatarForm.addEventListener("submit", (e) => {
+            e.preventDefault()
+            const avatarId = e.target.getAttribute('data-user-id');
+            console.log("Avatar Id ", avatarId)
+
+            const inputImageContent = document.querySelector("#id_avatar").files;
+
+            let formData = new FormData()
+            formData.append("avatar-image", inputImageContent[0])
+
+            const url = `http://127.0.0.1:8000/change-avatar/`
+
+            fetch(url, {
+                method: "POST",
+                headers: {
+                    // "Content-Type": "application/json",
+                    "X-Requested-With": "XMLHttpRequest",
+                    "X-CSRFToken": csrftoken,
+                },
+                body: formData
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log("Success Avatar ", data)
+                const profileAvatar = document.getElementsByClassName("profile-avatar");
+                console.log("profile avatar ", profileAvatar)
+                // profileAvatar.src = data.new_avatar_image
+
+                for (var i = 0; i < profileAvatar.length; i++) {
+                    profileAvatar[i].src = data.new_avatar_image
+                }
+
+                avatarForm.reset()
+            })
+        })
+    }
+    
+    changeAvatar();
+
     const followUnfollow = () => {
         const followForm = document.querySelector(".follow-form");
 
@@ -104,7 +145,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             postBody.insertAdjacentHTML("afterbegin", 
                     `   
                         <div class="card-body d-flex">
-                            <img src="${data.user_profile_image}" class="rounded-circle" width="35px" height="35px">
+                            <img src="${data.user_profile_image}" class="rounded-circle profile-avatar" width="35px" height="35px">
                             <h5 class="card-title ms-2">
                                 ${data.user}
                             </h5>
@@ -400,7 +441,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                     postBody.insertAdjacentHTML("beforeend", 
                     `   
                         <div class="card-body d-flex">
-                            <img src="${i.user_profile_img}" class="rounded-circle" width="35px" height="35px">
+                            <img src="${i.user_profile_img}" class="rounded-circle profile-avatar" width="35px" height="35px">
                             <h5 class="card-title ms-2">
                                 ${i.user}
                             </h5>

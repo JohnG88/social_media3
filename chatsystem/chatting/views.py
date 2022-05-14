@@ -509,12 +509,19 @@ def profile_view(request, id):
         # Add the instance to form not keep creating UserAvatar queries
         form = UserAvatarModelForm(request.POST or None, request.FILES or None, instance=user_avatar)
 
-        if request.method == 'POST':
-            if form.is_valid():
-                user_avatar_form = form.save(commit=False)
-                user_avatar_form.user = r_user
-                form.save()
-                return HttpResponseRedirect(reverse('profile', args=[id]))
+        # if request.method == 'POST':
+        #     avatar_image = request.POST.get("avatar-image")
+        #     new_avatar = UserAvatar.objects.create(user=r_user)
+        #     new_avatar.image = avatar_image
+        #     new_avatar.save()
+        #     return JsonResponse({
+        #         'new_avatar_image': new_avatar.image
+        #     })
+            # if form.is_valid():
+            #     user_avatar_form = form.save(commit=False)
+            #     user_avatar_form.user = r_user
+            #     form.save()
+            #     return HttpResponseRedirect(reverse('profile', args=[id]))
 
         default_image = 'avatar.png'
 
@@ -575,6 +582,17 @@ def profile_view(request, id):
         "end_pagination": True if page_number >= paginator.num_pages else False,
         'user': request.user.id,
     })
+
+def change_avatar_profile(request):
+    r_user = User.objects.get(id=request.user.id)
+    if request.method == 'POST':
+        avatar_image = request.FILES.get("avatar-image")
+        new_avatar = UserAvatar.objects.get(user=r_user)
+        new_avatar.avatar = avatar_image
+        new_avatar.save()
+        return JsonResponse({
+            'new_avatar_image': new_avatar.imageURL
+        })
 
 def delete_avatar(request, id):
     r_user = request.user

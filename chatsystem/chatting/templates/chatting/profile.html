@@ -8,7 +8,7 @@
             <div>
                 <img
                     src="{{user_avatar.avatar.url}}"
-                    class="rounded-circle"
+                    class="rounded-circle profile-avatar"
                     alt="User Avatar"
                     width="150px"
                     height="150px"
@@ -17,7 +17,7 @@
             <div class="row">
             {% if user == request.user %}
                 <div class="col-auto">
-                    <form method="POST" enctype="multipart/form-data">
+                    <form class="avatar-form" data-user-id="{{r_user.id}}" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="input-group mb-3">
                             {{form.avatar|add_class:"form-control"}}
@@ -104,7 +104,7 @@
                 {% for post in post_page %}
                     <div class="card-body d-flex">
                         {% for a in post.user.useravatar_set.all %}
-                            <img src="{{a.avatar.url}}" class="rounded-circle" width="35px" height="35px">
+                            <img src="{{a.avatar.url}}" class="rounded-circle profile-avatar" width="35px" height="35px">
                         {% endfor %}
                         <h5 class="card-title ms-2">{{post.user.username}}</h5>
                     </div>
