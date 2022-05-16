@@ -459,12 +459,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
     var endPagination = false;
 
     // Add this if statement to only use in index page
-    // if (window.location.href === "http://127.0.0.1:8000/") {
+    if (window.location.href === "http://127.0.0.1:8000/") {
         window.addEventListener("scroll", (e) => {
             // console.log('Scrolling')
             // console.log("Document height ", document.body.clientHeight)
             // console.log("Window height ", window.innerHeight)
-            const margin = document.body.clientHeight - window.innerHeight - 100;
+            const margin = document.body.clientHeight - window.innerHeight - 200;
             // console.log("Margin ", margin)
 
             if (window.scrollY > margin && endPagination === false && blockRequest === false) {
@@ -788,7 +788,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 // return false;
             }
         })
-    // }
+    }
 
     likeUnlikePosts();
 

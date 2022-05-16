@@ -467,7 +467,7 @@ def profile_view(request, id):
         
         # print(f"r_user {r_user}")
         user_avatar = UserAvatar.objects.get(user=user)
-        # print(f"User Avatar {user_avatar}" )
+        print(f"User Avatar {user_avatar}" )
         
         # for some reason post worked by moving it above UserAvatarModelForm, idk why that is, it doesn't work if placed below UserAvatarModelForm
         profile_post_form = PostModelForm(request.POST or None, request.FILES or None)
@@ -536,6 +536,7 @@ def profile_view(request, id):
             return JsonResponse({
                 "end_pagination": True
             })
+        print(f"num pages {paginator.num_pages}")
         # Idk if this is standard but it created the UserAvatar queries for each existing user(already created a signal to create the queries each time a user registers, so I commented it out)
         # users = User.objects.all()
         # for user in users:
@@ -578,9 +579,9 @@ def profile_view(request, id):
             }
             data.append(all_user_posts)
     return JsonResponse({
-        'data': data,
+        "data": data,
         "end_pagination": True if page_number >= paginator.num_pages else False,
-        'user': request.user.id,
+        "user": request.user.id,
     })
 
 def change_avatar_profile(request):

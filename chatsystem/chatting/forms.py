@@ -11,12 +11,18 @@ from .models import Post, UserAvatar, Comments
 # For rendering custom ClearableFileInput
 from django.forms.widgets import ClearableFileInput
 
-class MyImageWidget(ClearableFileInput):
-    template_name = "chatting/custom_form.html"
+# class ProfileImageWidget(ClearableFileInput):
+#     checkbox_name = ''
+#     initial_text = ''
+#     input_text = ''
+#     clear_checkbox_label = ''
 
-    def render(self, name, value, attrs=None, render=None):
-            if value and hasattr(value, "url"):
-                template = self.template_with_initialsubstitutions['initial'] = format_html(self.url_markup_template, value.url,force_str(value))
+# class MyImageWidget(ClearableFileInput):
+#     template_name = "chatting/custom_form.html"
+
+#     def render(self, name, value, attrs=None, render=None):
+#             if value and hasattr(value, "url"):
+#                 template = self.template_with_initialsubstitutions['initial'] = format_html(self.url_markup_template, value.url,force_str(value))
 
 
 
@@ -32,7 +38,7 @@ class CommentsModelForm(forms.ModelForm):
         exclude = ('user', 'post', 'created', 'updated')
 
 class EditPostModelForm(forms.ModelForm):
-    image = forms.ImageField(widget=MyImageWidget)
+    # image = forms.ImageField(widget=MyImageWidget)
     class Meta:
         model = Post
         exclude = ('user','created', 'updated')

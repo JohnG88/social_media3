@@ -3,9 +3,10 @@
 {% load static %}
 {% block body %}
     <div class="d-flex justify-content-center whole-flex-div">
-        <div class="card" style="width: 35rem">
+        <div class="card ms-4" style="width: 35rem">
             <h1 id="current-user" data-user-id={{user.id}}>{{user.username}} Profile Page</h1>
             <div>
+                
                 <img
                     src="{{user_avatar.avatar.url}}"
                     class="rounded-circle profile-avatar"
@@ -13,10 +14,11 @@
                     width="150px"
                     height="150px"
                 />
+                
             </div>
-            <div class="row">
+            <div class="now">
             {% if user == request.user %}
-                <div class="col-auto">
+                <div class="ncol-auto">
                     <form class="avatar-form" data-user-id="{{r_user.id}}" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="input-group mb-3">
@@ -27,7 +29,7 @@
                         </div>
                     </form>
                 </div>
-                <div class="col-auto">
+                <div class="ncol-auto">
                     {% if user_avatar.avatar != default_mage %}
 
                         <form
