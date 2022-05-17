@@ -278,7 +278,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                                             data.comments.map(c =>
                                             `<div class="d-flex mb-1">
                                                 <div class="flex-shrink-0">
-                                                    <img src="${c.comment_user_profile}" class="rounded-circle" width="30px" height="30px">
+                                                    <img src="${c.comment_user_profile}" class="rounded-circle profile-avatar" width="30px" height="30px">
                                                 </div>
                                                 <div class="ms-2 bd-highlight bg-secondary bg-gradient rounded-pill">
                                                     <div class="ms-3 me-5">
@@ -407,7 +407,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
                     const commentProfileImg = document.createElement("img");
                     commentProfileImg.src= data.profile_image;
-                    commentProfileImg.classList.add("rounded-circle");
+                    commentProfileImg.classList.add("rounded-circle, profile-avatar");
                     commentProfileImg.style.width = "30px";
                     commentProfileImg.style.height = "30px";
                     shrinkDiv.append(commentProfileImg)
@@ -579,7 +579,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                                         i.comments.map(c =>
                                         `<div class="d-flex mb-1">
                                             <div class="flex-shrink-0">
-                                                <img src="${c.comment_user_profile}" class="rounded-circle" width="30px" height="30px">
+                                                <img src="${c.comment_user_profile}" class="rounded-circle profile-avatar" width="30px" height="30px">
                                             </div>
                                             <div class="ms-2 bd-highlight bg-secondary bg-gradient rounded-pill">
                                                 <div class="ms-3 me-5">
