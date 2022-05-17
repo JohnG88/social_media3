@@ -595,15 +595,19 @@ def change_avatar_profile(request):
             'new_avatar_image': new_avatar.imageURL
         })
 
-def delete_avatar(request, id):
+def delete_avatar(request):
     r_user = request.user
     user = User.objects.get(id=r_user.id)
     user_avatar = UserAvatar.objects.get(user=user)
-    if request.method == 'POST':
+    if request.method == 'DELETE':
         user_avatar.avatar.delete()
         user_avatar.avatar = 'avatar.png'
         user_avatar.save()
-        return HttpResponseRedirect(reverse('profile', args=[id]))
+        # return HttpResponseRedirect(reverse('profile', args=[id]))
+        return JsonResponse({
+            'user': user.username,
+            'default_image': user_avatar.imageURL
+        })
 
 def follow_unfollow(request, id):
     main_user = User.objects.get(id=request.user.id)

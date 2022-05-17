@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     const beforeFirstPost = document.querySelector("#before-first-post")
 
     const avatarForm = document.querySelector(".avatar-form")
+    const deleteAvatarForm = document.querySelector(".delete-form")
 
     const pContent = document.createElement("p")
 
@@ -87,6 +88,34 @@ document.addEventListener("DOMContentLoaded", function(event) {
             })
         })
     }
+
+    const deleteAvatar = () => {
+        deleteAvatarForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            fetch('http://127.0.0.1:8000/delete-avatar/', {
+                method: "DELETE",
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest",
+                    "X-CSRFToken": csrftoken,
+                },
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log("Delete ", data)
+                const profileAvatar = document.getElementsByClassName("profile-avatar");
+
+                for (var i = 0; i < profileAvatar.length; i++) {
+                    profileAvatar[i].src = data.default_image
+                }
+            })
+        })
+    }
+    
+    // if (deleteAvatarForm != null) {
+    //     deleteAvatar();
+    // }
+    
     
     // if (avatarForm != null) {
     //     changeAvatar();
@@ -610,5 +639,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     if (avatarForm != null) {
         changeAvatar();
+    }
+
+    if (deleteAvatarForm != null) {
+        deleteAvatar();
     }
 })
