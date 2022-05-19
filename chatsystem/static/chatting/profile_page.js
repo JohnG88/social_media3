@@ -17,9 +17,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     const pContent = document.createElement("p")
 
-    function insertText(text) {
-        text.raw[0]
-    }
+    const avatarDiv = document.querySelector(".now");
+    const deleteAvatarDiv = document.querySelector(".delete-avatar-div")
+    console.log("delete avatar div ", deleteAvatarDiv)
 
     function sanitizeString(str) {
         str = str.replace(/[^a-z0-9áéíóúñü \.,_-]/gim, " ");
@@ -79,18 +79,45 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 const profileAvatar = document.getElementsByClassName("profile-avatar");
                 console.log("profile avatar ", profileAvatar)
                 // profileAvatar.src = data.new_avatar_image
+                // const deleteForm = document.querySelector(".delete-form")
 
                 for (var i = 0; i < profileAvatar.length; i++) {
                     profileAvatar[i].src = data.new_avatar_image
                 }
 
-                avatarForm.reset()
+                if (data.new_avatar_image === '/media/avatar.png') {
+                    deleteAvatarDiv.remove()
+                }
+
+                avatarDiv.insertAdjacentHTML('beforeend', 
+                `
+                    <div class="ncol-auto delete-avatar-div">
+                        <form
+                            class="delete-form"
+                            data-user-id="${avatarId}"
+                        >
+                            
+                            <div class="input-group mb-3">
+                                <button class="input-group-text">Delete Avatar</button>
+                            </div>
+                        </form>
+                    </div>
+                `
+                )
+                console.log("Delete form from change avatar ", deleteAvatarForm)
+                avatarForm.reset();
+                // if (deleteAvatarForm != null) {
+                //     deleteAvatar();
+                // }
+                deleteAvatar();
             })
+            e.stopImmediatePropagation();
         })
     }
 
     const deleteAvatar = () => {
-        deleteAvatarForm.addEventListener("submit", (e) => {
+        const deleteForm = document.querySelector(".delete-form")
+        deleteForm.addEventListener("submit", (e) => {
             e.preventDefault();
 
             fetch('http://127.0.0.1:8000/delete-avatar/', {
@@ -103,19 +130,25 @@ document.addEventListener("DOMContentLoaded", function(event) {
             .then((response) => response.json())
             .then((data) => {
                 console.log("Delete ", data)
+                console.log("Delete form from delete avatar ", deleteAvatarForm)
+
                 const profileAvatar = document.getElementsByClassName("profile-avatar");
+                const deleteThisForm = document.querySelector(".delete-form")
+                console.log("Delete form ", deleteThisForm)
 
                 for (var i = 0; i < profileAvatar.length; i++) {
                     profileAvatar[i].src = data.default_image
                 }
+
+                if (data.default_image === "/media/avatar.png") {
+                    deleteAvatarDiv.remove()
+                }
+
+                console.log("Dlete avatar div in delte ", deleteAvatarDiv)
             })
+            e.stopImmediatePropagation();
         })
     }
-    
-    // if (deleteAvatarForm != null) {
-    //     deleteAvatar();
-    // }
-    
     
     // if (avatarForm != null) {
     //     changeAvatar();
@@ -436,7 +469,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
                     const commentProfileImg = document.createElement("img");
                     commentProfileImg.src= data.profile_image;
-                    commentProfileImg.classList.add("rounded-circle, profile-avatar");
+                    commentProfileImg.classList.add("rounded-circle", "profile-avatar");
                     commentProfileImg.style.width = "30px";
                     commentProfileImg.style.height = "30px";
                     shrinkDiv.append(commentProfileImg)

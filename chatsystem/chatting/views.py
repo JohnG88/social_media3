@@ -589,6 +589,10 @@ def change_avatar_profile(request):
     if request.method == 'POST':
         avatar_image = request.FILES.get("avatar-image")
         new_avatar = UserAvatar.objects.get(user=r_user)
+        # print(f"new avatar {new_avatar.avatar}")
+        if new_avatar.avatar != 'avatar.png':
+            new_avatar.avatar.delete()
+
         new_avatar.avatar = avatar_image
         new_avatar.save()
         return JsonResponse({
@@ -599,8 +603,12 @@ def delete_avatar(request):
     r_user = request.user
     user = User.objects.get(id=r_user.id)
     user_avatar = UserAvatar.objects.get(user=user)
+    print(f"user avatar url {user_avatar.avatar}")
+    # print(f"imageURL {user_avatar.avatar}")
     if request.method == 'DELETE':
-        user_avatar.avatar.delete()
+        if user_avatar.avatar != 'avatar.png':
+            user_avatar.avatar.delete()
+        
         user_avatar.avatar = 'avatar.png'
         user_avatar.save()
         # return HttpResponseRedirect(reverse('profile', args=[id]))

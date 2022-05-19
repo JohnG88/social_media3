@@ -68,7 +68,7 @@ post_save.connect(create_follow_query, sender=User)
 # Tried to add a OneToOneField here but got IntegrityError - UNIQUE constraint failed:. The only way to use OneToOneField is to add it to a Profile model and that is it, I kept using User model everywhere so it wouldn't work, so changed to a foreignkey
 class UserAvatar(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    avatar = models.ImageField(default='avatar.png', upload_to='avatars')
+    avatar = models.ImageField(default='/media/avatar.png', upload_to='avatars')
 
     def __str__(self):
         return self.user.username
