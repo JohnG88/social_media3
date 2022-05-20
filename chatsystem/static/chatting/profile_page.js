@@ -80,16 +80,18 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 console.log("profile avatar ", profileAvatar)
                 // profileAvatar.src = data.new_avatar_image
                 const deleteForm = document.querySelector(".delete-form")
+                const deleteADiv = document.querySelector(".delete-avatar-div")
 
                 for (var i = 0; i < profileAvatar.length; i++) {
                     profileAvatar[i].src = data.new_avatar_image
                 }
 
-                if (data.new_avatar_image === '/media/avatar.png') {
-                    deleteAvatarDiv.remove()
-                }
+                // if (data.new_avatar_image === '/media/avatar.png') {
+                //     deleteAvatarDiv.remove()
+                // }
+                // deleteAvatarDiv.remove()
 
-                avatarDiv.insertAdjacentHTML('beforeend', 
+                deleteADiv != null ? '' : avatarDiv.insertAdjacentHTML('beforeend', 
                 `
                     <div class="ncol-auto delete-avatar-div">
                         <form
