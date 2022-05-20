@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 const profileAvatar = document.getElementsByClassName("profile-avatar");
                 console.log("profile avatar ", profileAvatar)
                 // profileAvatar.src = data.new_avatar_image
-                // const deleteForm = document.querySelector(".delete-form")
+                const deleteForm = document.querySelector(".delete-form")
 
                 for (var i = 0; i < profileAvatar.length; i++) {
                     profileAvatar[i].src = data.new_avatar_image
@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 )
                 console.log("Delete form from change avatar ", deleteAvatarForm)
                 avatarForm.reset();
-                // if (deleteAvatarForm != null) {
+                // if (deleteForm != null) {
                 //     deleteAvatar();
                 // }
                 deleteAvatar();
@@ -135,14 +135,18 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 const profileAvatar = document.getElementsByClassName("profile-avatar");
                 const deleteThisForm = document.querySelector(".delete-form")
                 console.log("Delete form ", deleteThisForm)
+                const deleteThisDiv = document.querySelector(".delete-avatar-div")
 
                 for (var i = 0; i < profileAvatar.length; i++) {
                     profileAvatar[i].src = data.default_image
                 }
 
-                if (data.default_image === "/media/avatar.png") {
-                    deleteAvatarDiv.remove()
-                }
+                // if (data.default_image === "/media/avatar.png") {
+                //     deleteThisDiv.remove()
+                // }
+
+                deleteAvatarDiv.remove()
+                deleteThisDiv.remove()
 
                 console.log("Dlete avatar div in delte ", deleteAvatarDiv)
             })
