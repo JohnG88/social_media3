@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 // }
                 // deleteAvatarDiv.remove()
 
-                deleteADiv != null ? '' : avatarDiv.insertAdjacentHTML('beforeend', 
+                deleteForm != null ? '' : avatarDiv.insertAdjacentHTML('beforeend', 
                 `
                     <div class="ncol-auto delete-avatar-div">
                         <form
@@ -108,10 +108,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 )
                 console.log("Delete form from change avatar ", deleteAvatarForm)
                 avatarForm.reset();
+
                 // if (deleteForm != null) {
                 //     deleteAvatar();
                 // }
                 deleteAvatar();
+                // if (deleteAvatarForm != null) {
+                //     deleteAvatar();
+                // }
             })
             e.stopImmediatePropagation();
         })
@@ -137,7 +141,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 const profileAvatar = document.getElementsByClassName("profile-avatar");
                 const deleteThisForm = document.querySelector(".delete-form")
                 console.log("Delete form ", deleteThisForm)
-                const deleteThisDiv = document.querySelector(".delete-avatar-div")
+                
 
                 for (var i = 0; i < profileAvatar.length; i++) {
                     profileAvatar[i].src = data.default_image
@@ -147,8 +151,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 //     deleteThisDiv.remove()
                 // }
 
-                deleteAvatarDiv.remove()
-                deleteThisDiv.remove()
+                const deleteThisDiv = document.querySelector(".delete-avatar-div")
+
+                // deleteAvatarDiv.remove()
+                if (deleteThisDiv != null) {
+                    deleteThisDiv.remove()
+                }
+                // deleteThisDiv.remove()
 
                 console.log("Dlete avatar div in delte ", deleteAvatarDiv)
             })

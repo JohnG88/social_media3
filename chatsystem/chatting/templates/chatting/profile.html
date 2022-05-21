@@ -29,9 +29,8 @@
                         </div>
                     </form>
                 </div>
-                <div class="ncol-auto delete-avatar-div">
-                    {% if user_avatar.avatar != default_mage %}
-
+                {% if user_avatar.avatar != default_mage %}
+                    <div class="ncol-auto delete-avatar-div">
                         <form
                             class="delete-form"
                             data-user-id="{{r_user.id}}"
@@ -43,10 +42,9 @@
                                 <button class="input-group-text">Delete Avatar</button>
                             </div>
                         </form>
-                
+                    </div>
                     {% else %} 
                     {% endif %}
-                </div>
             {% else %} 
             {% endif %}
             </div>
