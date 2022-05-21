@@ -21,6 +21,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
     const deleteAvatarDiv = document.querySelector(".delete-avatar-div")
     console.log("delete avatar div ", deleteAvatarDiv)
 
+    // inputIContent.length = null ? changeBtn.disabled = true : changeBtn.disabled = false
+
     function sanitizeString(str) {
         str = str.replace(/[^a-z0-9áéíóúñü \.,_-]/gim, " ");
         return str.trim();
@@ -50,6 +52,25 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
     const csrftoken = getCookie('csrftoken');
 
+    const inputIContent = document.querySelector("#id_avatar");
+    // console.log("IMage input length ", inputIContent.value.length)
+
+    const changeBtn = document.querySelector(".change-btn")
+    if (changeBtn != null) {
+        changeBtn.disabled = true
+    }
+    
+
+    const inputImageDisableChange = () => {
+        inputIContent.addEventListener('click', () => {
+            inputIContent.files.length > 1 ? changeBtn.disabled = true : changeBtn.disabled = false
+        })
+    }
+    if (inputIContent != null) {
+        inputImageDisableChange();
+    }
+    
+
     const changeAvatar = () => {
         // const avatarForm = document.querySelector(".avatar-form")
         avatarForm.addEventListener("submit", (e) => {
@@ -58,6 +79,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
             console.log("Avatar Id ", avatarId)
 
             const inputImageContent = document.querySelector("#id_avatar").files;
+            console.log("Image length in change ", inputImageContent.length)
+
+            // const changeBtn = document.querySelector(".change-btn")
+
+            // inputImageContent.length = null ? changeBtn.disabled = true : changeBtn.disabled = false 
 
             let formData = new FormData()
             formData.append("avatar-image", inputImageContent[0])
@@ -75,6 +101,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             })
             .then((response) => response.json())
             .then((data) => {
+                changeBtn.disabled = true
                 console.log("Success Avatar ", data)
                 const profileAvatar = document.getElementsByClassName("profile-avatar");
                 console.log("profile avatar ", profileAvatar)
@@ -113,6 +140,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 //     deleteAvatar();
                 // }
                 deleteAvatar();
+                // changeBtn.disabled = true
                 // if (deleteAvatarForm != null) {
                 //     deleteAvatar();
                 // }
