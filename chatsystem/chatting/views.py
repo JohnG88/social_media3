@@ -293,6 +293,7 @@ def comment_post(request, id):
         return JsonResponse({
             'id': new_comment.id,
             'user': new_comment.user.username,
+            'user_id': new_comment.user.id,
             'profile_image': profile_image.imageURL,
             'body': new_comment.body
         })
@@ -560,6 +561,7 @@ def profile_view(request, id):
                 comments_post = {
                     'comment_user_profile': comment_user_profile.imageURL,
                     'comment_user': comments.user.username,
+                    'comments_user_id': comments.user.id,
                     'body': comments.body
                 }
                 data_comments.append(comments_post)

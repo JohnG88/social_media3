@@ -103,7 +103,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             .then((data) => {
                 changeBtn.disabled = true
                 console.log("Success Avatar ", data)
-                const profileAvatar = document.getElementsByClassName("profile-avatar");
+                const profileAvatar = document.getElementsByClassName(`profile-avatar-${avatarId}`);
                 console.log("profile avatar ", profileAvatar)
                 // profileAvatar.src = data.new_avatar_image
                 const deleteForm = document.querySelector(".delete-form")
@@ -153,6 +153,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         const deleteForm = document.querySelector(".delete-form")
         deleteForm.addEventListener("submit", (e) => {
             e.preventDefault();
+            const avatarId = e.target.getAttribute('data-user-id');
 
             fetch('http://127.0.0.1:8000/delete-avatar/', {
                 method: "DELETE",
@@ -166,7 +167,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 console.log("Delete ", data)
                 console.log("Delete form from delete avatar ", deleteAvatarForm)
 
-                const profileAvatar = document.getElementsByClassName("profile-avatar");
+                const profileAvatar = document.getElementsByClassName(`profile-avatar-${avatarId}`);
                 const deleteThisForm = document.querySelector(".delete-form")
                 console.log("Delete form ", deleteThisForm)
                 
@@ -291,7 +292,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 postBody.insertAdjacentHTML("afterbegin", 
                         `   
                             <div class="card-body d-flex">
-                                <img src="${data.user_profile_image}" class="rounded-circle profile-avatar" width="35px" height="35px">
+                                <img src="${data.user_profile_image}" class="rounded-circle profile-avatar-${profileId}" width="35px" height="35px">
                                 <h5 class="card-title ms-2">
                                     ${data.user}
                                 </h5>
@@ -383,7 +384,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                                             data.comments.map(c =>
                                             `<div class="d-flex mb-1">
                                                 <div class="flex-shrink-0">
-                                                    <img src="${c.comment_user_profile}" class="rounded-circle profile-avatar" width="30px" height="30px">
+                                                    <img src="${c.comment_user_profile}" class="rounded-circle profile-avatar-${c.user_id}" width="30px" height="30px">
                                                 </div>
                                                 <div class="ms-2 bd-highlight bg-secondary bg-gradient rounded-pill">
                                                     <div class="ms-3 me-5">
@@ -512,7 +513,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
                     const commentProfileImg = document.createElement("img");
                     commentProfileImg.src= data.profile_image;
-                    commentProfileImg.classList.add("rounded-circle", "profile-avatar");
+                    commentProfileImg.classList.add("rounded-circle", `profile-avatar-${data.user_id}`);
                     commentProfileImg.style.width = "30px";
                     commentProfileImg.style.height = "30px";
                     shrinkDiv.append(commentProfileImg)
@@ -592,7 +593,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                     postBody.insertAdjacentHTML("beforeend", 
                     `   
                         <div class="card-body d-flex">
-                            <img src="${i.user_profile_img}" class="rounded-circle profile-avatar" width="35px" height="35px">
+                            <img src="${i.user_profile_img}" class="rounded-circle profile-avatar-${i.user_id}" width="35px" height="35px">
                             <h5 class="card-title ms-2">
                                 ${i.user}
                             </h5>
@@ -684,7 +685,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                                         i.comments.map(c =>
                                         `<div class="d-flex mb-1">
                                             <div class="flex-shrink-0">
-                                                <img src="${c.comment_user_profile}" class="rounded-circle profile-avatar" width="30px" height="30px">
+                                                <img src="${c.comment_user_profile}" class="rounded-circle profile-avatar-${c.coments_user_id}" width="30px" height="30px">
                                             </div>
                                             <div class="ms-2 bd-highlight bg-secondary bg-gradient rounded-pill">
                                                 <div class="ms-3 me-5">

@@ -9,7 +9,7 @@
                 
                 <img
                     src="{{user_avatar.avatar.url}}"
-                    class="rounded-circle profile-avatar"
+                    class="rounded-circle profile-avatar-{{r_user.id}}"
                     alt="User Avatar"
                     width="150px"
                     height="150px"
@@ -105,7 +105,7 @@
                 {% for post in post_page %}
                     <div class="card-body d-flex">
                         {% for a in post.user.useravatar_set.all %}
-                            <img src="{{a.avatar.url}}" class="rounded-circle profile-avatar" width="35px" height="35px">
+                            <img src="{{a.avatar.url}}" class="rounded-circle profile-avatar-{{post.user.id}}" width="35px" height="35px">
                         {% endfor %}
                         <h5 class="card-title ms-2">{{post.user.username}}</h5>
                     </div>
@@ -177,7 +177,7 @@
                                     <div class="flex-shrink-0">
                                         {% for ua in c.user.useravatar_set.all %}
                                         <img src="{{ua.avatar.url}}"
-                                        class="rounded-circle profile-avatar" width="30px" height="30px">
+                                        class="rounded-circle profile-avatar-{{c.user.id}}" width="30px" height="30px">
                                         {% endfor %}
                                     </div>
                                     <div class="ms-2 bd-highlight bg-secondary bg-gradient rounded-pill">
