@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     
 
 
-    console.log('main.js')
+    // console.log('main.js')
     // console.log("Window ", window.location.href)
 
     // const userId = document.querySelector("#current-user");
@@ -48,8 +48,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
             const dataLikeForm = e.target.getAttribute('data-form-id');
             const clickedLikeBtn = document.getElementById(`like-unlike-${dataLikeForm}`);
             const renderLikes = document.querySelector(`.render-likes-${dataLikeForm}`);
-            console.log("Data like form ", dataLikeForm)
-            console.log("clicked like btn ", clickedLikeBtn)
+            // console.log("Data like form ", dataLikeForm)
+            // console.log("clicked like btn ", clickedLikeBtn)
             const url = `http://127.0.0.1:8000/like-post/${dataLikeForm}/`
             // const url = "like-post/"
 
@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             })
             .then((response) => response.json())
             .then((data) => {
-                console.log("Like success ", data)
+                // console.log("Like success ", data)
                 // clickedLikeBtn.addEventListener("click", (e) => {
                 //     console.log("clicked like btn ", clickedLikeBtn)
                 //         clickedLikeBtn.classList.toggle("btn-info")
@@ -110,8 +110,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
             const dataCommentForm = e.target.getAttribute("data-comment-id");
             const clickedCommentBtn = document.querySelector(`.comment-${dataCommentForm}`)
             const commentInput = document.querySelector(`.comment-input-${dataCommentForm}`).value
-            console.log("Comment input id", dataCommentForm)
-            console.log("Comment input ", commentInput)
+            // console.log("Comment input id", dataCommentForm)
+            // console.log("Comment input ", commentInput)
             
             const data = {body: commentInput}
 
@@ -125,7 +125,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             })
                 .then((response) => response.json())
                 .then((data) => {
-                    console.log("Success ", data)
+                    // console.log("Success ", data)
 
                     const noCommentsP = document.querySelector(`.no-comments-${dataCommentForm}`);
 
@@ -179,14 +179,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
         const inputContent = document.querySelector("#id_content").value;
         const inputImageContent = document.querySelector("#id_image").files;
         // console.log("Input value", inputContent)
-        console.log("Input image value files 0", inputImageContent[0])
+        // console.log("Input image value files 0", inputImageContent[0])
         // const data = {content: inputContent, image:inputImageContent}
 
         let formData = new FormData()
         formData.append('image', inputImageContent[0])
         formData.append('content', inputContent )
 
-        console.log("Form data", formData)
+        // console.log("Form data", formData)
 
         // var url = new URL("http://127.0.0.1:8000/"),
         //     params = {data:inputContent}
@@ -204,7 +204,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         })
             .then((response) => response.json())
             .then((data) => {
-                console.log('Success ', data)
+                // console.log('Success ', data)
                 const dataDiv = document .createElement("div");
                 dataDiv.classList.add("post-center");
                 // dataDiv.textContent = data.data[i].id;
@@ -487,7 +487,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 })
                     .then((response) => response.json())
                     .then((data) => {
-                        console.log("data ", data)
+                        // console.log("data ", data)
                         if (data.end_pagination === true) {
                             endPagination = true;
                         } else {

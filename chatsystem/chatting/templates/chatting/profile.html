@@ -3,7 +3,7 @@
 {% load static %}
 {% block body %}
     <div class="d-flex justify-content-center whole-flex-div">
-        <div class="card ms-4" style="width: 35rem">
+        <div class="card ms-4 profile-info-div align-self-start" style="width: 35rem">
             <h1 id="current-user" data-user-id={{user.id}}>{{user.username}} Profile Page</h1>
             <div>
                 
@@ -115,7 +115,9 @@
                     {% endif %}
                     <div class="card-body">
                         <p class="card-text">{{post.content}}</p>
-                        <p>{{post.created}}</p>
+                        <p>{{post.updated}} {% if post.created|date:'d m y h:i:s' != post.updated|date:'d m y h:i:s' %}
+                            (Edited)
+                        {% endif %}</p>
                         {% if post.user == request.user %}
                             <a href="{% url 'update-post' post.id %}">
                                 Edit Post

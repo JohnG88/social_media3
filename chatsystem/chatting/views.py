@@ -330,9 +330,9 @@ def update_post(request, id):
             edit_form.save()
             edit_form.liked.set(post.liked.all())
             # form.save_m2m()
-            return redirect("index")
+            return redirect("profile", request.user.id)
 
-    context = {"form": form}
+    context = {"form": form, 'post': post}
     return render(request, "chatting/edit_post.html", context)
 
 # def like_post(request, id):
@@ -378,7 +378,7 @@ def delete_post(request, id):
     post = Post.objects.get(id=id)
     if request.method == 'POST':
         post.delete()
-        return redirect("index")
+        return redirect("profile", request.user.id)
 
     context = {"post": post}
 
@@ -674,14 +674,16 @@ def login_view(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                messages.info(request, f"You are now logged in as {username}.")
+                # messages.info(request, f"You are now logged in as {username}.")
                 return redirect("index")
-            else:
-                messages.error(request, "Invalid username or password.")
+            # else:
+            #     messages.error(request, "Invalid username or password.")
+                # return redirect("login")
         else:
             messages.error(request, "Invalid username or password.")
-    else:
-        messages.error(request, "Invalid username or password.")
+            return redirect("login")
+    # else:
+    #     messages.error(request, "Invalid username or password.")
     form = AuthenticationForm()
 
     context = {'form': form}

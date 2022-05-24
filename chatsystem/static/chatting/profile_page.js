@@ -1,11 +1,11 @@
 document.addEventListener("DOMContentLoaded", function(event) { 
-    console.log("Profile page")
+    // console.log("Profile page")
     const postBody = document.querySelector(".post-body")
     const userId = document.querySelector("#current-user")
     // const hereUrl = window.location.href;
     const loggedUserId = userId.dataset.userId
-    console.log("user id", userId)
-    console.log("user id ", userId.dataset.userId)
+    // console.log("user id", userId)
+    // console.log("user id ", userId.dataset.userId)
     // console.log("window location ", hereUrl)
 
     const profilePostForm = document.querySelector(".profile-post-form");
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     const avatarDiv = document.querySelector(".now");
     const deleteAvatarDiv = document.querySelector(".delete-avatar-div")
-    console.log("delete avatar div ", deleteAvatarDiv)
+    // console.log("delete avatar div ", deleteAvatarDiv)
 
     // inputIContent.length = null ? changeBtn.disabled = true : changeBtn.disabled = false
 
@@ -76,10 +76,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
         avatarForm.addEventListener("submit", (e) => {
             e.preventDefault()
             const avatarId = e.target.getAttribute('data-user-id');
-            console.log("Avatar Id ", avatarId)
+            // console.log("Avatar Id ", avatarId)
 
             const inputImageContent = document.querySelector("#id_avatar").files;
-            console.log("Image length in change ", inputImageContent.length)
+            // console.log("Image length in change ", inputImageContent.length)
 
             // const changeBtn = document.querySelector(".change-btn")
 
@@ -102,9 +102,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
             .then((response) => response.json())
             .then((data) => {
                 changeBtn.disabled = true
-                console.log("Success Avatar ", data)
+                // console.log("Success Avatar ", data)
                 const profileAvatar = document.getElementsByClassName(`profile-avatar-${avatarId}`);
-                console.log("profile avatar ", profileAvatar)
+                // console.log("profile avatar ", profileAvatar)
                 // profileAvatar.src = data.new_avatar_image
                 const deleteForm = document.querySelector(".delete-form")
                 const deleteADiv = document.querySelector(".delete-avatar-div")
@@ -133,7 +133,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                     </div>
                 `
                 )
-                console.log("Delete form from change avatar ", deleteAvatarForm)
+                // console.log("Delete form from change avatar ", deleteAvatarForm)
                 avatarForm.reset();
 
                 // if (deleteForm != null) {
@@ -164,12 +164,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
             })
             .then((response) => response.json())
             .then((data) => {
-                console.log("Delete ", data)
-                console.log("Delete form from delete avatar ", deleteAvatarForm)
+                // console.log("Delete ", data)
+                // console.log("Delete form from delete avatar ", deleteAvatarForm)
 
                 const profileAvatar = document.getElementsByClassName(`profile-avatar-${avatarId}`);
                 const deleteThisForm = document.querySelector(".delete-form")
-                console.log("Delete form ", deleteThisForm)
+                // console.log("Delete form ", deleteThisForm)
                 
 
                 for (var i = 0; i < profileAvatar.length; i++) {
@@ -188,7 +188,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 }
                 // deleteThisDiv.remove()
 
-                console.log("Dlete avatar div in delte ", deleteAvatarDiv)
+                // console.log("Dlete avatar div in delte ", deleteAvatarDiv)
             })
             e.stopImmediatePropagation();
         })
@@ -222,11 +222,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 })
                 .then((response) => response.json())
                 .then((data) => {
-                    console.log("Follow Success ", data)
+                    // console.log("Follow Success ", data)
 
                     const followButton = document.querySelector(".follow-button")
                     const followersNum = document.querySelector(".followers-number")
-                    console.log("Followers number ", followersNum.textContent)
+                    // console.log("Followers number ", followersNum.textContent)
                     
                     followButton.textContent = data.followers_bool ? "Unfollow" : "Follow";
                     if (data.followers_bool === false) {
@@ -247,7 +247,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             e.preventDefault()
 
             const profileId = e.target.getAttribute("data-user-id")
-            console.log("Profile id ", profileId)
+            // console.log("Profile id ", profileId)
 
             const url = `http://127.0.0.1:8000/profile/${profileId}/`
             
@@ -269,8 +269,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
             })
             .then((response) => response.json())
             .then((data) => {
-                console.log("Success ", data)
-                console.log("data image ", data.user_profile_image)
+                // console.log("Success ", data)
+                // console.log("data image ", data.user_profile_image)
 
                 // const insertText = (text) => {
                 //     const contentP = document.querySelector(".para-content")
@@ -423,8 +423,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
             const dataLikeForm = e.target.getAttribute('data-form-id');
             const clickedLikeBtn = document.getElementById(`like-unlike-${dataLikeForm}`);
             const renderLikes = document.querySelector(`.render-likes-${dataLikeForm}`);
-            console.log("Data like form ", dataLikeForm)
-            console.log("clicked like btn ", clickedLikeBtn)
+            // console.log("Data like form ", dataLikeForm)
+            // console.log("clicked like btn ", clickedLikeBtn)
             const url = `http://127.0.0.1:8000/like-post/${dataLikeForm}/`
             // const url = "like-post/"
 
@@ -439,7 +439,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             })
             .then((response) => response.json())
             .then((data) => {
-                console.log("Like success ", data)
+                // console.log("Like success ", data)
                 // clickedLikeBtn.addEventListener("click", (e) => {
                 //     console.log("clicked like btn ", clickedLikeBtn)
                 //         clickedLikeBtn.classList.toggle("btn-info")
@@ -483,8 +483,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
             const dataCommentForm = e.target.getAttribute("data-comment-id");
             const clickedCommentBtn = document.querySelector(`.comment-${dataCommentForm}`)
             const commentInput = document.querySelector(`.comment-input-${dataCommentForm}`).value
-            console.log("Comment input id", dataCommentForm)
-            console.log("Comment input ", commentInput)
+            // console.log("Comment input id", dataCommentForm)
+            // console.log("Comment input ", commentInput)
             
             const data = {body: sanitizeString(commentInput)}
 
@@ -498,7 +498,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             })
                 .then((response) => response.json())
                 .then((data) => {
-                    console.log("Success ", data)
+                    // console.log("Success ", data)
 
                     const noCommentsP = document.querySelector(`.no-comments-${dataCommentForm}`);
 
@@ -564,7 +564,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         if (window.scrollY > margin && endPagination === false && blockRequest === false) {
             blockRequest = true;
             page += 1;
-            console.log("Page inside block ", page)
+            // console.log("Page inside block ", page)
 
             var url  = new URL(`http://127.0.0.1:8000/profile/${loggedUserId}/`),
                 params = {page:page}
@@ -580,8 +580,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
             })
             .then((response) => response.json())
             .then((data) => {
-                console.log("data ", data)
-                console.log("end pagination ", data.end_pagination)
+                // console.log("data ", data)
+                // console.log("end pagination ", data.end_pagination)
 
                 if (data.end_pagination === true) {
                     endPagination = true;
