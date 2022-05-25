@@ -88,4 +88,9 @@ a:hover {
     .whole-flex-div {
         width: 100%;
     }
+
+    .profile-page-div {
+        flex-direction: column;
+        flex-grow: 1;
+    }
 }
