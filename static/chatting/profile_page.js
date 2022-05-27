@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             let formData = new FormData()
             formData.append("avatar-image", inputImageContent[0])
 
-            const url = `http://127.0.0.1:8000/change-avatar/`
+            const url = `/change-avatar/`
 
             fetch(url, {
                 method: "POST",
@@ -155,7 +155,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             e.preventDefault();
             const avatarId = e.target.getAttribute('data-user-id');
 
-            fetch('http://127.0.0.1:8000/delete-avatar/', {
+            fetch('/delete-avatar/', {
                 method: "DELETE",
                 headers: {
                     "X-Requested-With": "XMLHttpRequest",
@@ -207,7 +207,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             e.preventDefault()
             const formId = e.target.getAttribute('data-user-id')
             console.log("form id ", formId)
-            const url = `http://127.0.0.1:8000/follow-unfollow/${formId}/`
+            const url = `/follow-unfollow/${formId}/`
 
             fetch(url, {
                 method: "PUT",
@@ -249,7 +249,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             const profileId = e.target.getAttribute("data-user-id")
             // console.log("Profile id ", profileId)
 
-            const url = `http://127.0.0.1:8000/profile/${profileId}/`
+            const url = `/profile/${profileId}/`
             
             const inputContent = document.querySelector("#id_content").value;
             const inputImageContent = document.querySelector("#id_image").files;
@@ -425,7 +425,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             const renderLikes = document.querySelector(`.render-likes-${dataLikeForm}`);
             // console.log("Data like form ", dataLikeForm)
             // console.log("clicked like btn ", clickedLikeBtn)
-            const url = `http://127.0.0.1:8000/like-post/${dataLikeForm}/`
+            const url = `/like-post/${dataLikeForm}/`
             // const url = "like-post/"
 
             fetch(url, {
@@ -488,7 +488,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             
             const data = {body: sanitizeString(commentInput)}
 
-            fetch(`http://127.0.0.1:8000/comments/${dataCommentForm}/`, {
+            fetch(`/comments/${dataCommentForm}/`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -566,7 +566,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             page += 1;
             // console.log("Page inside block ", page)
 
-            var url  = new URL(`http://127.0.0.1:8000/profile/${loggedUserId}/`),
+            var url  = new URL(`/profile/${loggedUserId}/`),
                 params = {page:page}
             Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 

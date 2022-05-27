@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             const renderLikes = document.querySelector(`.render-likes-${dataLikeForm}`);
             // console.log("Data like form ", dataLikeForm)
             // console.log("clicked like btn ", clickedLikeBtn)
-            const url = `http://127.0.0.1:8000/like-post/${dataLikeForm}/`
+            const url = `/like-post/${dataLikeForm}/`
             // const url = "like-post/"
 
             fetch(url, {
@@ -115,7 +115,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             
             const data = {body: commentInput}
 
-            fetch(`http://127.0.0.1:8000/comments/${dataCommentForm}/`, {
+            fetch(`/comments/${dataCommentForm}/`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -191,7 +191,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         // var url = new URL("http://127.0.0.1:8000/"),
         //     params = {data:inputContent}
         //     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
-        fetch("http://127.0.0.1:8000/", {
+        fetch("/", {
             method: "POST",
             headers: {
                 // "Content-type": "application/json",
@@ -459,7 +459,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     var endPagination = false;
 
     // Add this if statement to only use in index page
-    if (window.location.href === "http://127.0.0.1:8000/") {
+    if (window.location.href === "") {
         window.addEventListener("scroll", (e) => {
             // console.log('Scrolling')
             // console.log("Document height ", document.body.clientHeight)
@@ -473,7 +473,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 // console.log("Page inside block", page)
                 
                 // lines below allow to add data through url parameters like from jquery ajax data property
-                var url = new URL("http://127.0.0.1:8000/"),
+                var url = new URL("/"),
                     params = {page:page}
                 Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 
