@@ -23,6 +23,7 @@
                         {% csrf_token %}
                         {% for f in form %}
                             <div class="input-group mb-3">
+                                <label>{{f.label}}</label>
                                 {{f|add_class:"form-control"}}
                             </div>
                         {% endfor %}
