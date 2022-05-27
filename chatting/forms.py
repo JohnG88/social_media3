@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User 
 from django.core.exceptions import ValidationError
 from django.utils.encoding import force_str
-from django.forms.fields import EmailField
+from django.forms.fields import EmailField, ImageField
 from django.utils.html import format_html
 from .models import Post, UserAvatar, Comments
 
@@ -17,8 +17,14 @@ from django.forms.widgets import ClearableFileInput
 #     input_text = ''
 #     clear_checkbox_label = ''
 
-# class MyImageWidget(ClearableFileInput):
-#     template_name = "chatting/custom_form.html"
+class MyImageWidget(ClearableFileInput):
+    # template_name = "chatting/custom_form.html"
+    template_with_initial = (
+        '%(initial_text)s: <a href="%(initial_url)s">%(initial)s</a> '
+        '%(clear_template)s<br />%(input_text)s: %(input)s'
+    )
+
+    template_with_clear = '%(clear)s <label for="%(clear_checkbox_id)s">%(clear_checkbox_label)s</label>'
 
 #     def render(self, name, value, attrs=None, render=None):
 #             if value and hasattr(value, "url"):
@@ -44,6 +50,7 @@ class EditPostModelForm(forms.ModelForm):
         exclude = ('user','created', 'updated')
 
 class ProfilePostModelForm(forms.ModelForm):
+    avatar = ImageField(widget=MyImageWidget)
     class Meta:
         model = Post
         exclude = ('user', 'created', 'updated')        
