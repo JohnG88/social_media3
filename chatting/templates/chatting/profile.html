@@ -21,9 +21,11 @@
                 <div class="ncol-auto">
                     <form class="avatar-form" data-user-id="{{r_user.id}}" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
+                        {% for f in form %}
                         <div class="input-group mb-3">
-                            {{form.avatar|add_class:"form-control"}}
+                            {{f.avatar|add_class:"form-control"}}
                         </div>
+                        {% endfor %}
                         <div class="input-group mb-3">
                             <button class="input-group-text change-btn">Change Avatar</button>
                         </div>
