@@ -17,14 +17,14 @@ from django.forms.widgets import ClearableFileInput
 #     input_text = ''
 #     clear_checkbox_label = ''
 
-class MyImageWidget(ClearableFileInput):
-    # template_name = "chatting/custom_form.html"
-    template_with_initial = (
-        '%(initial_text)s: <a href="%(initial_url)s">%(initial)s</a> '
-        '%(clear_template)s<br />%(input_text)s: %(input)s'
-    )
+# class MyImageWidget(ClearableFileInput):
+#     # template_name = "chatting/custom_form.html"
+#     template_with_initial = (
+#         '%(initial_text)s: <a href="%(initial_url)s">%(initial)s</a> '
+#         '%(clear_template)s<br />%(input_text)s: %(input)s'
+#     )
 
-    template_with_clear = '%(clear)s <label for="%(clear_checkbox_id)s">%(clear_checkbox_label)s</label>'
+#     template_with_clear = '%(clear)s <label for="%(clear_checkbox_id)s">%(clear_checkbox_label)s</label>'
 
 #     def render(self, name, value, attrs=None, render=None):
 #             if value and hasattr(value, "url"):
@@ -50,7 +50,7 @@ class EditPostModelForm(forms.ModelForm):
         exclude = ('user','created', 'updated')
 
 class ProfilePostModelForm(forms.ModelForm):
-    avatar = ImageField(widget=MyImageWidget)
+    # avatar = ImageField(widget=MyImageWidget)
     class Meta:
         model = Post
         exclude = ('user', 'created', 'updated')        
