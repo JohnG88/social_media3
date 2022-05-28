@@ -9,7 +9,7 @@ from django.utils.html import format_html
 from .models import Post, UserAvatar, Comments
 
 # For rendering custom ClearableFileInput
-from django.forms.widgets import ClearableFileInput
+# from django.forms.widgets import ClearableFileInput
 
 # class ProfileImageWidget(ClearableFileInput):
 #     checkbox_name = ''

@@ -21,12 +21,15 @@
                 <div class="ncol-auto">
                     <form class="avatar-form" data-user-id="{{r_user.id}}" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
-                        {% for f in form %}
+                        {% comment %} {% for f in form %}
                             <div class="input-group mb-3">
                                 <label>{{f.label}}</label>
                                 {{f}}
                             </div>
-                        {% endfor %}
+                        {% endfor %} {% endcomment %}
+                        <div class="input-group mb-3">
+                            <input class="form-control" type="file" name="avatar" accept="image/" id="id_avatar"/>
+                        </div>
                         <div class="input-group mb-3">
                             <button class="input-group-text change-btn">Change Avatar</button>
                         </div>
