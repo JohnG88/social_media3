@@ -65,7 +65,7 @@ a:hover {
     top: 10px;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1500px) {
     .whole-flex-div {
         flex-direction: column;
     }
