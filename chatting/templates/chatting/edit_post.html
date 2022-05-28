@@ -21,7 +21,7 @@
                 {% csrf_token %}   
                 <div class="center">         
                     <div class="box">
-                        <div class="input-group mb-3">
+                        {% comment %} <div class="input-group mb-3">
                             {{form.image|add_class:"form-control"}}
                         </div>
                         
@@ -29,7 +29,21 @@
                         <div class="input-group mb-3">
                             <button type="submit" class="input-group-text">Post</button>
                             {{form.content|add_class:"form-control"}}
+                        </div> {% endcomment %}
+                        {% if post.image %}
+                            <input type="checkbox" name="image-clear" id="image-clear_id" />
+                            <label for="image-clear_id">Clear Image</label>
+                        {% else %}
+                        {% endif %}
+                        
+
+                        <input type="file" name="image" accept="image/*" class="form-control" id="id_image" />
+
+                        <div class="input-group mb-3">
+                            <button type="submit" class="input-group-text">Post</button>
+                            {{form.content|add_class:"form-control"}}
                         </div>
+
                         <a class="btn btn-warning" href="{% url 'index' %}">Cancel Edit</a>
                     </div>
                 </div>
