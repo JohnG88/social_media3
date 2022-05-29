@@ -36,8 +36,14 @@
                         {% else %}
                         {% endif %}
                         
-
-                        <input type="file" name="image" accept="image/*" class="form-control" id="id_image" />
+                        <div class="input-group mb-3">
+                            <input type="file" name="image" accept="image/*" id="id_image" />
+                            <button class="btn btn-primary">
+                                <label for="id_image">
+                                Choose a Photo
+                                </label>
+                            </button>
+                        </div>
 
                         <div class="input-group mb-3">
                             <button type="submit" class="input-group-text">Post</button>

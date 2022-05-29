@@ -6,6 +6,10 @@ a:hover {
     text-decoration: underline;
 }
 
+input[type="file"]{
+    display: none
+}
+
 .center {
     display: flex;
     justify-content: center;

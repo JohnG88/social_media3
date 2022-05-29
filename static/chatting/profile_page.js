@@ -61,15 +61,25 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
     
 
-    const inputImageDisableChange = () => {
-        inputIContent.addEventListener('click', () => {
-            inputIContent.files.length > 1 ? changeBtn.disabled = true : changeBtn.disabled = false
-        })
-    }
-    if (inputIContent != null) {
-        inputImageDisableChange();
-    }
+    // const inputImageDisableChange = () => {
+    //     inputIContent.addEventListener('click', () => {
+    //     console.log("Input content length ", inputIContent.value)
+    //         inputIContent.value = false || undefined ? changeBtn.disabled = true : changeBtn.disabled = false
+    //     })
+    // }
+    // if (inputIContent != null) {
+    //     inputImageDisableChange();
+    // }
+
+    inputIContent.addEventListener("change", stateHandle)
     
+    function stateHandle() {
+        if (document.querySelector("#id_avatar").value === "") {
+            changeBtn.disabled = true;
+        } else {
+            changeBtn.disabled = false;
+        }
+    }
 
     const changeAvatar = () => {
         // const avatarForm = document.querySelector(".avatar-form")
@@ -79,7 +89,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
             // console.log("Avatar Id ", avatarId)
 
             const inputImageContent = document.querySelector("#id_avatar").files;
-            // console.log("Image length in change ", inputImageContent.length)
+            console.log("Image length in change ", inputImageContent.length)
+
+            // inputImageContent.files.length > 1 ? changeBtn.disabled = true : changeBtn.disabled = false
 
             // const changeBtn = document.querySelector(".change-btn")
 

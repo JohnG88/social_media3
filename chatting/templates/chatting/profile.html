@@ -28,10 +28,14 @@
                             </div>
                         {% endfor %} {% endcomment %}
                         <div class="input-group mb-3">
-                            <input class="form-control" type="file" name="avatar" accept="image/" id="id_avatar"/>
+                            <input  type="file" name="avatar" accept="image/" id="id_avatar"/>
+                            <label class="btn btn-primary btn-label" for="id_avatar">
+                                Choose Avatar Image
+                            </label>
                         </div>
+                        
                         <div class="input-group mb-3">
-                            <button class="input-group-text change-btn">Change Avatar</button>
+                            <button class="input-group-text btn-success change-btn">Change Avatar</button>
                         </div>
                     </form>
                 </div>
@@ -45,7 +49,7 @@
                         >
                             {% csrf_token %}
                             <div class="input-group mb-3">
-                                <button class="input-group-text">Delete Avatar</button>
+                                <button class="input-group-text btn-danger">Delete Avatar</button>
                             </div>
                         </form>
                     </div>
