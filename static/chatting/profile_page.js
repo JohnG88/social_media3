@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     const avatarDiv = document.querySelector(".now");
     const deleteAvatarDiv = document.querySelector(".delete-avatar-div")
+    const changeAvatarBtnDiv = document.querySelector(".change-btn-div")
     // console.log("delete avatar div ", deleteAvatarDiv)
 
     // inputIContent.length = null ? changeBtn.disabled = true : changeBtn.disabled = false
@@ -56,9 +57,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
     // console.log("IMage input length ", inputIContent.value.length)
 
     const changeBtn = document.querySelector(".change-btn")
-    if (changeBtn != null) {
-        changeBtn.disabled = true
-    }
+    // if (changeBtn != null) {
+    //     changeBtn.disabled = true
+    // }
+    // if (changeBtn != null) {
+    //     console.log("CHnage btn ", changeBtn)
+    //     changeBtn.addEventListener("click", () => {
+    //         changeAvatarBtnDiv.remove();
+    //     })
+    // }
     
 
     // const inputImageDisableChange = () => {
@@ -74,11 +81,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
     inputIContent.addEventListener("change", stateHandle)
     
     function stateHandle() {
-        if (document.querySelector("#id_avatar").value === "") {
-            changeBtn.disabled = true;
-        } else {
-            changeBtn.disabled = false;
-        }
+        document.querySelector("#id_avatar").value === "" ? "" :
+            avatarForm.insertAdjacentHTML('beforeend',
+                `
+                <div class="input-group mb-3 change-btn-div">
+                    <button class="input-group-text btn-success change-btn">Change Avatar</button>
+                </div>
+                `
+            )
+            
+        changeAvatar()
     }
 
     const changeAvatar = () => {
@@ -113,7 +125,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             })
             .then((response) => response.json())
             .then((data) => {
-                changeBtn.disabled = true
+                // changeBtn.disabled = true
                 // console.log("Success Avatar ", data)
                 const profileAvatar = document.getElementsByClassName(`profile-avatar-${avatarId}`);
                 // console.log("profile avatar ", profileAvatar)
@@ -139,7 +151,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                         >
                             
                             <div class="input-group mb-3">
-                                <button class="input-group-text">Delete Avatar</button>
+                                <button class="input-group-text btn-danger">Delete Avatar</button>
                             </div>
                         </form>
                     </div>
@@ -156,6 +168,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 // if (deleteAvatarForm != null) {
                 //     deleteAvatar();
                 // }
+                const changeAvatarBtnDiv = document.querySelector(".change-btn-div")
+
+                if (changeAvatarBtnDiv != null) {
+                    changeAvatarBtnDiv.remove()
+                }
             })
             e.stopImmediatePropagation();
         })
@@ -198,6 +215,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 if (deleteThisDiv != null) {
                     deleteThisDiv.remove()
                 }
+                
+
+                const changeAvatarBtnDiv = document.querySelector(".change-btn-div")
+
+                if (changeAvatarBtnDiv != null) {
+                    changeAvatarBtnDiv.remove()
+                }
+
                 // deleteThisDiv.remove()
 
                 // console.log("Dlete avatar div in delte ", deleteAvatarDiv)
