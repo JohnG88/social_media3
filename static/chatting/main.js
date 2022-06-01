@@ -163,7 +163,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
                     commentsDiv.prepend(divFlex);
                     
                     form.reset();
-                    noCommentsP.remove();
+                    if (noCommentsP != null) {
+                        noCommentsP.remove();
+                    }
+                    
 
 
                 })
@@ -459,9 +462,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
     var endPagination = false;
 
     // Add this if statement to only use in index page
-    if (window.location.href === "") {
+    // if (window.location.href === "") {
         window.addEventListener("scroll", (e) => {
-            // console.log('Scrolling')
+            console.log('Scrolling')
             // console.log("Document height ", document.body.clientHeight)
             // console.log("Window height ", window.innerHeight)
             const margin = document.body.clientHeight - window.innerHeight - 200;
@@ -473,7 +476,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 // console.log("Page inside block", page)
                 
                 // lines below allow to add data through url parameters like from jquery ajax data property
-                var url = new URL("/"),
+                var url = new URL(""),
                     params = {page:page}
                 Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 
@@ -487,7 +490,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 })
                     .then((response) => response.json())
                     .then((data) => {
-                        // console.log("data ", data)
+                        console.log("data ", data)
                         if (data.end_pagination === true) {
                             endPagination = true;
                         } else {
@@ -788,7 +791,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 // return false;
             }
         })
-    }
+    // }
 
     likeUnlikePosts();
 

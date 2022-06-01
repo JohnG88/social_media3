@@ -593,7 +593,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     var endPagination = false;
 
     window.addEventListener("scroll", (e) => {
-        // console.log("Scrolling")
+        console.log("Scrolling")
         // console.log("Document height ", document.body.clientHeight)
         const margin = document.body.clientHeight - window.innerHeight - 200;
         // console.log("Margin ", margin)
@@ -603,7 +603,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             page += 1;
             // console.log("Page inside block ", page)
 
-            var url  = new URL(`/profile/${loggedUserId}/`),
+            var url  = new URL(`http://127.0.0.1:8000/profile/${loggedUserId}/`),
                 params = {page:page}
             Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 
