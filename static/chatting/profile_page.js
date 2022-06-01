@@ -77,8 +77,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
     // if (inputIContent != null) {
     //     inputImageDisableChange();
     // }
-
-    inputIContent.addEventListener("change", stateHandle)
+    if (inputIContent != null) {
+        inputIContent.addEventListener("change", stateHandle)
+    }
+    
     
     function stateHandle() {
         document.querySelector("#id_avatar").value === "" ? "" :
