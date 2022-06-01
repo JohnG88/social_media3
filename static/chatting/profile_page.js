@@ -602,8 +602,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
             blockRequest = true;
             page += 1;
             // console.log("Page inside block ", page)
+            // http://127.0.0.1:8000/profile/${loggedUserId}/
 
-            var url  = new URL(`http://127.0.0.1:8000/profile/${loggedUserId}/`),
+            var url  = new URL(`https://john-chat-1.herokuapp.com/profile/${loggedUserId}/`),
                 params = {page:page}
             Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 

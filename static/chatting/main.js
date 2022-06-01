@@ -476,7 +476,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 // console.log("Page inside block", page)
                 
                 // lines below allow to add data through url parameters like from jquery ajax data property
-                var url = new URL(""),
+                var url = new URL("https://john-chat-1.herokuapp.com/"),
                     params = {page:page}
                 Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 
