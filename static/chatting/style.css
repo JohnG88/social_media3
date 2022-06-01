@@ -6,8 +6,12 @@ a:hover {
     text-decoration: underline;
 }
 
-input[type="file"]{
+/* input[type="file"]{
     display: none
+} */
+
+#id_avatar {
+    display: none;
 }
 
 .center {
