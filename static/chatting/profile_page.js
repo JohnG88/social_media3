@@ -595,7 +595,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     var endPagination = false;
 
     window.addEventListener("scroll", (e) => {
-        console.log("Scrolling")
+        // console.log("Scrolling")
         // console.log("Document height ", document.body.clientHeight)
         const margin = document.body.clientHeight - window.innerHeight - 200;
         // console.log("Margin ", margin)

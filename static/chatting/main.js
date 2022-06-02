@@ -464,7 +464,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     // Add this if statement to only use in index page
     // if (window.location.href === "") {
         window.addEventListener("scroll", (e) => {
-            console.log('Scrolling')
+            // console.log('Scrolling')
             // console.log("Document height ", document.body.clientHeight)
             // console.log("Window height ", window.innerHeight)
             const margin = document.body.clientHeight - window.innerHeight - 200;
@@ -490,7 +490,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 })
                     .then((response) => response.json())
                     .then((data) => {
-                        console.log("data ", data)
+                        // console.log("data ", data)
                         if (data.end_pagination === true) {
                             endPagination = true;
                         } else {
