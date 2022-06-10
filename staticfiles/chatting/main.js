@@ -163,7 +163,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
                     commentsDiv.prepend(divFlex);
                     
                     form.reset();
-                    noCommentsP.remove();
+                    if (noCommentsP != null) {
+                        noCommentsP.remove();
+                    }
+                    
 
 
                 })
@@ -459,7 +462,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     var endPagination = false;
 
     // Add this if statement to only use in index page
-    if (window.location.href === "") {
+    // if (window.location.href === "") {
         window.addEventListener("scroll", (e) => {
             // console.log('Scrolling')
             // console.log("Document height ", document.body.clientHeight)
@@ -473,7 +476,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 // console.log("Page inside block", page)
                 
                 // lines below allow to add data through url parameters like from jquery ajax data property
-                var url = new URL("/"),
+                const m = "http://127.0.0.1:8000/"
+                // const n = "https://john-chat-1.herokuapp.com/"
+                var url = new URL(m),
                     params = {page:page}
                 Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 
@@ -788,7 +793,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 // return false;
             }
         })
-    }
+    // }
 
     likeUnlikePosts();
 

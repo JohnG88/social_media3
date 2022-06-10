@@ -660,6 +660,17 @@ def follow_unfollow(request, id):
     #     "count": follow_user.count(),
     #     "followers_count": other_user.followers.all().count()
     # })
+def delete_user(request):
+    user = User.objects.get(id=request.user.id)
+    print(f"User {user}")
+
+    if request.method == 'POST':
+        user.delete()
+        return redirect("login")
+
+    context = {"user": user}
+
+    return render(request, "chatting/confirm-delete-page.html", context)
 
 
 

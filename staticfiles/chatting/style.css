@@ -6,8 +6,16 @@ a:hover {
     text-decoration: underline;
 }
 
-input[type="file"]{
+/* input[type="file"]{
     display: none
+} */
+
+#id_avatar {
+    display: none;
+}
+
+#id_image {
+    display: none;
 }
 
 .center {
@@ -69,7 +77,7 @@ input[type="file"]{
     top: 10px;
 }
 
-@media (max-width: 1500px) {
+@media (max-width: 800px) {
     .whole-flex-div {
         flex-direction: column;
     }

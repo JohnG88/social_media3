@@ -77,8 +77,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
     // if (inputIContent != null) {
     //     inputImageDisableChange();
     // }
-
-    inputIContent.addEventListener("change", stateHandle)
+    if (inputIContent != null) {
+        inputIContent.addEventListener("change", stateHandle)
+    }
+    
     
     function stateHandle() {
         document.querySelector("#id_avatar").value === "" ? "" :
@@ -602,8 +604,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
             blockRequest = true;
             page += 1;
             // console.log("Page inside block ", page)
+            const m = `http://127.0.0.1:8000/profile/${loggedUserId}/`
+            // const n = `https://john-chat-1.herokuapp.com/profile/${loggedUserId}/`
 
-            var url  = new URL(`/profile/${loggedUserId}/`),
+            var url  = new URL(m),
                 params = {page:page}
             Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 

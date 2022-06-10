@@ -1,0 +1,14 @@
+{% extends "chatting/layout.html" %} 
+{% block body %}
+
+    <div class="form-center">
+        <div class="edit-form-center">
+            <h1>Click button to permanently delete profile</h1>
+            <form action="{% url 'delete-user' %}" method="POST">
+                {% csrf_token %}
+                <a class="btn btn-warning" href="{% url 'index' %}">Cancel</a>
+                <input class="btn btn-danger" type="submit" name="Confirm" value="Delete {{user.username}}'s Profile" />
+            </form>
+        </div>
+    </div>
+{% endblock %}

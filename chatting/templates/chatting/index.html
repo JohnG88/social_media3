@@ -4,54 +4,50 @@
 {% comment %} if saving with ctrl + s, make sure none of the django tags are on same line or are cut because will throw template tag error {% endcomment %}
 {% block body %}
 
-<!-- Button trigger modal -->
-{% comment %} <button
-    type="button"
-    class="btn btn-primary"
-    data-bs-toggle="modal"
-    data-bs-target="#exampleModal"
->
-    People To Follow
-</button> {% endcomment %}
-
-<!-- Modal -->
-<div
-    class="modal fade"
-    id="exampleModal"
-    tabindex="-1"
-    aria-labelledby="exampleModalLabel"
-    aria-hidden="true"
->
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Users</h5>
-                <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                ></button>
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Offcanvas</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+            <div class="me-4" style="width: 15rem">
+                <h5>People To Know</h5>
+                <div>
+                    {% for users in available %}
+                        <div class="mb-3 d-flex align-item-center">
+                            {% for img_avatar in users.useravatar_set.all %}
+                            <div class="flex-shrink-0">
+                            <img src="{{img_avatar.avatar.url}}" class="rounded-circle" width="30px" height="30px">
+                            </div>
+                            {% endfor %}
+                            <div class="flex-grow-1 ms-3">
+                            <a href="{% url 'profile' users.id %}">
+                                <div>{{users.username}}</div>
+                            </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <hr>
+                <div class="mt-1">
+                    <h5>Contacts</h5>
+                    {% for f_users in all_followed_profiles %}
+                    <div class="mb-3 d-flex align-item-center">
+                        {% for img_avatar in f_users.useravatar_set.all %}
+                        <div class="flex-shrink-0">
+                        <img src="{{img_avatar.avatar.url}}" class="rounded-circle" width="30px" height="30px">
+                        </div>
+                        {% endfor %}
+                        <div class="flex-grow-1 ms-3">
+                        <a href="{% url 'profile' f_users.id %}">
+                            <div>{{f_users.username}}</div>
+                        </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
-            {% comment %} {% for users in available %}
-            <a href="{% url 'profile' users.id %}">
-                <div class="modal-body">{{users.username}}</div>
-                <hr />
-            </a>
-            {% endfor %} {% endcomment %}
-            <div class="modal-footer">
-                <button
-                    type="button"
-                    class="btn btn-secondary"
-                    data-bs-dismiss="modal"
-                >
-                    Close
-                </button>
-                <button type="button" class="btn btn-primary">
-                    Save changes
-                </button>
-            </div>
-        </div>
     </div>
 </div>
 

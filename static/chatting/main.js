@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function(event) { 
-    
+    const windowLocation = window.location.href
+    console.log("Window location ", windowLocation)
 
 
     // console.log('main.js')
@@ -476,7 +477,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 // console.log("Page inside block", page)
                 
                 // lines below allow to add data through url parameters like from jquery ajax data property
-                var url = new URL("https://john-chat-1.herokuapp.com/"),
+                const m = "http://127.0.0.1:8000/"
+                // const n = "https://john-chat-1.herokuapp.com/"
+                var url = new URL(windowLocation),
                     params = {page:page}
                 Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 

@@ -14,6 +14,10 @@ a:hover {
     display: none;
 }
 
+.edit-file {
+    display: none;
+}
+
 .center {
     display: flex;
     justify-content: center;

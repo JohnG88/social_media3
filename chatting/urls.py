@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import index, update_post, delete_post, login_view, register, logout_view, single_post_view, profile_view, like_post, follow_unfollow, delete_avatar, comment_post, available_users, change_avatar_profile
+from .views import index, update_post, delete_post, login_view, register, logout_view, single_post_view, profile_view, like_post, follow_unfollow, delete_avatar, comment_post, available_users, change_avatar_profile, delete_user
 
 urlpatterns = [
     path("", index, name="index"),
@@ -13,6 +13,7 @@ urlpatterns = [
     path('delete-avatar/', delete_avatar, name='delete-avatar'),
     path("follow-unfollow/<int:id>/", follow_unfollow, name="follow-unfollow"),
     path("available-users", available_users, name="available-users"),
+    path("delete-user/", delete_user, name="delete-user"),
     path("login/", login_view, name="login"),
     path("register/", register, name="register"),
     path("logout/", logout_view, name="logout"),
