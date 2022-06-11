@@ -42,6 +42,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
     const csrftoken = getCookie('csrftoken');
 
+    
+
     const likeUnlikePosts = () => {
         const likeUnlikeForms = [...document.getElementsByClassName("like-unlike-forms")]
         likeUnlikeForms.forEach(form => form.addEventListener("submit", (e) => {

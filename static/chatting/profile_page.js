@@ -263,7 +263,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 })
                 .then((response) => response.json())
                 .then((data) => {
-                    // console.log("Follow Success ", data)
+                    console.log("Follow Success ", data)
 
                     const followButton = document.querySelector(".follow-button")
                     const followersNum = document.querySelector(".followers-number")
@@ -279,6 +279,19 @@ document.addEventListener("DOMContentLoaded", function(event) {
                     }
 
                     followersNum.textContent = data.followers_count ? `${data.followers_count}` : `${data.followers_count}`
+
+                    const child = document.querySelector(`.user-id-${formId}`)
+
+                    if (data.followers_bool === true) {
+                        const parent = document.querySelector(".contact-div");
+                        console.log("Parent ", parent)
+                        
+
+                        parent.appendChild(child)
+                    } else {
+                        const secondParent = document.querySelector(".people-div");
+                        secondParent.appendChild(child)
+                    }
             })
         })
     }

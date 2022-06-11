@@ -448,6 +448,14 @@ def profile_view(request, id):
         print(f"Profile user {user}")
         r_user = User.objects.get(id=request.user.id)
         print(f"Main user {r_user}")
+
+        users = User.objects.all().exclude(id=r_user.id)
+        followed_profiles = UserFollowing.objects.get(user=r_user)
+        all_followed_profiles = followed_profiles.following_user_id.all()
+        available = [user for user in users if user not in all_followed_profiles]
+        print(f"Available {available}")
+
+        random.shuffle(available)
         # main_user = User.objects.get(user=request.user.id)
         # main_user_all = UserFollowing.objects.get(user=main_user)
         # print(f"Main user {main_user}")
@@ -544,7 +552,7 @@ def profile_view(request, id):
         #     UserAvatar.objects.create(user=user)
             
     if not is_ajax:
-        context = {'user': user, 'r_user': r_user, 'followed_user': followed_by_main_user, 'count': following_other_users.total_following, 'followers': user.followers.all().count(), 'following_bool': following_bool, 'post_page': post_page, 'user_avatar': user_avatar, 'form': form, 'default_mage': default_image, 'profile_post_form': profile_post_form}
+        context = {'user': user, 'r_user': r_user, 'followed_user': followed_by_main_user,'all_followed_profiles': all_followed_profiles, 'available': available[:3], 'count': following_other_users.total_following, 'followers': user.followers.all().count(), 'following_bool': following_bool, 'post_page': post_page, 'user_avatar': user_avatar, 'form': form, 'default_mage': default_image, 'profile_post_form': profile_post_form}
         return render(request, "chatting/profile.html", context)
     else:
         data = []

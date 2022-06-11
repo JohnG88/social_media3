@@ -2,6 +2,54 @@
 {% load widget_tweaks %} 
 {% load static %}
 {% block body %}
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Offcanvas</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+            <div class="me-4" style="width: 15rem">
+                <h5>People To Know</h5>
+                <div class="people-div">
+                    {% for users in available %}
+                        <div class="mb-3 d-flex align-item-center user-id-{{users.id}}">
+                            {% for img_avatar in users.useravatar_set.all %}
+                            <div class="flex-shrink-0">
+                            <img src="{{img_avatar.avatar.url}}" class="rounded-circle" width="30px" height="30px">
+                            </div>
+                            {% endfor %}
+                            <div class="flex-grow-1 ms-3">
+                            <a href="{% url 'profile' users.id %}">
+                                <div>{{users.username}}</div>
+                            </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <hr>
+                <div class="mt-1 contact-div">
+                    <h5>Contacts</h5>
+                    {% for f_users in all_followed_profiles %}
+                    <div class="mb-3 d-flex align-item-center user-id-{{f_users.id}}">
+                        {% for img_avatar in f_users.useravatar_set.all %}
+                        <div class="flex-shrink-0">
+                        <img src="{{img_avatar.avatar.url}}" class="rounded-circle" width="30px" height="30px">
+                        </div>
+                        {% endfor %}
+                        <div class="flex-grow-1 ms-3">
+                        <a href="{% url 'profile' f_users.id %}">
+                            <div>{{f_users.username}}</div>
+                        </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+    </div>
+</div>
+
     <div class="d-flex justify-content-evenly flex-wrap">
         <div class="card profile-info-div align-self-start" style="width: 35rem">
             <h1 id="current-user" data-user-id={{user.id}}>{{user.username}} Profile Page</h1>
