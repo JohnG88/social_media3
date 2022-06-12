@@ -692,7 +692,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                                         id="like-unlike-${i.id}"
                                         name="post_id"
                                         value="${i.id}"
-                                        class="btn btn-primary">
+                                        class="btn btn-info">
                                         Like
                                     </button>`
                                     }
