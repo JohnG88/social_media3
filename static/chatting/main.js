@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function(event) { 
     const windowLocation = window.location.href
-    console.log("Window location ", windowLocation)
+    // console.log("Window location ", windowLocation)
 
 
     // console.log('main.js')

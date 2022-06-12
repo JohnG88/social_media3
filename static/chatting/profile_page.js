@@ -247,7 +247,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         followForm.addEventListener("submit", (e) => {
             e.preventDefault()
             const formId = e.target.getAttribute('data-user-id')
-            console.log("form id ", formId)
+            // console.log("form id ", formId)
             const url = `/follow-unfollow/${formId}/`
 
             fetch(url, {
@@ -263,7 +263,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 })
                 .then((response) => response.json())
                 .then((data) => {
-                    console.log("Follow Success ", data)
+                    // console.log("Follow Success ", data)
 
                     const followButton = document.querySelector(".follow-button")
                     const followersNum = document.querySelector(".followers-number")
