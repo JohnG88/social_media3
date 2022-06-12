@@ -10,12 +10,25 @@ a:hover {
     display: none
 } */
 
-#id_avatar {
+#id_avatar, #id_image, .edit-file {
     display: none;
 }
 
-.edit-file {
-    display: none;
+.photo-span-text {
+    font-size: 18px;
+}
+
+.image-icon {
+    color: blue;
+}
+
+.label-icon:hover {
+    cursor: pointer;
+}
+
+.image-icon:hover, .photo-span-text:hover {
+    color: green;
+    cursor: pointer;
 }
 
 .center {
