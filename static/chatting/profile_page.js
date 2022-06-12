@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function(event) { 
     const windowLocation = window.location.href
-    console.log("Window location ", windowLocation)
+    // console.log("Window location ", windowLocation)
     // console.log("Profile page")
     const postBody = document.querySelector(".post-body")
     const userId = document.querySelector("#current-user")
@@ -284,7 +284,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
                     if (data.followers_bool === true) {
                         const parent = document.querySelector(".contact-div");
-                        console.log("Parent ", parent)
+                        // console.log("Parent ", parent)
                         
 
                         parent.appendChild(child)
