@@ -29,6 +29,8 @@ a:hover {
 .image-icon:hover, .photo-span-text:hover {
     color: green;
     cursor: pointer;
+    width: 51px;
+    height: 51px;
 }
 
 .center {

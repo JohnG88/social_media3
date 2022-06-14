@@ -115,7 +115,7 @@ def index(request):
         followed_profiles = UserFollowing.objects.get(user=request.user)
         # print(f"followed Profiles {followed_profiles}")
 
-        all_followed_profiles = followed_profiles.following_user_id.all()
+        # all_followed_profiles = followed_profiles.following_user_id.all()
         # print(f"all_followed_profiles {all_followed_profiles}")
 
         all_followed_users_tables = UserFollowing.objects.all()
@@ -146,7 +146,7 @@ def index(request):
         # print(f'Pagination Post {paginator}')
 
         # profiles = Profile.objects.all().exclude(user=self.user)
-        users = User.objects.all().exclude(id=main_user.id)
+        # users = User.objects.all().exclude(id=main_user.id)
         # print(f"Users {users}")
 
         user_avatars = UserAvatar.objects.all()
@@ -155,7 +155,7 @@ def index(request):
         # print(f"user_avatars {user_avatars}")
 
         # I still don't know how list comprehensions work, I tweaked one example I copied from a tutorial, It seems to be working 
-        available = [user for user in users if user not in all_followed_profiles]
+        # available = [user for user in users if user not in all_followed_profiles]
         # for user_data in available:
         #     return JsonResponse({
         #     "available_user_id": user_data.id,
@@ -163,7 +163,7 @@ def index(request):
         # })
             # print(f"User id {user_data.id}")
         # print(f"Available {available}")
-        random.shuffle(available)
+        # random.shuffle(available)
 
         # user_posts = Post.objects.filter(user=request.user).all()
 
@@ -174,7 +174,7 @@ def index(request):
         # followed_profiles_posts = Post.objects.filter(user__in=followed_profiles).all()
         
     if not is_ajax:
-        context = {'follower_user_posts': follower_user_posts, 'all_followed_profiles': all_followed_profiles, 'form': form, 'user': user, 'available': available[:3], 'post_page': post_page}
+        context = {'follower_user_posts': follower_user_posts, 'form': form, 'user': user,  'post_page': post_page}
         return render(request, "chatting/index.html", context)
     
     # This block below will get everything from a template and convert into a string to use for scroll
@@ -384,40 +384,43 @@ def delete_post(request, id):
 
     return render(request, "chatting/delete_post.html", context)
 
-def available_users(request):
-    main_user = request.user
-    user = User.objects.get(id=main_user.id)
-    users = User.objects.all().exclude(id=user.id)
+# def available_users(request):
+#     main_user = request.user
+#     user = User.objects.get(id=main_user.id)
+#     users = User.objects.all().exclude(id=user.id)
     
-    followed_profiles = UserFollowing.objects.get(user=request.user)
-    print(f"Followed profiles {followed_profiles}")
+#     followed_profiles = UserFollowing.objects.get(user=request.user)
+#     print(f"Followed profiles {followed_profiles}")
 
-    data_followed_info = []
-    all_followed_profiles = followed_profiles.following_user_id.all()
-    print(f"all followed profiles {all_followed_profiles}")
-    for already_followed_profiles in all_followed_profiles:
-        user_followed_info = {
-            "users_followed_id": already_followed_profiles.id,
-            "users_followed_username": already_followed_profiles.username,
-        }
-        data_followed_info.append(user_followed_info)
+#     data_followed_info = []
+#     all_followed_profiles = followed_profiles.following_user_id.all()
+#     print(f"all followed profiles {all_followed_profiles}")
+    # for already_followed_profiles in all_followed_profiles:
+    #     user_followed_info = {
+    #         "users_followed_id": already_followed_profiles.id,
+    #         "users_followed_username": already_followed_profiles.username,
+    #     }
+    #     data_followed_info.append(user_followed_info)
 
-    available_profiles = [user for user in users if user not in all_followed_profiles]
-    print(f"available profiles {available_profiles}")
+    # available_profiles = [user for user in users if user not in all_followed_profiles]
+    # print(f"available profiles {available_profiles}")
+    # random.shuffle(available_profiles)
     
-    data_available_info = []
-    for user_data in available_profiles:
-        print(f"User data id {user_data.id}")
-        user_data_info = {
-            "users_data_id": user_data.id,
-            "users_data_usernames": user_data.username,
-        }
-        data_available_info.append(user_data_info)
+    # data_available_info = []
+    # for user_data in available_profiles:
+    #     print(f"User data id {user_data.id}")
+    #     user_data_info = {
+    #         "users_data_id": user_data.id,
+    #         "users_data_usernames": user_data.username,
+    #     }
+    #     data_available_info.append(user_data_info)
 
-    return JsonResponse({
-        "data_available_info": data_available_info,
-        "data_followed_info": data_followed_info,
-    })
+    # return JsonResponse({
+    #     "data_available_info": data_available_info,
+    #     "data_followed_info": data_followed_info,
+    # # })
+    # context = {"all_followed_profiles": all_followed_profiles, "available_profiles": available_profiles[:3]}
+    # return render(request, "chatting/peoples.html", context)
 
     # for already_followed_users in all_followed_profiles:
     #     return JsonResponse({
@@ -450,12 +453,12 @@ def profile_view(request, id):
         print(f"Main user {r_user}")
 
         users = User.objects.all().exclude(id=r_user.id)
-        followed_profiles = UserFollowing.objects.get(user=r_user)
-        all_followed_profiles = followed_profiles.following_user_id.all()
-        available = [user for user in users if user not in all_followed_profiles]
-        print(f"Available {available}")
+    #     followed_profiles = UserFollowing.objects.get(user=r_user)
+    #     all_followed_profiles = followed_profiles.following_user_id.all()
+    #     available = [user for user in users if user not in all_followed_profiles]
+    #     print(f"Available {available}")
 
-        random.shuffle(available)
+    #     random.shuffle(available)
         # main_user = User.objects.get(user=request.user.id)
         # main_user_all = UserFollowing.objects.get(user=main_user)
         # print(f"Main user {main_user}")
@@ -552,7 +555,7 @@ def profile_view(request, id):
         #     UserAvatar.objects.create(user=user)
             
     if not is_ajax:
-        context = {'user': user, 'r_user': r_user, 'followed_user': followed_by_main_user,'all_followed_profiles': all_followed_profiles, 'available': available[:3], 'count': following_other_users.total_following, 'followers': user.followers.all().count(), 'following_bool': following_bool, 'post_page': post_page, 'user_avatar': user_avatar, 'form': form, 'default_mage': default_image, 'profile_post_form': profile_post_form}
+        context = {'user': user, 'r_user': r_user, 'followed_user': followed_by_main_user, 'count': following_other_users.total_following, 'followers': user.followers.all().count(), 'following_bool': following_bool, 'post_page': post_page, 'user_avatar': user_avatar, 'form': form, 'default_mage': default_image, 'profile_post_form': profile_post_form}
         return render(request, "chatting/profile.html", context)
     else:
         data = []
