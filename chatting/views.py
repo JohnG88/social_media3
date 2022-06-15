@@ -110,7 +110,7 @@ def index(request):
         # print(f"Post image {all_posts_images}")
         
         
-        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+        # is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
         # created the request.user query for UserFollowing
         followed_profiles = UserFollowing.objects.get(user=request.user)
         # print(f"followed Profiles {followed_profiles}")
@@ -172,7 +172,8 @@ def index(request):
         # followed_profiles = user.followers.all()
         # print(f"Followed Profiles {followed_profiles}")
         # followed_profiles_posts = Post.objects.filter(user__in=followed_profiles).all()
-        
+    is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+    
     if not is_ajax:
         context = {'follower_user_posts': follower_user_posts, 'form': form, 'user': user,  'post_page': post_page}
         return render(request, "chatting/index.html", context)
