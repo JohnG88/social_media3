@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 import random
 
+# https://stackoverflow.com/questions/43173618/django-context-processor-login-in-issue
+
 # @login_required(login_url='login')
 def users_available(request):
     if request.user.is_authenticated:
