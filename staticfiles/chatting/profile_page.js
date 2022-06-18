@@ -1,4 +1,6 @@
 document.addEventListener("DOMContentLoaded", function(event) { 
+    const windowLocation = window.location.href
+    // console.log("Window location ", windowLocation)
     // console.log("Profile page")
     const postBody = document.querySelector(".post-body")
     const userId = document.querySelector("#current-user")
@@ -245,7 +247,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         followForm.addEventListener("submit", (e) => {
             e.preventDefault()
             const formId = e.target.getAttribute('data-user-id')
-            console.log("form id ", formId)
+            // console.log("form id ", formId)
             const url = `/follow-unfollow/${formId}/`
 
             fetch(url, {
@@ -277,6 +279,19 @@ document.addEventListener("DOMContentLoaded", function(event) {
                     }
 
                     followersNum.textContent = data.followers_count ? `${data.followers_count}` : `${data.followers_count}`
+
+                    const child = document.querySelector(`.user-id-${formId}`)
+
+                    if (data.followers_bool === true) {
+                        const parent = document.querySelector(".contact-div");
+                        // console.log("Parent ", parent)
+                        
+
+                        parent.appendChild(child)
+                    } else {
+                        const secondParent = document.querySelector(".people-div");
+                        secondParent.appendChild(child)
+                    }
             })
         })
     }
@@ -607,7 +622,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             const m = `http://127.0.0.1:8000/profile/${loggedUserId}/`
             // const n = `https://john-chat-1.herokuapp.com/profile/${loggedUserId}/`
 
-            var url  = new URL(m),
+            var url  = new URL(windowLocation),
                 params = {page:page}
             Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 
@@ -632,7 +647,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 // https://stackoverflow.com/questions/44488434/inserting-if-statement-inside-es6-template-literal
                 for (let i of data.data) {
                     postBody.insertAdjacentHTML("beforeend", 
-                    `   
+                    `  
+                    <div class="card"> 
                         <div class="card-body d-flex">
                             <img src="${i.user_profile_img}" class="rounded-circle profile-avatar-${i.user_id}" width="35px" height="35px">
                             <h5 class="card-title ms-2">
@@ -676,7 +692,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                                         id="like-unlike-${i.id}"
                                         name="post_id"
                                         value="${i.id}"
-                                        class="btn btn-primary">
+                                        class="btn btn-info">
                                         Like
                                     </button>`
                                     }
@@ -745,6 +761,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                                 </div>
                             </div>    
                         </div>
+                    </div>
                     `
                     )
 
