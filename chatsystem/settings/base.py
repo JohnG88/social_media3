@@ -10,27 +10,21 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
-from pathlib import Path
+import dj_database_url
 from decouple import config
+from dotenv import load_dotenv, find_dotenv
+
+from pathlib import Path
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG')
-
-ALLOWED_HOSTS = [
-    'john-chat-1.herokuapp.com',
-    '127.0.0.1',
-    'localhost'
-]
 
 
 # Application definition
@@ -50,6 +44,8 @@ INSTALLED_APPS = [
     # third party
     # pip install django-widget-tweaks
     'widget_tweaks',
+    'django_extensions',
+    'storages'
 ]
 
 MIDDLEWARE = [
@@ -90,11 +86,10 @@ WSGI_APPLICATION = 'chatsystem.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+load_dotenv(find_dotenv())
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(default='sqlite:///db.sqlite3', conn_max_age=600)
 }
 
 
@@ -132,29 +127,23 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = '/static/'
 
-STATIC_ROOT = 'staticfiles'
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-STATICFILES_DIRS = [
-    BASE_DIR / 'static'
-]
+# STATICFILES_DIRS = [
+#     BASE_DIR / 'static'
+# ]
 
 # STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
-MEDIA_URL = '/media/'
+# MEDIA_URL = '/media/'
 
-MEDIA_ROOT = BASE_DIR / 'media'
+# MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-AWS_ACCESS_KEY_ID = config('AWS_SECRET_KEY')
-AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
-AWS_QUERYSTRING_AUTH = config('AWS_QUERYSTRING_AUTH')
+
