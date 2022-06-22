@@ -20,3 +20,9 @@ Setting config variables from heroku cli
 
     to view all variables in cli type:
         heroku config
+
+When deploying to heroku, there is no data, no superuser so to create one through heroku cli use :     heroku run bash
+ Then once that is run use:
+     python manage.py createsuperuser --username Name
+    and it will be same as django creates super user
+    Type exit to leave
