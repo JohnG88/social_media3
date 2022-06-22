@@ -14,3 +14,9 @@ In views.py
     - To get following count and followers count
         - 'count': profile.get_following_count,
         - 'following': user.get_followed_profiles.all().count()
+
+Setting config variables from heroku cli
+    heroku config:set VARIABLE_NAME=config.settings.route
+
+    to view all variables in cli type:
+        heroku config
