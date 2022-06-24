@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function(event) { 
     const windowLocation = window.location.href
     // console.log("Window location ", windowLocation)
-    // console.log("Profile page")
+    console.log("Profile page")
     const postBody = document.querySelector(".post-body")
     const userId = document.querySelector("#current-user")
     // const hereUrl = window.location.href;
@@ -59,6 +59,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     // console.log("IMage input length ", inputIContent.value.length)
 
     const changeBtn = document.querySelector(".change-btn")
+    console.log("Change button", changeBtn)
     // if (changeBtn != null) {
     //     changeBtn.disabled = true
     // }
@@ -79,9 +80,19 @@ document.addEventListener("DOMContentLoaded", function(event) {
     // if (inputIContent != null) {
     //     inputImageDisableChange();
     // }
+
     if (inputIContent != null) {
         inputIContent.addEventListener("change", stateHandle)
+        inputIContent.addEventListener("click", function handleClick() {
+            console.log('element clicked')
+            const changeBtnDiv = document.querySelector(".change-btn-div")
+            console.log("Change button div", changeBtnDiv)
+            if (changeBtnDiv != null) {
+                changeBtnDiv.remove()
+            }
+        })
     }
+
     
     
     function stateHandle() {
@@ -645,128 +656,130 @@ document.addEventListener("DOMContentLoaded", function(event) {
                     blockRequest = false;
                 }
                 // https://stackoverflow.com/questions/44488434/inserting-if-statement-inside-es6-template-literal
-                for (let i of data.data) {
-                    postBody.insertAdjacentHTML("beforeend", 
-                    `  
-                    <div class="card"> 
-                        <div class="card-body d-flex">
-                            <img src="${i.user_profile_img}" class="rounded-circle profile-avatar-${i.user_id}" width="35px" height="35px">
-                            <h5 class="card-title ms-2">
-                                ${i.user}
-                            </h5>
-                        </div>
-                        ${i.image &&
-                            `<img src="${i.image}" class="card-img-top" alt="Post Image">`
-                        }
-                        <div class="card-body">
-                            <p class="card-text">
-                                ${i.content}
-                            </p>
-                            <p>${i.created}</p>
-                            ${(data.user == i.user_id) ?
-                                `<a href="/update-post/${i.id}">
-                                    Edit Post
-                                </a>
-                                <a href="/delete-post/${i.id}">
-                                    Delete Post
-                                </a>`
-                                : ``
-                            }
-                            <a href="/single-post/${i.id}">
-                                View Post
-                            </a>
-                            <div>
-                                <form       class="like-unlike-forms"
-                                    data-form-id="${i.id}">
-                                    ${i.likes ?
-                                    `<button
-                                        type="submit"
-                                        id="like-unlike-${i.id}"
-                                        name="post_id"
-                                        value="${i.id}"
-                                        class="btn btn-danger">
-                                        Unlike
-                                    </button>` :
-                                    `<button
-                                        type="submit"
-                                        id="like-unlike-${i.id}"
-                                        name="post_id"
-                                        value="${i.id}"
-                                        class="btn btn-info">
-                                        Like
-                                    </button>`
-                                    }
-                                    <p class="render-likes-${i.id}">- ${i.likes_count} Likes - </p>
-                                </form>
+                if (data.data) {
+                    for (let i of data.data) {
+                        postBody.insertAdjacentHTML("beforeend", 
+                        `  
+                        <div class="card"> 
+                            <div class="card-body d-flex">
+                                <img src="${i.user_profile_img}" class="rounded-circle profile-avatar-${i.user_id}" width="35px" height="35px">
+                                <h5 class="card-title ms-2">
+                                    ${i.user}
+                                </h5>
                             </div>
-                            <p>
-                                <a 
-                                    data-bs-toggle="collapse"
-                                    href="#collapseExample-${i.id}"
-                                    role="button"
-                                    aria-expanded="false"
-                                    aria-controls="collapseExample-${i.id}"
-                                >
-                                    Comments
+                            ${i.image &&
+                                `<img src="${i.image}" class="card-img-top" alt="Post Image">`
+                            }
+                            <div class="card-body">
+                                <p class="card-text">
+                                    ${i.content}
+                                </p>
+                                <p>${i.created}</p>
+                                ${(data.user == i.user_id) ?
+                                    `<a href="/update-post/${i.id}">
+                                        Edit Post
+                                    </a>
+                                    <a href="/delete-post/${i.id}">
+                                        Delete Post
+                                    </a>`
+                                    : ``
+                                }
+                                <a href="/single-post/${i.id}">
+                                    View Post
                                 </a>
-                            </p>
-                            <div
-                                class="collapse"
-                                id="collapseExample-${i.id}"
-                            >
                                 <div>
-                                    <form
-                                        class="all-comments-form"
-                                        data-comment-id="${i.id}"
-                                    >
-                                        <div class="input-group mb-3">
-                                            <button
-                                                type="submit"
-                                                class="input-group-text comment-${i.id}"
-                                                name="submit_c_form"
-                                            >
-                                                Post
-                                            </button>
-                                            <input 
-                                                type="text"
-                                                name="body"
-                                                class="form-control comment-input-${i.id}"
-                                                required
-                                                id="id_body"
-                                            >
-                                        </div>
+                                    <form       class="like-unlike-forms"
+                                        data-form-id="${i.id}">
+                                        ${i.likes ?
+                                        `<button
+                                            type="submit"
+                                            id="like-unlike-${i.id}"
+                                            name="post_id"
+                                            value="${i.id}"
+                                            class="btn btn-danger">
+                                            Unlike
+                                        </button>` :
+                                        `<button
+                                            type="submit"
+                                            id="like-unlike-${i.id}"
+                                            name="post_id"
+                                            value="${i.id}"
+                                            class="btn btn-info">
+                                            Like
+                                        </button>`
+                                        }
+                                        <p class="render-likes-${i.id}">- ${i.likes_count} Likes - </p>
                                     </form>
                                 </div>
-                                <div class="card card-body comments-div-${i.id}">
-                                    ${(i.comments.length != 0) ?
-                                        i.comments.map(c =>
-                                        `<div class="d-flex mb-1">
-                                            <div class="flex-shrink-0">
-                                                <img src="${c.comment_user_profile}" class="rounded-circle profile-avatar-${c.coments_user_id}" width="30px" height="30px">
+                                <p>
+                                    <a 
+                                        data-bs-toggle="collapse"
+                                        href="#collapseExample-${i.id}"
+                                        role="button"
+                                        aria-expanded="false"
+                                        aria-controls="collapseExample-${i.id}"
+                                    >
+                                        Comments
+                                    </a>
+                                </p>
+                                <div
+                                    class="collapse"
+                                    id="collapseExample-${i.id}"
+                                >
+                                    <div>
+                                        <form
+                                            class="all-comments-form"
+                                            data-comment-id="${i.id}"
+                                        >
+                                            <div class="input-group mb-3">
+                                                <button
+                                                    type="submit"
+                                                    class="input-group-text comment-${i.id}"
+                                                    name="submit_c_form"
+                                                >
+                                                    Post
+                                                </button>
+                                                <input 
+                                                    type="text"
+                                                    name="body"
+                                                    class="form-control comment-input-${i.id}"
+                                                    required
+                                                    id="id_body"
+                                                >
                                             </div>
-                                            <div class="ms-2 bd-highlight bg-secondary bg-gradient rounded-pill">
-                                                <div class="ms-3 me-5">
-                                                    ${c.comment_user}
+                                        </form>
+                                    </div>
+                                    <div class="card card-body comments-div-${i.id}">
+                                        ${(i.comments.length != 0) ?
+                                            i.comments.map(c =>
+                                            `<div class="d-flex mb-1">
+                                                <div class="flex-shrink-0">
+                                                    <img src="${c.comment_user_profile}" class="rounded-circle profile-avatar-${c.coments_user_id}" width="30px" height="30px">
                                                 </div>
-                                                <p class="ms-3 me-5">
-                                                    ${c.body}
-                                                </p>
-                                            </div>
-                                        </div>`).join("")
-                                    :
-                                    `<p class="no-comments no-comments-${i.id}">
-                                        Be the first to comment
-                                    </p>`
-                                }
-                                </div>
-                            </div>    
+                                                <div class="ms-2 bd-highlight bg-secondary bg-gradient rounded-pill">
+                                                    <div class="ms-3 me-5">
+                                                        ${c.comment_user}
+                                                    </div>
+                                                    <p class="ms-3 me-5">
+                                                        ${c.body}
+                                                    </p>
+                                                </div>
+                                            </div>`).join("")
+                                        :
+                                        `<p class="no-comments no-comments-${i.id}">
+                                            Be the first to comment
+                                        </p>`
+                                    }
+                                    </div>
+                                </div>    
+                            </div>
                         </div>
-                    </div>
-                    `
-                    )
+                        `
+                        )
 
-                    commentsForm();
-                    likeUnlikePosts();
+                        commentsForm();
+                        likeUnlikePosts();
+                    }
                 }
             })
         }

@@ -40,10 +40,11 @@ STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'
 STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
 MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
 
-DEBUG_PROPAGATE_EXCEPTIONS = True
 
 # Heroku Logging
 # With code below, will be able to see django errors in heroku logs
+DEBUG_PROPAGATE_EXCEPTIONS = True
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
