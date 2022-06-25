@@ -4,10 +4,10 @@
 
 {% block body %}
     {% include "chatting/peoples.html" %}
-    <div class="form-center d-flex">
-        <div class="edit-form-center" style="width: 35rem;">
+    {% comment %} <div class="form-center">
+        <div class="edit-form-center">
 
-            <div class="edit-form-center card d-flex">
+            <div class="edit-form-center card d-flex" style="width: 35rem;">
                 <div class="card-body">
                     <div>
                         <p>{{post.content}}</p>
@@ -31,7 +31,7 @@
                                 <div class="input-group mb-3">
                                     <button type="submit" class="input-group-text">Post</button>
                                     {{form.content|add_class:"form-control"}}
-                                </div> {% endcomment %}
+                                </div> 
                                 {% if post.image %}
                                     <input type="checkbox" name="image-clear" id="image-clear_id" />
                                     <label for="image-clear_id">Clear Image</label>
@@ -59,8 +59,52 @@
                 </div>
             </div>    
         </div>
-    </div>
+    </div> {% endcomment %}
 
-        
+    <div class="form-center">
+        <div class="edit-form-center" style="width: 35rem;">
+            <div class="edit-form-center card d-flex">
+                <div class="card-body">
+                    <p>{{post.content}}</p>
+                    {% if post.image %}
+                        <img src="{{post.imageURL}}" class="card-img-top" alt="Post Image"/>
+                    {% else %}
+                        <p>No Image in Post</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}   
+                <div>         
+                    <div class="card-body">
+                        {% if post.image %}
+                            <input type="checkbox" name="image-clear" id="image-clear_id" />
+                            <label for="image-clear_id">Clear Image</label>
+                        {% else %}
+                        {% endif %}
+                        
+                        <div class="input-group mb-3">
+                            <input class="edit-file" type="file" name="image" accept="image/*" id="id_image" />
+                            <button class="btn btn-primary">
+                                <label for="id_image">
+                                Choose a Photo
+                                </label>
+                            </button>
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <button type="submit" class="input-group-text">Post</button>
+                            {{form.content|add_class:"form-control"}}
+                        </div>
+
+                        <a class="btn btn-warning" href="{% url 'index' %}">Cancel Edit</a>
+                    </div>
+                </div>
+            </form>
+            
+            <a class="btn btn-warning" href="{% url 'index' %}">Home</a>
+        </div>
+    </div>
     
 {% endblock %}
