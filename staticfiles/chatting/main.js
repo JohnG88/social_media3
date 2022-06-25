@@ -251,6 +251,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 username.textContent = data.user
                 usernameLink.append(username);
 
+                const postContent = document.createElement("h4");
+                postContent.classList.add("card-text", "ms-3");
+                postContent.textContent = data.content;
+                normalDiv.append(postContent)
+
                 // Everything below goes in normal div, also have to check if image exists and if it doesn't leave empty
                 if (data.image != "") {
                     const normalImage = document.createElement("img");
@@ -263,11 +268,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 const cardBodyDiv = document.createElement("div");
                 cardBodyDiv.classList.add("card-body");
                 normalDiv.append(cardBodyDiv);
-
-                const postContent = document.createElement("h4");
-                postContent.classList.add("card-text");
-                postContent.textContent = data.content;
-                cardBodyDiv.append(postContent);
 
                 const createdDate = document.createElement("p");
                 createdDate.textContent = data.created;
@@ -552,6 +552,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
                                 username.textContent = data.data[i].user
                                 usernameLink.append(username);
 
+                                const postContent = document.createElement("h4");
+                                postContent.classList.add("card-text", "ms-3");
+                                postContent.textContent = data.data[i].content;
+                                normalDiv.append(postContent)
+
                                 // Everything below goes in normal div, also have to check if image exists and if it doesn't leave empty
                                 if (data.data[i].image != "") {
                                     const normalImage = document.createElement("img");
@@ -564,11 +569,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
                                 const cardBodyDiv = document.createElement("div");
                                 cardBodyDiv.classList.add("card-body");
                                 normalDiv.append(cardBodyDiv);
-
-                                const postContent = document.createElement("h4");
-                                postContent.classList.add("card-text");
-                                postContent.textContent = data.data[i].content;
-                                cardBodyDiv.append(postContent);
 
                                 const createdDate = document.createElement("p");
                                 createdDate.textContent = data.data[i].created;

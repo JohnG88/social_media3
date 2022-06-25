@@ -362,13 +362,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
                                     ${data.user}
                                 </h5>
                             </div>
+                            <p class="card-text ms-3">
+                                    ${data.content}
+                            </p>
                             ${data.image &&
                                 `<img src="${data.image}" class="card-img-top" alt="Post Image">`
                             }
                             <div class="card-body content-body">
-                                <p class="card-text">
-                                    ${data.content}
-                                </p>
                                 <p>${data.created}</p>
                                 ${(data.main_user_id == data.user_id) ?
                                     `<a href="/update-post/${data.id}">
@@ -667,13 +667,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
                                     ${i.user}
                                 </h5>
                             </div>
+                            <p class="card-text ms-3">
+                                ${i.content}
+                            </p>
                             ${i.image &&
                                 `<img src="${i.image}" class="card-img-top" alt="Post Image">`
                             }
                             <div class="card-body">
-                                <p class="card-text">
-                                    ${i.content}
-                                </p>
                                 <p>${i.created}</p>
                                 ${(data.user == i.user_id) ?
                                     `<a href="/update-post/${i.id}">
