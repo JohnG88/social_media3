@@ -4,58 +4,60 @@
 
 {% block body %}
     {% include "chatting/peoples.html" %}
-        <div class="edit-form-center">
+        <div class="edit-form-center" style="width: 35rem;">
 
-            <div class="edit-form-center card" style="width: 35rem;">
-                <div class="card-body post-center">
-                    {% if post.imageURL %}
+            <div class="edit-form-center card d-flex">
+                <div class="card-body">
+                    <div>
+                        <p>{{post.content}}</p>
+                    </div>
+                    {% if post.image %}
                         <img src="{{post.imageURL}}" class="card-img-top" alt="Post Image"/>
                     {% else %}
                         <p>No Image to Edit</p>
                     {% endif %}
                 </div>
-                <div class="card-body post-center">
-                    <p>{{post.content}}</p>
-                </div>
             </div>
 
-            <form method="post" enctype="multipart/form-data">
-                {% csrf_token %}   
-                <div class="center">         
-                    <div class="box">
-                        {% comment %} <div class="input-group mb-3">
-                            {{form.image|add_class:"form-control"}}
-                        </div>
-                        
-        
-                        <div class="input-group mb-3">
-                            <button type="submit" class="input-group-text">Post</button>
-                            {{form.content|add_class:"form-control"}}
-                        </div> {% endcomment %}
-                        {% if post.image %}
-                            <input type="checkbox" name="image-clear" id="image-clear_id" />
-                            <label for="image-clear_id">Clear Image</label>
-                        {% else %}
-                        {% endif %}
-                        
-                        <div class="input-group mb-3">
-                            <input class="edit-file" type="file" name="image" accept="image/*" id="id_image" />
-                            <button class="btn btn-primary">
-                                <label for="id_image">
-                                Choose a Photo
-                                </label>
-                            </button>
-                        </div>
+            <div>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}   
+                    <div class="center">         
+                        <div class="box" style="width: 35rem;">
+                            {% comment %} <div class="input-group mb-3">
+                                {{form.image|add_class:"form-control"}}
+                            </div>
+                            
+            
+                            <div class="input-group mb-3">
+                                <button type="submit" class="input-group-text">Post</button>
+                                {{form.content|add_class:"form-control"}}
+                            </div> {% endcomment %}
+                            {% if post.image %}
+                                <input type="checkbox" name="image-clear" id="image-clear_id" />
+                                <label for="image-clear_id">Clear Image</label>
+                            {% else %}
+                            {% endif %}
+                            
+                            <div class="input-group mb-3">
+                                <input class="edit-file" type="file" name="image" accept="image/*" id="id_image" />
+                                <button class="btn btn-primary">
+                                    <label for="id_image">
+                                    Choose a Photo
+                                    </label>
+                                </button>
+                            </div>
 
-                        <div class="input-group mb-3">
-                            <button type="submit" class="input-group-text">Post</button>
-                            {{form.content|add_class:"form-control"}}
-                        </div>
+                            <div class="input-group mb-3">
+                                <button type="submit" class="input-group-text">Post</button>
+                                {{form.content|add_class:"form-control"}}
+                            </div>
 
-                        <a class="btn btn-warning" href="{% url 'index' %}">Cancel Edit</a>
+                            <a class="btn btn-warning" href="{% url 'index' %}">Cancel Edit</a>
+                        </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>    
         </div>
 
         

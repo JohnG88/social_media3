@@ -176,14 +176,14 @@
                         {% for a in post.user.useravatar_set.all %}
                             <img src="{{a.avatar.url}}" class="rounded-circle profile-avatar-{{post.user.id}}" width="35px" height="35px">
                         {% endfor %}
-                        <h5 class="card-title ms-2">{{post.user.username}}</h5>
+                        <h5 class="card-title ms-1">{{post.user.username}}</h5>
                     </div>
+                    <p class="card-text ms-3">{{post.content}}</p>
                     {% if post.image %}
                         <img src="{{post.imageURL}}" class="card-img-top" alt="Post Image"/>
                     {% else %}
                     {% endif %}
                     <div class="card-body">
-                        <p class="card-text">{{post.content}}</p>
                         <p>{{post.updated}} {% if post.created|date:'d m y h:i:s' != post.updated|date:'d m y h:i:s' %}
                             (Edited)
                         {% endif %}</p>

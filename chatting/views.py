@@ -303,7 +303,7 @@ def comment_post(request, id):
 
 @login_required(login_url='login')
 def single_post_view(request, id):
-    post = Post.objects.filter(id=id)
+    post = Post.objects.get(id=id)
 
     context = {'post': post}
     return render(request, "chatting/single_post.html", context)

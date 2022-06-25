@@ -2,16 +2,21 @@
 
 {% block body %}
     <div class="form-center">
-    <div class="edit-form-center">
-    {% for post_item in post %}
-        {% if post_item.image %}
-            <img src="{{post_item.imageURL}}" width="100%" height="200px">
-        {% else %}
-        {% endif %}
-        <h3>{{post_item.user.username}}</h3>
-        <p>{{post_item.content}}</p>
-    {% endfor %}
-    <a class="btn btn-warning" href="{% url 'index' %}">Home</a>
-    </div>
+        <div class="edit-form-center" style="width: 35rem;">
+            <div class="edit-form-center card d-flex">
+                <div class="card-body">
+                    <p>{{post.content}}</p>
+                    {% if post.image %}
+                        <img src="{{post.imageURL}}" class="card-img-top" alt="Post Image"/>
+                    {% else %}
+                        <p>No Image in Post</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            
+            
+            <a class="btn btn-warning" href="{% url 'index' %}">Home</a>
+        </div>
     </div>
 {% endblock %}

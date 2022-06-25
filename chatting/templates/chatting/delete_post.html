@@ -3,14 +3,21 @@
 {% block body %}
 
     <div class="form-center">
-    <div class="edit-form-center">
+    <div class="edit-form-center" style="width: 35rem;">
         
         <h3>Do you wish to delete post:</h3>
-        {% if  post.image  %}
-        <img src="{{post.imageURL}}" width="100%" height="200px" />
-        {% else %}
-        {% endif %}
-        <p>{{post.content}}</p>
+        <div class="edit-form-center card d-flex">
+            <div class="card-body">
+                <div>
+                    <p>{{post.content}}</p>
+                </div>
+                {% if post.image %}
+                    <img src="{{post.imageURL}}" class="card-img-top" alt="Post Image"/>
+                {% else %}
+                    <p>No Image in Post</p>
+                {% endif %}
+            </div>
+        </div>
         
         
         <form action="{% url 'delete-post' post.id %}" method="POST">
