@@ -13,6 +13,8 @@ ALLOWED_HOSTS = [
     'john-chat-1.herokuapp.com',
 ]
 
+SECURE_SSL_REDIRECT = True
+
 # Amazon s3 settings
 # Find these in django-storages docs
 AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
