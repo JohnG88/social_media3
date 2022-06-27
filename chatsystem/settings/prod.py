@@ -12,8 +12,15 @@ DEBUG = False
 ALLOWED_HOSTS = [
     'john-chat-1.herokuapp.com',
 ]
-
+# HTTPS settings
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 SECURE_SSL_REDIRECT = True
+
+# HSTS settings
+SECURE_HSTS_SECONDS = 31536000 # 1 year
+SECURE_HSTS_PRELOAD = True
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 
 # Amazon s3 settings
 # Find these in django-storages docs
