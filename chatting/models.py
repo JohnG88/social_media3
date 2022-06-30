@@ -18,7 +18,7 @@ class Post(models.Model):
         return self.liked.count()
 
     def __str__(self):
-        return str(self.content[:10])
+        return f'{self.content[:10]} | {self.user.username}'
 
     def delete(self, *args, **kwargs):
         self.image.delete()

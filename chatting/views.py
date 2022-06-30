@@ -113,7 +113,7 @@ def index(request):
         # is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
         # created the request.user query for UserFollowing
         followed_profiles = UserFollowing.objects.get(user=request.user)
-        # print(f"followed Profiles {followed_profiles}")
+        print(f"followed Profiles {followed_profiles.following_user_id.all()}")
 
         # all_followed_profiles = followed_profiles.following_user_id.all()
         # print(f"all_followed_profiles {all_followed_profiles}")
@@ -124,8 +124,8 @@ def index(request):
         
         # queried the user from posts and linked it to followers from UserFollowing's following_user_id's related name and instanced followed_profiles to it 
         # using .distinct() helps eliminate duplicate values
-        follower_user_posts = Post.objects.filter(Q(user__followers=followed_profiles) | Q(user=main_user)).distinct()
-        # print(f"Follower Ids {follower_user_posts}")
+        follower_user_posts = Post.objects.filter(Q(user__in=followed_profiles.following_user_id.all()) | Q(user=main_user))
+        print(f"Follower posts {follower_user_posts}")
         data_page_num = request.GET.get('page')
         # print(f"Data page Num {data_page_num}")
         page_number = int(request.GET.get('page', 1))
