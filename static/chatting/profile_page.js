@@ -84,6 +84,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         inputIContent.addEventListener("change", stateHandle)
         inputIContent.addEventListener("click", function handleClick() {
             const changeBtnDiv = document.querySelector(".change-btn-div")
+            inputIContent.value = "";
             if (changeBtnDiv != null) {
                 changeBtnDiv.remove()
             }
@@ -93,7 +94,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
     
     
     function stateHandle() {
-        document.querySelector("#id_avatar").value === "" ? "" :
+        // console.log("Avatar value ", document.querySelector("#id_avatar").value)
+        (document.querySelector("#id_avatar").value === "") ? "" :
             avatarForm.insertAdjacentHTML('beforeend',
                 `
                 <div class="input-group mb-3 change-btn-div">

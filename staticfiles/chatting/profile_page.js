@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function(event) { 
     const windowLocation = window.location.href
     // console.log("Window location ", windowLocation)
-    console.log("Profile page")
+    // console.log("Profile page")
     const postBody = document.querySelector(".post-body")
     const userId = document.querySelector("#current-user")
     // const hereUrl = window.location.href;
@@ -59,7 +59,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     // console.log("IMage input length ", inputIContent.value.length)
 
     const changeBtn = document.querySelector(".change-btn")
-    console.log("Change button", changeBtn)
     // if (changeBtn != null) {
     //     changeBtn.disabled = true
     // }
@@ -82,11 +81,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
     // }
 
     if (inputIContent != null) {
+        console.log(document.querySelector("#id_avatar").value)
         inputIContent.addEventListener("change", stateHandle)
         inputIContent.addEventListener("click", function handleClick() {
-            console.log('element clicked')
             const changeBtnDiv = document.querySelector(".change-btn-div")
-            console.log("Change button div", changeBtnDiv)
             if (changeBtnDiv != null) {
                 changeBtnDiv.remove()
             }
@@ -96,7 +94,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     
     
     function stateHandle() {
-        document.querySelector("#id_avatar").value === "" ? "" :
+        (document.querySelector("#id_avatar").value === "") ? "" :
             avatarForm.insertAdjacentHTML('beforeend',
                 `
                 <div class="input-group mb-3 change-btn-div">
